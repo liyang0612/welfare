@@ -8,7 +8,7 @@
         <link href="css/mui.min.css" rel="stylesheet" />
         <style type="text/css">
             body {
-                background-color: black;
+                background-color: white;
             }
         </style>
     </head>
@@ -31,7 +31,14 @@
                         id: "main",
                         extras: {
                             mark: "index" //额外的参数，仅仅是个标识，实际开发中不用；
-                        }
+                        },
+                        show: {
+				            aniShow: 'none',
+//				            duration: 5
+				        },
+				        waiting: {
+				            autoShow: false, //自动显示等待框，默认为true
+				        }
                     });
                 } else {
                     mui.openWindow({

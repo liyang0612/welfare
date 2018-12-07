@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style>
+	html,body {
+		background: transparent;
+	}
+	.ellipsis {white-space: nowrap;text-overflow: ellipsis;overflow: hidden}
+	.bs-example{padding: 10px;border: 1px solid #999;margin: 2px;}
+	.bs-example span{font-size: 10px;color:red;}
+	.layer_barrage{ position:fixed; top:135px; width:100%; z-index: 9999;}
+	.layer_barrage ul{ display:box; display:-webkit-box; display:-moz-box; display: -ms-box; margin-bottom:20px;  }
+	.layer_barrage ul li{
+	    transform: translateX(0px)
+	}
+	.layer_barrage ul:nth-child(even){ padding-left:20px;}
+	.layer_barrage li{ font-size:12px; margin-right:28px; padding-right:30px;color:#fff; display: block; white-space: nowrap;text-overflow: ellipsis; height:22px; line-height:22px; background:rgba(0,0,0,0.68); border-radius:11px;transform: translateX(0px);}
+	.layer_barrage li span{display:inline-block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}
+	.layer_barrage img{ width:18px; height:18px; border-radius:50%; float: left; margin:2px 6px 0 2px;}
+	.layer_barrage .active{ background:rgba(20,185,148,0.9);}
+	.layer_barrage .reward{ position:absolute; right:50px; bottom:58px;} 
+	.layer_barrage .reward img{ width:40px; height:auto;}
+	</style>
+	<body>
+		<section class="layer_barrage j_barrage ">
+			<ul>
+			</ul>
+		</section>
+		<div class="bs-example">
+			<div class="form-group">
+				<input type="text" class="form-control j_bcontent" id="exampleInputPassword1">
+			</div>
+			<button type="submit" class="btn btn-default j_insert_barrage">插入弹幕</button>
+		</div>
+	</body>
+	<script src="../js/zepto.main.js"></script>
+	<script src="../js/barrage.js"></script>
+	<script type="application/javascript">
+		//初始化彈幕插件
+		var aqueue = [{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '【夸雷斯马】，接我空翻360度接转体720度的双膝跪地！'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '空耳好评'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '无畏的事情'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '金钟大不是我男人吗，哦，坂本也是(｢･ω･)｢嘿'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '扳本OS：送上来的装逼机会啊！'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '女主我只认8823'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '牛顿不会诈尸，不要胡说，坂本做得都是有物理原理的可以实现'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '又换发了'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '葡萄牙必胜！'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '盲降成功'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '可怜你赢不过坂本大佬'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '关键是他不仅不穿衣服，而且居然还不换胖次ヾ(｡｀Д´｡)ﾉ彡'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '辣眼睛啊喂'
+			},
+			{
+				'img': 'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif',
+				'content': '我们未能穿透敌人的装甲'
+			}
+		];
+		Barrage.danMuInit(aqueue);
+		playBarrage();
+	</script>
+</html>

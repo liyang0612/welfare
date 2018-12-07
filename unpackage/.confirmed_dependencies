@@ -2,11 +2,32 @@
 	"guide.html": {
 		"refer": [
 			"main.html"
-		]
+		],
+		"resources": []
 	},
 	"index.html": {
 		"refer": [
+			"guide.html",
+			"main.html"
+		],
+		"resources": []
+	},
+	"main.html": {
+		"resources": [
+			"component/home.html"
+		],
+		"refer": [
+			"component/me.html",
+			"component/home.html",
 			"guide.html"
+		]
+	},
+	"component/home.html": {
+		"resources": [
+			"component/barrage.html"
+		],
+		"refer": [
+			"component/barrage.html"
 		]
 	}
 }

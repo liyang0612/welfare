@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style>
+	.ellipsis {white-space: nowrap;text-overflow: ellipsis;overflow: hidden}
+	.bs-example{padding: 10px;border: 1px solid #999;margin: 2px;}
+	.bs-example span{font-size: 10px;color:red;}
+	.layer_barrage{ position:fixed; top:135px; width:100%; z-index: 9999;}
+	.layer_barrage ul{ display:box; display:-webkit-box; display:-moz-box; display: -ms-box; margin-bottom:20px;  }
+	.layer_barrage ul li{
+	    transform: translateX(0px)
+	}
+	.layer_barrage ul:nth-child(even){ padding-left:20px;}
+	.layer_barrage li{ font-size:12px; margin-right:28px; padding-right:30px;color:#fff; display: block; white-space: nowrap;text-overflow: ellipsis; height:22px; line-height:22px; background:rgba(0,0,0,0.68); border-radius:11px;transform: translateX(0px);}
+	.layer_barrage li span{display:inline-block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}
+	.layer_barrage img{ width:18px; height:18px; border-radius:50%; float: left; margin:2px 6px 0 2px;}
+	.layer_barrage .active{ background:rgba(20,185,148,0.9);}
+	.layer_barrage .reward{ position:absolute; right:50px; bottom:58px;} 
+	.layer_barrage .reward img{ width:40px; height:auto;}
+	</style>
+	
+	<body>
+		<div>
+			<div id="video" style="width:98%;height:300px;background-color:#000000;margin:auto"></div>
+			<button id="reset_launch">重置引导页</button>
+			<button onclick="createSubview()">弹幕</button>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript">
+		function updatePlaying(play) {
+			playing = play;
+			document.getElementById('pp').innerText = playing ? '暂停' : '播放';
+		}
+		//创建弹幕webview
+		var wsub = null;
+		function createSubview(){
+			if(wsub) {
+				wsub.close();wsub = null;
+				return;
+			}
+			var topoffset = document.getElementById('video').offsetTop;
+			wsub=plus.webview.create('./barrage.html','sub',{top:topoffset,height:'300px',position:'static',scrollIndicator:'none',background:'transparent'});
+			plus.webview.currentWebview().append(wsub);
+		}
+		mui.plusReady(function() {
+			// 更新为播放状态
+			function playVideo() {
+				var path = document.getElementById('path').value;
+				if(path && path.length > 0) {
+					video.setOptions({
+						src: path
+					});
+					video.play();
+				}
+			}
+			// 创建视频播放控件
+			video = new plus.video.VideoPlayer('video', {
+				src: 'http://hd.yinyuetai.com/uploads/videos/common/0D7601345B999963CD41FB5D5CF356C0.flv'
+			});
+			video.addEventListener('play', function() {
+				updatePlaying(true);
+			}, false);
+			video.addEventListener('pause', function() {
+				updatePlaying(false);
+			}, false);
+			
+			createSubview();
+//			var nTitle = plus.webview.currentWebview.getTitleNView();
+//			nTitle.drawText("static/reddot.png", {top:'3px',left:'340px',width:'4px',height:'4px'});
+			
+			document.getElementById("reset_launch").addEventListener("tap", function() {
+				/**
+				 * 系统确认对话框
+				 * http://www.html5plus.org/doc/zh_cn/nativeui.html#plus.nativeUI.confirm
+				 */
+				plus.nativeUI.confirm("是否重置首次打开app？", function(event) {
+					/**
+					 * 按钮的索引，从0开始；
+					 */
+					var index = event.index;
+					if(index == 0) {
+						/**
+						 * 通过key值删除键值对存储的数据
+						 * http://www.html5plus.org/doc/zh_cn/storage.html#plus.storage.removeItem
+						 */
+						plus.storage.removeItem("launchFlag");
+						/**
+						 * 自动消失提示，位置为center；
+						 * http://www.html5plus.org/doc/zh_cn/nativeui.html#plus.nativeUI.ToastOption
+						 */
+						plus.nativeUI.toast("重置成功，2秒后重启app。", {
+							verticalAlign: "center"
+						});
+						/**
+						 * 2秒后重启应用
+						 * http://www.html5plus.org/doc/zh_cn/runtime.html#plus.runtime.restart
+						 */
+						setTimeout(function() {
+							plus.runtime.restart();
+						}, 2000);
+					}
+				}, "重置启动", ["重置", "放弃"]);
+			});
+		})
+	</script>
+
+</html>

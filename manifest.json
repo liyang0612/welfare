@@ -138,8 +138,26 @@
 			"index.html": {
 				"resources": [],
 				"refer": [
+					"guide.html",
+					"main.html"
+				],
+				"priority": 0
+			},
+			"main.html": {
+				"resources": [
+					"component/home.html"
+				],
+				"refer": [
+					"component/me.html",
 					"guide.html"
 				],
+				"priority": 0
+			},
+			"component/home.html": {
+				"resources": [
+					"component/barrage.html"
+				],
+				"refer": [],
 				"priority": 0
 			}
 		},
