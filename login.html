@@ -96,7 +96,7 @@
 			<form id='login-form' class="mui-input-group">
 				<div class="mui-input-row">
 					<label>账号</label>
-					<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
+					<input id='account' type="tel" class="mui-input-clear mui-input" placeholder="请输入账号">
 				</div>
 				<div class="mui-input-row">
 					<label>密码</label>
@@ -105,15 +105,16 @@
 			</form>
 			<form class="mui-input-group">
 				<ul class="mui-table-view mui-table-view-chevron">
-					<li class="mui-table-view-cell">
+<!-- 					<li class="mui-table-view-cell">
 						自动登录
 						<div id="autoLogin" class="mui-switch">
 							<div class="mui-switch-handle"></div>
 						</div>
-					</li>
+					</li> -->
 				</ul>
 			</form>
 			<div class="mui-content-padded">
+				<button id='getCode' class="mui-btn mui-btn-block mui-btn-primary">获取验证码</button>
 				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
 				<div class="link-area"><a id='reg'>注册账号</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a>
 				</div>
@@ -124,13 +125,15 @@
 		</div>
 		<script src="js/mui.min.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
+		<script src="js/zepto.main.js"></script>
 		<script src="js/app.js"></script>
+		<script src="js/http.js"></script>
 		<script>
 			(function($, doc) {
 				$.init({
 					statusBarBackground: '#f7f7f7'
 				});
-				$.plusReady(function() {
+				$.plusReady(function() {					
 					plus.screen.lockOrientation("portrait-primary");
 					var settings = app.getSettings();
 					var state = app.getState();
@@ -138,8 +141,8 @@
 					var main_loaded_flag = false;
 					if(!mainPage){
 						mainPage = $.preload({
-							"id": 'main',
-							"url": 'main.html'
+							"id": 'home',
+							"url": './component/home.html'
 						});
 					}else{
 						main_loaded_flag = true;
@@ -160,7 +163,7 @@
 						},20);
 					};
 					//检查 "登录状态/锁屏状态" 开始
-					if (settings.autoLogin && state.token && settings.gestures) {
+					if (state.token && settings.gestures) {
 						$.openWindow({
 							url: 'unlock.html',
 							id: 'unlock',
@@ -171,7 +174,7 @@
 								autoShow: false
 							}
 						});
-					} else if (settings.autoLogin && state.token) {
+					} else if (state.token) {
 						toMain();
 					} else {
 						app.setState(null);
@@ -231,33 +234,43 @@
 					var loginButton = doc.getElementById('login');
 					var accountBox = doc.getElementById('account');
 					var passwordBox = doc.getElementById('password');
-					var autoLoginButton = doc.getElementById("autoLogin");
+					// var autoLoginButton = doc.getElementById("autoLogin");
 					var regButton = doc.getElementById('reg');
 					var forgetButton = doc.getElementById('forgetPassword');
-					loginButton.addEventListener('tap', function(event) {
-						var loginInfo = {
-							account: accountBox.value,
-							password: passwordBox.value
-						};
-						app.login(loginInfo, function(err) {
-							if (err) {
-								plus.nativeUI.toast(err);
-								return;
+					var codeButton = doc.getElementById('getCode');
+					// 获取验证码
+					var code_key = '';
+					codeButton.addEventListener('tap', function() {
+						$http({
+							url: "/auth/user/v2/send/verify/code",
+							data: {
+								phone: accountBox.value
+							},
+							success: function(res) {
+								console.log(res.code)
+								code_key = res.msg;
 							}
-							toMain();
-						});
-					});
+						})
+					})
+					//登录
+					loginButton.addEventListener('tap', function() {
+						$http({
+							url: "/auth/user/v2/login/phone",
+							data: {
+								phone: accountBox.value,
+								code: passwordBox.value,
+								code_key: code_key
+							},
+							success: function(res) {
+								console.log(res.code)
+								toMain();
+								localStorage.setItem('token', res.msg.token);
+							}
+						})
+					})
 					$.enterfocus('#login-form input', function() {
 						$.trigger(loginButton, 'tap');
 					});
-					autoLoginButton.classList[settings.autoLogin ? 'add' : 'remove']('mui-active')
-					autoLoginButton.addEventListener('toggle', function(event) {
-						setTimeout(function() {
-							var isActive = event.detail.isActive;
-							settings.autoLogin = isActive;
-							app.setSettings(settings);
-						}, 50);
-					}, false);
 					regButton.addEventListener('tap', function(event) {
 						$.openWindow({
 							url: 'reg.html',
@@ -274,22 +287,6 @@
 // 							}
 						});
 					}, false);
-// 					forgetButton.addEventListener('tap', function(event) {
-// 						$.openWindow({
-// 							url: 'forget_password.html',
-// 							id: 'forget_password',
-// 							preload: true,
-// 							show: {
-// 								aniShow: 'pop-in'
-// 							},
-// 							styles: {
-// 								popGesture: 'hide'
-// 							},
-// 							waiting: {
-// 								autoShow: false
-// 							}
-// 						});
-// 					}, false);
 					//
 					window.addEventListener('resize', function() {
 						oauthArea.style.display = document.body.clientHeight > 400 ? 'block' : 'none';

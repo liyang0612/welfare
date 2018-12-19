@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style>
+		html {
+			font-size: 14px
+		}
+
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			background: transparent;
+		}
+		.fixed_wrap {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, .2);
+		}
+		.content {
+			width: 100%;
+			/* height: 50%; */
+			position: absolute;
+			bottom: 0;
+		}
+		.opr, .cancel {
+			margin: 0 15px;
+			background: #fff;
+			border-radius: 10px;
+		}
+		.opr div {
+			height: 54px;
+			line-height: 54px;
+			text-align: center;
+			color: #888;
+			border-bottom: solid 1px #eee;
+		}
+		.opr div:last-child {
+			border: none;
+		}
+		.opr div:active, .opr div:hover {
+			color: #4fb4f8
+		}
+		.cancel {
+			height: 54px;
+			line-height: 54px;
+			text-align: center;
+			color: #333;
+			margin-top: 10px;
+			margin-bottom: 20px;
+		}
+
+	</style>
+	<body>
+		<div class="fixed_wrap">
+			<div class="content">
+				<div class="opr">
+					<div id="wechart">绑定微信</div>
+					<div id="tel">绑定手机号</div>
+					<div id="card">绑定银行卡</div>
+				</div>
+				<div class="cancel">取消</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/zepto.main.js"></script>
+	<script>
+		mui.init()
+		mui.plusReady(function() {
+			$(".cancel").on('tap', function() {
+				plus.webview.currentWebview().close();
+			})
+			$('body').on('tap', function(e) {
+				if(e.target.className === 'fixed_wrap') {
+					plus.webview.currentWebview().close();
+				}
+			})
+			mui(".opr").on('tap','div',function(e){
+				mui.openWindow({
+					url: './' + e.target.id + '.html',
+					id: e.target.id
+				})
+			})
+		})
+	</script>
+</html>

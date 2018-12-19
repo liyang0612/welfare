@@ -6,36 +6,49 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/global.css" rel="stylesheet" />
 	</head>
-
-	<body>
+	<style>
+		html {
+			touch-action: none
+		}
+	</style>
+	<body class="wf_webview">
 		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">福利机</h1>
+			<h1 id="title" class="mui-title">首页</h1>
+			<a class="wf_icon_nav"><span class="wf_icon_setting"><img src="img/seeting.jpg"></span></a>
 		</header>
 		<nav class="mui-bar mui-bar-tab">
 			<a id="defaultTab" class="mui-tab-item mui-active" href="./component/home.html">
-				<span class="mui-icon mui-icon-home"></span>
-				<span class="mui-tab-label">首页</span>
+				<div class="me_nav_icon home_icon active"></div>
+				<!-- <span class="mui-tab-label">首页</span> -->
 			</a>
 			<a class="mui-tab-item" href="./component/me.html">
-				<span class="mui-icon mui-icon-gear"></span>
-				<span class="mui-tab-label">个人中心</span>
+				<div class="me_nav_icon me_icon"></div>
+				<!-- <span class="mui-tab-label">我的</span> -->
 			</a>
 		</nav>
 	</body>
 	<script src="js/mui.min.js"></script>
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 	<script type="text/javascript">
 		mui.init({
 			swipeBack: true
 		});
-		var subpages = ['./component/home.html', './component/me.html'];
+		var subpages = ['./component/me.html', './component/home.html', ];
 		var subpage_style = {
-			top: '45px',
-			bottom: '51px'
+			top: '54px',
+			bottom: '61px',
+			zindex: 0
 		};
 		var aniShow = {};
 		mui.plusReady(function() {
+			$('.wf_icon_nav').on('tap', function() {
+				mui.openWindow({
+					url: './component/setting.html',
+					id: 'setting'
+				})
+			})
 			var self = plus.webview.currentWebview();
 			for(var i = 0; i < 2; i++) {
 				var temp = {};
@@ -78,7 +91,16 @@
 				return;
 			}
 			//更换标题
-			title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
+			if(e.target.className.indexOf('home_icon') > -1){
+				$('.wf_icon_nav').css({display: 'none'})
+				title.innerHTML = '<span class=".mui-tab-label">首页</span>'
+			}else {
+				$('.wf_icon_nav').css({display: 'block'})
+				title.innerHTML = '<span class=".mui-tab-label">个人中心</span>';
+			}
+
+			$(this).find('div').addClass('active').parent().siblings().find('div').removeClass('active')
+			// title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
 			//显示目标选项卡
 			//若为iOS平台或非首次显示，则直接显示
 			if(mui.os.ios || aniShow[targetTab]) {
@@ -94,7 +116,7 @@
 			plus.webview.hide(activeTab);
 			//更改当前活跃的选项卡
 			activeTab = targetTab;
-		});
+		}, false);
 		//自定义事件，模拟点击“首页选项卡”
 		document.addEventListener('gohome', function() {
 			var defaultTab = document.getElementById("defaultTab");

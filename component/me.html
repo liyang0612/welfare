@@ -7,73 +7,148 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<style>
-			html,body {
-				background-color: #efeff4;
-			}
-			.title{
-				margin: 20px 15px 10px;
-				color: #6d6d72;
-				font-size: 15px;
-			}
-		</style>
+		<link rel="stylesheet" href="../css/global.css"/>
 	</head>
 
-	<body>
-		<!--<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">设置</h1>
-		</header>-->
-		<div class="mui-content">
-			<div class="title">
-				这是webview模式选项卡中的第4个子页面，该页面展示一个常见的设置示例
+	<body class="wf_webview">
+		<header class="mui-bar mui-bar-nav">
+			<h1 id="title" class="mui-title">个人中心</h1>
+			<a class="wf_icon_nav"><span class="wf_icon_setting"><img src="../img/seeting.jpg"></span></a>
+		</header>
+		<div class="mui-scroll-wrapper" style="margin: 56px auto;">
+			<div class="mui-scroll">
+			<div class="wf_me_info wf_lay">
+				<div class="me_info_picture">
+					<img src="../img/me_goods.png"/>
+					<span></span>
+				</div>
+				<div class="me_info_con">
+					<div class="me_username">用户1</div>
+					<div class="me_level"></div>
+					<div class="me_money">
+						<span>50 金币</span>
+					</div>
+				</div>
 			</div>
-			<ul class="mui-table-view">
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						新消息通知
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						隐私
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						通用
-					</a>
-				</li>
-			</ul>
-			<ul class="mui-table-view" style="margin-top: 25px;">
-				<li class="mui-table-view-cell">
-					<a id="about" class="mui-navigate-right">
-						关于mui
-					</a>
-				</li>
-			</ul>
-			<ul class="mui-table-view" style="margin-top: 25px;">
-				<li class="mui-table-view-cell">
-					<a style="text-align: center;color: #FF3B30;">
-						退出登录
-					</a>
-				</li>
-			</ul>
+			<div class="wf_me_menu wf_lay">
+				<p class="me_menu_status">目前没有状态信息</>
+				<div class="wf_grid_wrap">
+					<ul class="mui-table-view mui-grid-view mui-grid-9">
+							<li id="me_money" class="mui-table-view-cell mui-media mui-col-xs-4"><a href="#">
+											<div class="me_menu_icon"><img src="../img/me_package.png"/></div>
+											<div class="mui-media-body">我的钱包</div></a></li>
+							<li id="me_goods" class="mui-table-view-cell mui-media mui-col-xs-4"><a href="#">
+											<div class="me_menu_icon"><img src="../img/me_goods.png"/></div>
+											<div class="mui-media-body">我的物品</div></a></li>
+							<li id="me_adress" class="mui-table-view-cell mui-media mui-col-xs-4"><a href="#">
+											<div class="me_menu_icon"><img src="../img/me_adress.png"/></div>
+											<div class="mui-media-body">我的地址</div></a></li>
+					</ul> 
+				</div>
+			</div>
+			<div class="wf_hr"></div>
+			<div class="wf_live wf_lay">
+				<div class="live_title">
+					<div class="live_icon_pen">
+						<img src="../img/me_live_pen.jpg"/>
+					</div>
+					我的直播间
+				</div>
+				<div class="live_content">
+					<div class="live_null">
+						<p>当前还没有直播间</p>
+						<div class="add_btn">
+							<span>添加</span>
+						</div>
+					</div>
+					<!-- <div class="live_player">
+						<video id="video" controls src="http://hd.yinyuetai.com/uploads/videos/common/0D7601345B999963CD41FB5D5CF356C0.flv"></video>
+					</div> -->
+				</div>
+			</div>
+			</div>
+			<nav class="mui-bar mui-bar-tab">
+				<a id="homeHref" class="mui-tab-item mui-active" href="./component/home.html">
+					<div class="me_nav_icon home_icon"></div>
+					<!-- <span class="mui-tab-label">首页</span> -->
+				</a>
+				<a class="mui-tab-item" href="./component/me.html">
+					<div class="me_nav_icon me_icon active"></div>
+					<!-- <span class="mui-tab-label">我的</span> -->
+				</a>
+			</nav>
 		</div>
-		</style>
 	</body>
 	<script src="../js/mui.min.js"></script>
+	<script src="../js/zepto.main.js"></script>
 	<script>
 		mui.init({
 			swipeBack:true //启用右滑关闭功能
 		});
-		document.getElementById("about").addEventListener('tap',function () {
-			//获得主页面的webview
-			var main = plus.webview.currentWebview().parent();
-			//触发主页面的gohome事件
-			mui.fire(main,'gohome');
+		mui('.mui-scroll-wrapper').scroll({
+			bounce: true //是否启用回弹
 		});
+		function createDialogview(){
+// 			if(wsub) {
+// 				wsub.close();wsub = null;
+// 				return;
+// 			}
+			var wsub=plus.webview.create('./bindingDialog.html','bindingDialog',{top: 0,height:'100%',position:'static',scrollIndicator:'none',background:'transparent', zindex: 9999});
+			plus.webview.currentWebview().append(wsub);
+		}
+		mui.plusReady(function() {
+			$('.wf_me_info').on('tap', function() {
+				createDialogview()
+			})
+			$('.wf_icon_nav').on('tap', function() {
+				mui.openWindow({
+					url: './setting.html',
+					id: 'setting'
+				})
+			})
+			mui(".mui-table-view").on('tap','.mui-table-view-cell',function(e){
+				mui.openWindow({
+					url: './' + this.id + '.html',
+					id: this.id
+				})
+			}) 
+			// createDialogview()
+			$('#homeHref').on('tap', function() {
+				mui.openWindow({
+					url: './home.html',
+					id: 'home',
+					show: {
+						aniShow: 'none',
+						//				            duration: 5
+					},
+					waiting: {
+						autoShow: false, //自动显示等待框，默认为true
+					}
+				})
+			})
+		})
+		var first = null;
+		mui.back = function() {
+			if(!first) {
+				first = new Date().getTime();
+				/**
+				* 自动消失提示信息
+				* http://www.html5plus.org/doc/zh_cn/nativeui.html#plus.nativeUI.toast
+				*/
+				plus.nativeUI.toast("再按一次退出应用");
+				setTimeout(function() {
+					first = null;
+				}, 1000);
+			} else {
+				if(new Date().getTime() - first < 1000) {
+					/**
+					* 退出应用，仅安卓有效；
+					* http://www.html5plus.org/doc/zh_cn/runtime.html#plus.runtime.quit
+					*/
+					plus.runtime.quit();
+				}
+			}
+		};
 	</script>
 </html>

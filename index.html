@@ -16,11 +16,12 @@
 	<body>
 		<script src="js/mui.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
-			localStorage.clear();
+			// localStorage.clear()
+			// localStorage.setItem('$state', JSON.stringify({ token: "haksdjfa"}));
 			mui.init();
 			function getToken() {
-				var stateText = localStorage.getItem('$state') || "{}";
-				return JSON.parse(stateText).token;
+				// var stateText = localStorage.getItem('$state') || "{}";
+				return localStorage.getItem('token')
 			}
 			mui.plusReady(function() {
 				/**
@@ -30,11 +31,12 @@
 				 * 若不存在，说明是首次启动，进入引导页；
 				 */
 				var launchFlag = plus.storage.getItem("launchFlag");
+				// console.log(getToken())
 				if (launchFlag) {
 					if (getToken()) {
 						mui.openWindow({
-							url: "main.html",
-							id: "main",
+							url: "./component/home.html",
+							id: "home",
 							extras: {
 								mark: "index" //额外的参数，仅仅是个标识，实际开发中不用；
 							},
