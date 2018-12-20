@@ -1,5 +1,11 @@
+/* 主题色 #4FB4F8 */
 html {
-	font-size: 14px
+	font-size: 14px;
+	background: #fff;
+}
+
+.wf_body {
+	padding-top: 56px;
 }
 
 .wf_webview {
@@ -16,7 +22,7 @@ html {
 .wf_webview .mui-bar {
 	background: #fcfcfc;
 	box-shadow: none;
-	border-top: solid 1px #eee;
+	/* border-top: solid 1px #eee; */
 }
 
 .wf_icon_nav {
@@ -56,7 +62,7 @@ html {
 
 .wf_lay {
 	margin-top: 30px;
-	padding: 0 20px;
+	padding: 0 15px;
 }
 
 .wf_grid_wrap {
@@ -142,33 +148,25 @@ html {
 
 .live_content {
 	width: 100%;
-	height: 15rem;
-	padding-bottom: 60px
+	/* height: 15rem; */
+	text-align: center;
+	padding: 20px 15px;
+	/* padding-bottom: 60px */
 }
 
 .live_content .live_null {
 	text-align: center;
 	padding-top: 60px;
 }
-.live_player {
-	width: 100%;
-	margin-bottom: 200px;
-}
-.live_player #video {
-	width: 100%;
-	height: 100%;
-	height: 400px;
-	background: #000;
-}
 
 .live_null>div {
 	padding-top: 20px;
 }
 
-.live_null>div>span {
+.live_content .add_btn >span {
 	padding: 7px 18px;
 	background: #ebf6fd;
-	color: #79bdf4;
+	color: #4FB4F8;
 	font-size: 1rem;
 	border-radius: 8px;
 }
@@ -292,9 +290,12 @@ html {
 	right: 40px;
 	top: 16px;
 }
-
+.mui-bar-nav .wf_title { font-size: 17px;line-height: 56px;margin: 0;padding-right: 20px;}
 .mui-navbar .mui-btn-link {
 	height: 54px;
+}
+.mui-bar-nav {
+	box-shadow: none;
 }
 
 .mui-title {

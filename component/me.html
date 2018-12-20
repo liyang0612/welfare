@@ -10,13 +10,32 @@
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<link rel="stylesheet" href="../css/global.css"/>
 	</head>
-
+	<style>
+		.live_player {
+			width: 100%;
+			padding: 0 10px;
+			height: 24.8571rem;
+			background: #999999;
+			position: relative;
+		}
+		.video_icon {
+			width: 10rem;
+			position: absolute;
+			top: 7.1555rem;
+			left: 7.1111rem;
+		}
+		.video_icon img { width: 100%; }
+		.live_player img {
+			width: 100%;
+		}
+		.add_live_txt {margin: 30px auto;}
+	</style>
 	<body class="wf_webview">
 		<header class="mui-bar mui-bar-nav">
 			<h1 id="title" class="mui-title">个人中心</h1>
 			<a class="wf_icon_nav"><span class="wf_icon_setting"><img src="../img/seeting.jpg"></span></a>
 		</header>
-		<div class="mui-scroll-wrapper" style="margin: 56px auto;">
+		<div class="mui-scroll-wrapper">
 			<div class="mui-scroll">
 			<div class="wf_me_info wf_lay">
 				<div class="me_info_picture">
@@ -53,14 +72,24 @@
 					<div class="live_icon_pen">
 						<img src="../img/me_live_pen.jpg"/>
 					</div>
-					我的直播间
+					我的游戏间
 				</div>
 				<div class="live_content">
-					<div class="live_null">
-						<p>当前还没有直播间</p>
+<!-- 					<div class="live_null">
+						<p>当前还没有游戏间</p>
 						<div class="add_btn">
 							<span>添加</span>
 						</div>
+					</div> -->
+					<div class="live_player">
+						<img src="../img/abc.png"/>
+						<div class="video_icon">
+							<img src="../img/play.png" />
+						</div>
+					</div>
+					<p class="add_live_txt">当前还没有游戏间</p>
+					<div class="add_btn">
+						<span>添加</span>
 					</div>
 					<!-- <div class="live_player">
 						<video id="video" controls src="http://hd.yinyuetai.com/uploads/videos/common/0D7601345B999963CD41FB5D5CF356C0.flv"></video>

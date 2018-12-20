@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/global.css">
+		<!--App自定义的css-->
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css" />-->
+		<style>
+			.gold_coin_bg {
+				height: 140px;padding: 8px;
+				background: #4FB4F8;
+				margin-top: -2px;
+			}
+			.gold_coin_wrap { padding-top: 40px; text-align: center; color: #666; width: 130px; height: 130px;
+				background: url(../img/gold_coin_bg.png) no-repeat; background-size: 100%;margin: 0 auto; }
+			.gold_coin_txt { font-size:.8rem;}
+			.gold_price { font-size: 1.4rem;}
+			.gold_coin_txt { margin-left: 10px; }
+		</style>
+	</head>
+	<body class="wf_webview">
+		<div class="mui-navbar-inner mui-bar mui-bar-nav">
+			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+				<span class="mui-icon mui-icon-left-nav"></span>
+			</button>
+			<h1 class="mui-center mui-title">我的金币</h1>
+		</div>
+		<div class="mui-scroll-wrapper">
+			<div class="mui-scroll wf_body">
+				<div class="gold_coin_bg">
+					<div class="gold_coin_wrap">
+						<div class="gold_coin_txt">金币（个）</div>
+						<div class="gold_price">1400.00</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/jquery.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		})
+		mui('.mui-scroll-wrapper').scroll({
+			bounce: true //是否启用回弹
+		});
+	</script>
+</html>
