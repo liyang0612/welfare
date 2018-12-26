@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/global.css" />
+		<style>
+			.add_input, input[type=tel] {border: none; width: 100%; height: 48px;padding: 0 15px; background: #f6f8fa;color: #333;}
+		</style>
+		<body class="wf_webview">
+				<div class="mui-navbar-inner mui-bar mui-bar-nav">
+					<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+						<span class="mui-icon mui-icon-left-nav"></span>
+					</button>
+					<h1 class="mui-center mui-title">添加银行卡</h1>
+				</div>
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll wf_body">
+						<div class="tel_content">
+							<form class="wl_input_group">
+								<div class="wl_input_row">
+									<input id="userName" name="userName" type="text" placeholder="持卡人">
+									<div id="userNameError" class="form_error"></div>
+								</div>
+								<div class="wl_input_row">
+									<input id="cardNumber" name="catdNumber" type="tel" placeholder="卡号">
+									<div id="cardNumberError" class="form_error"></div>
+								</div>
+								<div class="wl_input_row">
+									<input id="telNumber" name="tel" type="tel" placeholder="手机号">
+									<div id="telNumberError" class="form_error"></div>
+								</div>
+								<div class="wl_input_row wl_auth_code">
+									<input id="authCode" name="authCode" type="password" placeholder="验证码">
+									<button id="codeBtn" onclick="return false">获取验证码</button>
+									<div id="authCodeError" class="form_error"></div>
+								</div>
+								<div class="wl_input_row" style="padding-top: 7rem">
+									<button id="add_btn" type="button" class="wl_btn" onclick="return false;">确定</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</body>
+			<script src="../js/mui.min.js"></script>
+			<script src="../js/jquery.min.js"></script>
+			<script src="../js/config.js"></script>
+			<script>
+				mui.init({
+					swipeBack:true //启用右滑关闭功能
+				})
+				mui('.mui-scroll-wrapper').scroll({
+					bounce: true //是否启用回弹
+				});
+				var code = '', code_key, bankName = '', cardType = '';
+				function getCode() {
+					$http({
+						url: "/auth/user/v2/send/verify/code",
+						data: {
+							phone: $('#telNumber').val()
+						},
+						success: function(res) {
+							console.log(JSON.stringify(res))
+							if(res.code == 10000) {
+								plus.nativeUI.toast('已成功发送验证码')
+								code_key = res.msg;
+							}else {
+								plus.nativeUI.toast('发送验证码失败，请稍后重试')
+								code_key = '';
+							}
+						}
+					})
+				}
+				function getBankInfo() {
+					$http({
+						url: "/auth/user/v2/get/bank/card/info",
+						data: {
+							cardNum: $('#cardNumber').val()
+						},
+						success: function(res) {
+							console.log(JSON.stringify(res))
+							if(res.code == 10000) {
+								$('#cardNumberError').text('')
+								bankName = res.msg.bankName;
+								cardType = res.msg.cardType;
+							}else {
+								$('#cardNumberError').text(res.msg)
+								bankName = '';
+								cardType = '';
+							}
+						}
+					})
+				}
+				mui.plusReady(function() {
+// 					window.addEventListener('myevent', function(event) {
+// 						console.log(event.detail)
+// 					})
+					$('#cardNumber').on('blur', function() {
+						getBankInfo()
+					})
+					$('#codeBtn').on('tap', function(e) {
+						getCode();
+					})
+					$('#add_btn').on('tap', function() {
+						//表单验证
+						var name = $('#userName').val(), phone = $('#telNumber').val(), code = $('#authCode').val(),
+							cardNum = $('#cardNumber').val();
+						var vaild = false;
+						if(name == '') {
+							$('#userNameError').text('持卡人不能为空');
+							vaild = true;
+						}
+						if(cardNum == '') {
+							$('#cardNumberError').text('卡号不能为空')
+							vaild = true;
+						}
+						if(phone == '') {
+							$('#telNumberError').text('手机号不能为空');
+							vaild = true;
+						}
+						if(code == ''){
+							$('#authCodeError').text('验证码不能为空');
+						}
+						if(vaild) {
+							return false;
+						}
+						$http({
+							url: '/auth/user/v2/bind/card',
+							data: {
+								"token": localStorage.getItem('token'),
+								"phone": phone,
+								"code": code,
+								"code_key": code_key,
+								"cardNum": cardNum,
+								"bankName": bankName,
+								"cardType": cardType,
+								"name": name,
+							},
+							success: function(res) {
+								console.log(JSON.stringify(res));
+								if(res.code == 10000) {
+									mui.currentWebview.close();
+									mui.fire(plus.webview.getWebviewById('card'), 'getCardListEvent')
+								}else {
+									plus.nativeUI.toast(res.msg)
+								}
+							}
+						})
+					})
+				});
+			</script>
+		</html>

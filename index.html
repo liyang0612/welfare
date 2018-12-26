@@ -15,9 +15,10 @@
 
 	<body>
 		<script src="js/mui.min.js"></script>
+		<script src="js/config.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			// localStorage.clear()
-			// localStorage.setItem('$state', JSON.stringify({ token: "haksdjfa"}));
+			// localStorage.setItem('token', "12sdf");
 			mui.init();
 			function getToken() {
 				// var stateText = localStorage.getItem('$state') || "{}";
@@ -30,10 +31,53 @@
 				 * 若存在，说明不是首次启动，直接进入首页；
 				 * 若不存在，说明是首次启动，进入引导页；
 				 */
-				var launchFlag = plus.storage.getItem("launchFlag");
-				// console.log(getToken())
+				// var launchFlag = plus.storage.getItem("launchFlag");
+				var launchFlag = 1;
 				if (launchFlag) {
 					if (getToken()) {
+						$http({
+							url: "/auth/user/v2/auto/login",
+							data: {
+								token: getToken()
+							},
+							success: function(res) {
+								if(res.code == 10000) {
+									mui.openWindow({
+										url: "./component/home.html",
+										id: "home",
+										extras: {
+											mark: "index" //额外的参数，仅仅是个标识，实际开发中不用；
+										},
+										show: {
+											aniShow: 'none',
+											//				            duration: 5
+										},
+										waiting: {
+											autoShow: false, //自动显示等待框，默认为true
+										}
+									});
+									plus.nativeUI.toast('登录成功')
+									localStorage.setItem('token', res.msg.token);
+								}else if(res.code == 10002) {
+									mui.openWindow({
+										url: "./login.html",
+										id: "login",
+										extras: {
+											mark: "index" //额外的参数，仅仅是个标识，实际开发中不用；
+										},
+										show: {
+											aniShow: 'none',
+											//				            duration: 5
+										},
+										waiting: {
+											autoShow: false, //自动显示等待框，默认为true
+										}
+									});
+									plus.nativeUI.toast('请重新登录')
+									localStorage.clear()
+								}
+							},
+						})
 						mui.openWindow({
 							url: "./component/home.html",
 							id: "home",

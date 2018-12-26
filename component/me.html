@@ -36,10 +36,10 @@
 			<a class="wf_icon_nav"><span class="wf_icon_setting"><img src="../img/seeting.jpg"></span></a>
 		</header>
 		<div class="mui-scroll-wrapper">
-			<div class="mui-scroll">
+			<div class="mui-scroll" style="padding: 54px 0;">
 			<div class="wf_me_info wf_lay">
 				<div class="me_info_picture">
-					<img src="../img/me_goods.png"/>
+					<img src="../img/wechart_icon.png"/>
 					<span></span>
 				</div>
 				<div class="me_info_con">
@@ -54,7 +54,7 @@
 				<p class="me_menu_status">目前没有状态信息</>
 				<div class="wf_grid_wrap">
 					<ul class="mui-table-view mui-grid-view mui-grid-9">
-							<li id="me_money" class="mui-table-view-cell mui-media mui-col-xs-4"><a href="#">
+							<li id="me_money_pack" class="mui-table-view-cell mui-media mui-col-xs-4"><a href="#">
 											<div class="me_menu_icon"><img src="../img/me_package.png"/></div>
 											<div class="mui-media-body">我的钱包</div></a></li>
 							<li id="me_goods" class="mui-table-view-cell mui-media mui-col-xs-4"><a href="#">
@@ -111,6 +111,7 @@
 	</body>
 	<script src="../js/mui.min.js"></script>
 	<script src="../js/zepto.main.js"></script>
+	<script src="../js/config.js"></script>
 	<script>
 		mui.init({
 			swipeBack:true //启用右滑关闭功能
@@ -118,6 +119,23 @@
 		mui('.mui-scroll-wrapper').scroll({
 			bounce: true //是否启用回弹
 		});
+		$(function() {
+			$http({
+				url: '/auth/user/v2/get/user/info',
+				data: {
+					token: localStorage.getItem('token')
+				},
+				success: function(res) {
+					console.log(JSON.stringify(res))
+					if(res.code == 10000) {
+						$('.me_username').text(res.msg.NickName);
+						$('.me_money span').text(res.msg.Balance + '金币')
+					}else {
+						
+					}
+				}
+			})
+		})
 		function createDialogview(){
 // 			if(wsub) {
 // 				wsub.close();wsub = null;
@@ -127,13 +145,19 @@
 			plus.webview.currentWebview().append(wsub);
 		}
 		mui.plusReady(function() {
-			$('.wf_me_info').on('tap', function() {
+			$('.me_info_picture').on('tap', function() {
 				createDialogview()
 			})
 			$('.wf_icon_nav').on('tap', function() {
 				mui.openWindow({
 					url: './setting.html',
 					id: 'setting'
+				})
+			})
+			$('.me_money').on('tap', function() {
+				mui.openWindow({
+					url: './gold_coin.html',
+					id: 'gold_coin'
 				})
 			})
 			mui(".mui-table-view").on('tap','.mui-table-view-cell',function(e){

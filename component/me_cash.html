@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>我的钱包</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/global.css">
+		<!--App自定义的css-->
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css" />-->
+		<style>
+			html {background: #f7f7f7;}
+			.adress_list {margin-bottom: 20px; padding:5px 0;background: #fff;display: flex; font-size: 14px;}
+			.adress_pic { width: 32px; height: 32px;margin: auto 10px;}
+			.adress_pic img { width: 100%; height: 100%; border-radius: 50%; }
+			.adress_info { flex: 1;}
+			.user_info { display: flex; }
+			.user_info .user_name { max-width: 70px; padding-right: 10px;}
+			.adress_detail {font-size: 13px; color: #555;}
+			.mui-navigate-right {float: right; right: 5px;width: 20px; height: 20px; display: block;position: relative;font-size: 20px;}
+			.mui-navigate-right:after {right: 0px;}
+			.mui-navigate-right:after {top: 15px;}
+			.adress_opr {margin: auto 0;height: 27px;line-height: 27px;width: 60px;text-align: center;font-size: 12px;color: #999}
+			.cash_wrap {background: #fff;}
+			.cash_wrap .title {font-size: 18px;padding: 5px 10px;}
+			.add_row .add_label {font-size: 28px;position: absolute;top: 10px;left: 10px;}
+			.add_input, input[type=tel] {width: 100%;border: none;height: 44px;padding: 0 35px;}
+			.cash_info{padding: 8px 10px; color: #999;border-top: solid 1px #eee; font-size: 14px;}
+			.cash_all_btn {color: #6cb290;padding-left: 30px;}
+		</style>
+	</head>
+	<body class="wf_webview">
+		<div class="mui-navbar-inner mui-bar mui-bar-nav">
+			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+				<span class="mui-icon mui-icon-left-nav"></span>
+			</button>
+			<h1 class="mui-center mui-title">我的钱包</h1>
+		</div>
+		<div class="mui-scroll-wrapper">
+			<div class="mui-scroll wf_body">
+				<div class="adress_list" style="margin-top: 10px;">
+					<div class="adress_pic"><img src="../img/icbc_icon.png"></div>
+					<div class="adress_info">
+						<div class="user_info">
+							<div class="user_name">中国银行</div>
+						</div>
+						<div class="adress_detail">
+							<span>3333 2222 1111 232</span> <span>储存卡<span>
+						</div>
+					</div>
+					<div class="adress_opr">
+						<span class="mui-navigate-right"></span>
+						<!-- <span>编辑</span> -->
+					</div>
+				</div>
+				<div class="cash_wrap">
+					<div class="title">提现金额</div>
+					<form>
+						<div class="add_row" style="margin: 7px 0;position: relative;">
+							<label class="add_label">¥</label>
+							<input id='money' class="add_input" placeholder="">
+						</div>
+					</form>
+					<div class="cash_info">
+						可提现余额 <span>1400.00</span>元
+						<span class="cash_all_btn">全部提现</span>
+					</div>
+				</div>
+				<div class="wl_input_row" style="padding: 0 15px;margin-top: 40px">
+					<button class="wl_btn">确认提现</button>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/jquery.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		})
+		mui('.mui-scroll-wrapper').scroll({
+			bounce: true //是否启用回弹
+		});
+		mui.ready(function() {
+			$('.adress_list').on('tap', function() {
+				mui.openWindow({
+					url: './me_cash_select.html',
+					id: 'me_cash_select.html'
+				})
+			})
+		})
+	</script>
+</html>

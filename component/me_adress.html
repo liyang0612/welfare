@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>收货地址</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/global.css">
+		<!--App自定义的css-->
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css" />-->
+		<style>
+			html {background: #f7f7f7;}
+			.mui-table-view {background: transparent;}
+			#OA_task_2 .mui-table-view-cell {padding: 0;border: none;}
+			.adress_list {height: 90px;padding:10px 0;background: #fff;display: flex; font-size: 14px;}
+			.adress_pic { width: 32px; height: 32px;margin: auto 10px;}
+			.adress_pic img { width: 100%; height: 100%; border-radius: 50%; }
+			.adress_info { flex: 1;}
+			.user_info { display: flex; }
+			.user_info .user_name { max-width: 70px; padding-right: 10px;}
+			.user_info .user_tel { flex: 1; font-size: 12px; color: #999; }
+			.adress_detail {font-size: 13px; color: #555; padding-right: 15px;}
+			.adress_detail span { color: #f18c5f; background: #fcf0eb;font-size: 12px; padding: 2px 5px;}
+			.adress_opr {margin: auto 0;border-left: 1px solid #eee;height: 27px;line-height: 27px;width: 60px;text-align: center;font-size: 12px;color: #999}
+		</style>
+	</head>
+	<body class="wf_webview">
+		<div class="mui-navbar-inner mui-bar mui-bar-nav">
+			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+				<span class="mui-icon mui-icon-left-nav"></span>
+			</button>
+			<h1 class="mui-center mui-title">收货地址</h1>
+		</div>
+		<div class="mui-scroll-wrapper">
+			<div class="mui-scroll wf_body">
+				<ul id="OA_task_2" class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<div class="mui-slider-right mui-disabled">
+							<a class="mui-btn mui-btn-red">删除</a>
+						</div>
+						<div class="mui-slider-handle mui-table">
+							<div class="adress_list">
+								<div class="adress_pic"><img src="../img/ccb.png"></div>
+								<div class="adress_info">
+									<div class="user_info">
+										<div class="user_name">item.Nam</div>
+										<div class="user_tel">tem.Phone </div>
+									</div>
+									<div class="adress_detail">
+										<span>默认</span>
+										阿斯顿发
+									</div>
+								</div>
+								<div class="adress_opr">
+									<span>编辑</span>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<div class="wl_input_row" style="padding: 0 15px;">
+					<button id="add_btn" class="wl_btn">添加收货地址</button>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/config.js"></script>
+	<script>
+		mui.init({
+			swipeBack: true //启用右滑关闭功能
+		})
+		mui('.mui-scroll-wrapper').scroll({
+			bounce: true //是否启用回弹
+		});
+		var adressList = [];
+// 		mui('#OA_task_2').on('slideleft', '', function(event) {
+// 			
+// 		});
+		mui.ready(function() {
+			//初始化页面
+			initAdressList();
+			window.addEventListener('myevent', function(event) {
+				console.log(event.detail)
+			})
+			$('#add_btn').on('tap', function() {
+				mui.openWindow({
+					url: './add_adress.html',
+					id: 'add_adress'
+				})
+			})
+			var btnArray = ['确认', '取消'];
+			$('#OA_task_2 .mui-table-view-cell').each(function(index) {
+				$(this).on('slideleft', function(event) {
+					var elem = this;
+					mui.confirm('确认删除该地址吗？', '删除收货地址', btnArray, function(e) {
+						if (e.index == 0) {
+							deleteAdress(adressList[index].id, function() {
+								elem.parentNode.removeChild(elem);
+							})
+						} else {
+							setTimeout(function() {
+								mui.swipeoutClose(elem);
+							}, 0);
+						}
+					});
+				})
+			});
+			
+
+		});
+
+		function initAdressList() {
+			$http({
+				url: '/auth/user/v2/get/receiving/list',
+				data: {
+					token: localStorage.getItem('token')
+				},
+				success: function(res) {
+					console.log(JSON.stringify(res));
+					var listDom = [];
+					if (res.code == 10000) {
+						adressList = res.msg;
+						if (!res.msg.length) {
+							var nullList = '<div class="no_data">暂无数据</div>';
+							$('#OA_task_2').html(nullList);
+							return false;
+						}
+						res.msg.forEach(function(item, index) {
+							listDom.push('﻿<li class="mui-table-view-cell">\n' +
+								'\t\t\t\t\t\t\t\t\t\t<div class="mui-slider-right mui-disabled">\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t<a class="mui-btn mui-btn-red">删除</a>\n' +
+								'\t\t\t\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t\t\t\t\t<div class="mui-slider-handle mui-table">\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t<div class="adress_list">\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t<div class="adress_pic"><img src="../img/ccb.png"></div>\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t<div class="adress_info">\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t\t<div class="user_info">\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class="user_name">' + item.Name + '</div>\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class="user_tel">' + item.Phone + ' </div>\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t\t<div class="adress_detail">\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span>默认</span>\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t\t\t﻿' + item.Province + item.City + item.Area + item.Street + '\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t<div class="adress_opr">\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t\t<span>编辑</span>\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t\t\t\t</li>')
+						});
+						$('#OA_task_2').html(listDom.join(''))
+					}
+				}
+			})
+		}
+
+		function deleteAdress(id, callback) {
+			console.log(id);
+			callback();
+			$http({
+				url: '/auth/user/v2/del/receiving/address',
+				data: {
+					token: localStorage.getItem('token'),
+					id: id
+				},
+				success: function(res) {
+					console.log(JSON.stringify(res));
+					if (res.code == 10000) {
+						plus.nativeUI.toast('删除成功')
+					} else {
+						plus.nativeUI.toast('删除失败，请重试')
+					}
+				}
+			})
+		}
+	</script>
+</html>

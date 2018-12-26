@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>我的钱包-选择提现方式</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/global.css">
+		<!--App自定义的css-->
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css" />-->
+		<style>
+			html {background: #f7f7f7;}
+			.adress_list {padding:5px 0;border-bottom: solid 1px #eee;background: #fff;display: flex; font-size: 14px;}
+			.adress_list:last-child {border: none;}
+			.adress_pic { width: 32px; height: 32px;margin: auto 10px;}
+			.adress_pic img { width: 100%; height: 100%; border-radius: 50%; }
+			.adress_info { flex: 1;}
+			.user_info { display: flex; }
+			.user_info .user_name { max-width: 70px; padding-right: 10px;}
+			.adress_detail {font-size: 13px; color: #555;}
+			.mui-icon {font-size: 28px; color: #4FB4F8;}
+			.adress_opr {margin: auto 0;height: 27px;line-height: 27px;width: 60px;text-align: center;font-size: 12px;color: #999}
+		</style>
+	</head>
+	<body class="wf_webview">
+		<div class="mui-navbar-inner mui-bar mui-bar-nav">
+			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+				<span class="mui-icon mui-icon-left-nav"></span>
+			</button>
+			<h1 class="mui-center mui-title">我的钱包-选择提现方式</h1>
+		</div>
+		<div class="mui-scroll-wrapper">
+			<div class="mui-scroll wf_body">
+				<div>
+					<div class="adress_list">
+						<div class="adress_pic"><img src="../img/icbc_icon.png"></div>
+						<div class="adress_info">
+							<div class="user_info">
+								<div class="user_name">中国银行</div>
+							</div>
+							<div class="adress_detail">
+								<span>3333 2222 1111 232</span> <span>储存卡<span>
+							</div>
+						</div>
+						<div class="adress_opr">
+							<span class="mui-icon mui-icon-checkmarkempty"></span>
+							<!-- <span>编辑</span> -->
+						</div>
+					</div>
+					<div class="adress_list">
+						<div class="adress_pic"><img src="../img/wechart_icon.png"></div>
+						<div class="adress_info">
+							<div class="user_info">
+								<div class="user_name">微信钱包</div>
+							</div>
+							<div class="adress_detail">
+								<span>wxid</span> <span><span>
+							</div>
+						</div>
+						<div class="adress_opr">
+							<!-- <span class="mui-icon mui-icon-checkmarkempty"></span> -->
+							<!-- <span>编辑</span> -->
+						</div>
+					</div>
+				</div>
+				<div class="wl_input_row" style="padding: 0 15px;margin-top: 40px">
+					<button class="wl_btn">确认</button>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/jquery.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		})
+		mui('.mui-scroll-wrapper').scroll({
+			bounce: true //是否启用回弹
+		});
+	</script>
+</html>

@@ -127,7 +127,7 @@
 		<script src="js/mui.enterfocus.js"></script>
 		<script src="js/zepto.main.js"></script>
 		<script src="js/app.js"></script>
-		<script src="js/http.js"></script>
+		<script src="js/config.js"></script>
 		<script>
 			(function($, doc) {
 				$.init({
@@ -154,6 +154,7 @@
 					var toMain = function() {
 						//使用定时器的原因：
 						//可能执行太快，main页面loaded事件尚未触发就执行自定义事件，此时必然会失败
+						console.log('tomain')
 						var id = setInterval(function () {
 							if(main_loaded_flag){
 								clearInterval(id);
@@ -247,8 +248,13 @@
 								phone: accountBox.value
 							},
 							success: function(res) {
-								console.log(res.code)
-								code_key = res.msg;
+								console.log(JSON.stringify(res))
+								if(res.code == 10000) {
+									plus.nativeUI.toast('已成功发送验证码')
+									code_key = res.msg;
+								}else {
+									plus.nativeUI.toast('发送验证码失败，请稍后重试')
+								}
 							}
 						})
 					})
@@ -262,9 +268,30 @@
 								code_key: code_key
 							},
 							success: function(res) {
-								console.log(res.code)
-								toMain();
-								localStorage.setItem('token', res.msg.token);
+								console.log(JSON.stringify(res))
+								if(res.code == 10000) {
+									plus.nativeUI.toast('登录成功')
+									console.log('success')
+									// toMain();
+									mui.openWindow({
+										url: "./component/home.html",
+										id: "home",
+										extras: {
+											mark: "index" //额外的参数，仅仅是个标识，实际开发中不用；
+										},
+										show: {
+											aniShow: 'none',
+											//				            duration: 5
+										},
+										waiting: {
+											autoShow: false, //自动显示等待框，默认为true
+										}
+									});
+									localStorage.setItem('token', res.msg.token);
+								}else {
+									plus.nativeUI.toast('登录失败，请重试')
+									localStorage.clear()
+								}
 							}
 						})
 					})

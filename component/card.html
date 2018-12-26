@@ -14,10 +14,12 @@
 			html {
 				touch-action: none
 			}
+
 			html,
 			body {
 				background-color: #efeff4;
 			}
+
 			.mui-views,
 			.mui-view,
 			.mui-pages,
@@ -32,46 +34,55 @@
 				height: 100%;
 				background-color: #fff;
 			}
+
 			.mui-pages {
 				top: 56px;
 				height: auto;
 			}
+
 			.mui-scroll-wrapper,
 			.mui-scroll {
 				background-color: #ffffff;
 			}
+
 			.mui-page.mui-transitioning {
 				-webkit-transition: -webkit-transform 300ms ease;
 				transition: transform 300ms ease;
 			}
+
 			.mui-page-left {
 				-webkit-transform: translate3d(0, 0, 0);
 				transform: translate3d(0, 0, 0);
 			}
+
 			.mui-ios .mui-page-left {
 				-webkit-transform: translate3d(-20%, 0, 0);
 				transform: translate3d(-20%, 0, 0);
 			}
-			
+
 
 			.mui-android .mui-navbar-inner.mui-navbar-left {
 				opacity: 0;
 			}
+
 			.mui-ios .mui-navbar-left .mui-left,
 			.mui-ios .mui-navbar-left .mui-center,
 			.mui-ios .mui-navbar-left .mui-right {
 				opacity: 0;
 			}
+
 			.mui-navbar .mui-btn-nav {
 				-webkit-transition: none;
 				transition: none;
 				-webkit-transition-duration: .0s;
 				transition-duration: .0s;
 			}
+
 			.mui-navbar .mui-bar .mui-title {
 				display: inline-block;
 				width: auto;
 			}
+
 			.mui-page-shadow {
 				position: absolute;
 				right: 100%;
@@ -81,116 +92,151 @@
 				z-index: -1;
 				content: '';
 			}
+
 			.mui-page-shadow {
 				background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
 				background: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
 			}
+
 			.mui-navbar-inner.mui-transitioning,
 			.mui-navbar-inner .mui-transitioning {
 				-webkit-transition: opacity 300ms ease, -webkit-transform 300ms ease;
 				transition: opacity 300ms ease, transform 300ms ease;
 			}
+
 			.mui-page {
 				display: none;
 			}
+
 			.mui-pages .mui-page {
 				display: block;
 			}
+
 			.mui-table-view-cell:after {
 				height: 0;
 			}
+
 			.mui-table-view:after {
 				height: 0
 			}
+
 			.mui-table-view:before {
 				background-color: #eee;
 			}
-			.mui-navigate-right:after, .mui-push-right:after {
+
+			.mui-navigate-right:after,
+			.mui-push-right:after {
 				font-size: 20px;
 				font-weight: 800;
 			}
+
 			.card_content {
 				padding: 15px;
 			}
-			.card_list{
-				
-			}
-			.card_list_item{
+
+			.card_list {}
+
+			.card_list_item {
 				position: relative;
-				margin-top: 15px;
+				/* margin-bottom: 15px; */
 				height: 8.5rem;
 				width: 100%;
 			}
-			.card_list_item > p {
+
+			.card_list_item>p {
 				color: #fff;
 				margin: 0
 			}
+
 			.card_list_item .card_type {
 				font-size: 12px;
 			}
-			.card_name, .card_number, .card_type {
+
+			.card_name,
+			.card_number,
+			.card_type {
 				position: absolute;
 				left: 4.145rem;
 			}
+
 			.card_name {
 				top: 1.2857rem;
 			}
+
 			.card_type {
 				top: 2.4386rem;
 			}
+
 			.card_number {
 				bottom: 0.8554rem;
 			}
-			.cmb_bg{
+
+			.cmb_bg {
 				background: url(../img/cmb.png) no-repeat;
 				background-size: 100%;
 			}
+
 			.bocom_bg {
 				background: url(../img/bocom.png) no-repeat;
 				background-size: 100%;
 			}
+
 			.bocd_bg {
 				background: url(../img/bocd.png) no-repeat;
 				background-size: 100%;
 			}
-			.spdb_bg{
+
+			.spdb_bg {
 				background: url(../img/spdb.png) no-repeat;
 				background-size: 100%;
 			}
+
 			.boc_bg {
 				background: url(../img/boc.png) no-repeat;
 				background-size: 100%;
 			}
+
 			.cib_bg {
 				background: url(../img/cib.png) no-repeat;
 				background-size: 100%;
 			}
+
 			.citic_bg {
 				background: url(../img/citic.png) no-repeat;
 				background-size: 100%;
 			}
+
 			.psbc_bg {
 				background: url(../img/psbc.png) no-repeat;
 				background-size: 100%;
 			}
+
 			.abc_bg {
 				background: url(../img/abc.png) no-repeat;
 				background-size: 100%;
 			}
+
 			.ccb_bg {
 				background: url(../img/ccb.png) no-repeat;
 				background-size: 100%;
 			}
+
 			.icbc_bg {
 				background: url(../img/icbc.png) no-repeat;
 				background-size: 100%;
 			}
+
 			.unionpay_bg {
 				background: url(../img/unionpay.png) no-repeat;
 				background-size: 100%;
 			}
+
+			.mui-table-view-cell {
+				margin-bottom: 15px;
+				padding: 0;
+			}
+
 			/*问题反馈在setting页面单独的css==end*/
-			
 		</style>
 		<link rel="stylesheet" type="text/css" href="../css/feedback.css" />
 	</head>
@@ -228,97 +274,191 @@
 						</ul> -->
 						<div class="card_content">
 							<div class="card_list">
-								<div class="card_list_item boc_bg">
-									<p class="card_name">
-										<span class="cn">中国银行</span>
-										<span class="en">BOC</span>
-									</p>
-									<p class="card_type">储存卡</p>
-									<p class="card_number">123412312312</p>
-								</div>
-								<div class="card_list_item bocom_bg">
-									<p class="card_name">
-										<span class="cn">交通银行</span>
-										<span class="en">BOCOM</span>
-									</p>
-									<p class="card_type">信用卡</p>
-									<p class="card_number">3453247896734</p>
-								</div>
-								<div class="card_list_item bocd_bg">
-									<p class="card_name">
-										<span class="cn">成都银行</span>
-										<span class="en">BOC</span>
-									</p>
-									<p class="card_type">储存卡</p>
-									<p class="card_number">3453247896734</p>
-								</div>
-								<div class="card_list_item ccb_bg">
-									<p class="card_name">
-										<span class="cn">中国建设银行</span>
-										<span class="en">CCB</span>
-									</p>
-									<p class="card_type">储存卡</p>
-									<p class="card_number">3453247896734</p>
-								</div>
-								<div class="card_list_item unionpay_bg">
-									<p class="card_name">
-										<span class="cn">中国银联</span>
-										<span class="en">UP</span>
-									</p>
-									<p class="card_type">储存卡</p>
-									<p class="card_number">3453247896734</p>
-								</div>
-								<div class="card_list_item spdb_bg">
-									<p class="card_name">
-										<span class="cn">浦发银行</span>
-										<span class="en">SPDB</span>
-									</p>
-									<p class="card_type">储存卡</p>
-									<p class="card_number">3453247896734</p>
-								</div>
-								<div class="card_list_item cib_bg">
-									<p class="card_name">
-										<span class="cn">兴业银行</span>
-										<span class="en">CIB</span>
-									</p>
-									<p class="card_type">储存卡</p>
-									<p class="card_number">3453247896734</p>
-								</div>
-								<div class="card_list_item cmb_bg">
-									<p class="card_name">
-										<span class="cn">招商银行</span>
-										<span class="en">CMB</span>
-									</p>
-									<p class="card_type">储存卡</p>
-									<p class="card_number">3453247896734</p>
-								</div>
-								<div class="card_list_item abc_bg">
-									<p class="card_name">
-										<span class="cn">中国邮政银行</span>
-										<span class="en">CMB</span>
-									</p>
-									<p class="card_type">储存卡</p>
-									<p class="card_number">3453247896734</p>
-								</div>
-								<div class="card_list_item citic_bg">
-									<p class="card_name">
-										<span class="cn">中信银行</span>
-										<span class="en">CCB</span>
-									</p>
-									<p class="card_type">储存卡</p>
-									<p class="card_number">3453247896734</p>
-								</div>
-								<div class="card_list_item psbc_bg">
-									<p class="card_name">
-										<span class="cn">中国邮政银行</span>
-										<span class="en">PSBC</span>
-									</p>
-									<p class="card_type">储存卡</p>
-									<p class="card_number">3453247896734</p>
-								</div>
+								<ul id="OA_task_2" class="mui-table-view">
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item boc_bg">
+												<p class="card_name">
+													<span class="cn">中国银行</span>
+													<span class="en">BOC</span>
+												</p>
+												<p class="card_type">储存卡</p>
+												<p class="card_number">123412312312</p>
+											</div>
+										</div>
+									</li>
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item boc_bg">
+												<p class="card_name">
+													<span class="cn">中国银行</span>
+													<span class="en">BOC</span>
+												</p>
+												<p class="card_type">储存卡</p>
+												<p class="card_number">123412312312</p>
+											</div>
+										</div>
+									</li>
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item bocom_bg">
+												<p class="card_name">
+													<span class="cn">交通银行</span>
+													<span class="en">BOCOM</span>
+												</p>
+												<p class="card_type">信用卡</p>
+												<p class="card_number">3453247896734</p>
+											</div>
+										</div>
+									</li>
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item bocd_bg">
+												<p class="card_name">
+													<span class="cn">成都银行</span>
+													<span class="en">BOC</span>
+												</p>
+												<p class="card_type">储存卡</p>
+												<p class="card_number">3453247896734</p>
+											</div>
+										</div>
+									</li>
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item ccb_bg">
+												<p class="card_name">
+													<span class="cn">中国建设银行</span>
+													<span class="en">CCB</span>
+												</p>
+												<p class="card_type">储存卡</p>
+												<p class="card_number">3453247896734</p>
+											</div>
+										</div>
+									</li>
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item unionpay_bg">
+												<p class="card_name">
+													<span class="cn">中国银联</span>
+													<span class="en">UP</span>
+												</p>
+												<p class="card_type">储存卡</p>
+												<p class="card_number">3453247896734</p>
+											</div>
+										</div>
+									</li>
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item spdb_bg">
+												<p class="card_name">
+													<span class="cn">浦发银行</span>
+													<span class="en">SPDB</span>
+												</p>
+												<p class="card_type">储存卡</p>
+												<p class="card_number">3453247896734</p>
+											</div>
+										</div>
+									</li>
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item cib_bg">
+												<p class="card_name">
+													<span class="cn">兴业银行</span>
+													<span class="en">CIB</span>
+												</p>
+												<p class="card_type">储存卡</p>
+												<p class="card_number">3453247896734</p>
+											</div>
+										</div>
+									</li>
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item cmb_bg">
+												<p class="card_name">
+													<span class="cn">招商银行</span>
+													<span class="en">CMB</span>
+												</p>
+												<p class="card_type">储存卡</p>
+												<p class="card_number">3453247896734</p>
+											</div>
+										</div>
+									</li>
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item abc_bg">
+												<p class="card_name">
+													<span class="cn">中国邮政银行</span>
+													<span class="en">CMB</span>
+												</p>
+												<p class="card_type">储存卡</p>
+												<p class="card_number">3453247896734</p>
+											</div>
+										</div>
+									</li>
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item citic_bg">
+												<p class="card_name">
+													<span class="cn">中信银行</span>
+													<span class="en">CCB</span>
+												</p>
+												<p class="card_type">储存卡</p>
+												<p class="card_number">3453247896734</p>
+											</div>
+										</div>
+									</li>
+									<li class="mui-table-view-cell">
+										<div class="mui-slider-right mui-disabled">
+											<a class="mui-btn mui-btn-red">删除</a>
+										</div>
+										<div class="mui-slider-handle mui-table">
+											<div class="card_list_item psbc_bg">
+												<p class="card_name">
+													<span class="cn">中国邮政银行</span>
+													<span class="en">PSBC</span>
+												</p>
+												<p class="card_type">储存卡</p>
+												<p class="card_number">3453247896734</p>
+											</div>
+										</div>
+									</li>
+								</ul>
 							</div>
 							<div class="wl_input_row" style="margin-top: 30px">
-								<button class="wl_btn">添加</button>
+								<button id="add_btn" class="wl_btn">添加</button>
 							</div>
 						</div>
 					</div>
@@ -330,6 +470,8 @@
 	<script src="../js/mui.min.js "></script>
 	<script src="../js/mui.view.js "></script>
 	<script src='../js/feedback.js'></script>
+	<script src="../js/config.js"></script>
+	<script src="../js/jquery.min.js"></script>
 	<script>
 		mui.init();
 		//初始化单页view
@@ -339,10 +481,20 @@
 		//初始化单页的区域滚动
 		mui('.mui-scroll-wrapper').scroll();
 		var view = viewApi.view;
-		(function($) {
+		var cardList = [];
+		(function(mui) {
+			
+			mui.ready(function() {
+				//初始化
+				initCardList();
+				//监听添加银行卡
+				window.addEventListener('getCardListEvent', function() {
+					initCardList();
+				})
+			})
 			//处理view的后退与webview后退
-			var oldBack = $.back;
-			$.back = function() {
+			var oldBack = mui.back;
+			mui.back = function() {
 				if (viewApi.canBack()) { //如果view可以后退，则执行view的后退
 					viewApi.back();
 				} else { //执行webview后退
@@ -363,8 +515,91 @@
 			view.addEventListener('pageBack', function(e) {
 				//				console.log(e.detail.page.id + ' back');
 			});
+			$('#add_btn').on('tap', function() {
+				mui.openWindow({
+					url: './me_card_add.html',
+					id: 'me_card_add'
+				})
+			})
+
+			function deleteAdress(id, callback) {
+				console.log('delete id');
+				callback();
+				$http({
+					url: '/auth/user/v2/del/card',
+					data: {
+						token: localStorage.getItem('token'),
+						id: id
+					},
+					success: function(res) {
+						console.log(JSON.stringify(res));
+						if (res.code == 10000) {
+							plus.nativeUI.toast('删除成功')
+						} else {
+							plus.nativeUI.toast('删除失败，请重试')
+						}
+					}
+				})
+			}
+
+			function initCardList() {
+				// return false;
+				$http({
+					url: '/auth/user/v2/get/card/list',
+					data: {
+						token: localStorage.getItem('token')
+					},
+					success: function(res) {
+						var listDom = [];
+						console.log(JSON.stringify(res))
+						if (res.code == 10000) {
+							cardList = res.msg;
+							res.msg.forEach(function(item, index) {
+								listDom.push('<li class="mui-table-view-cell">\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t<div class="mui-slider-right mui-disabled">\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t\t<a class="mui-btn mui-btn-red">删除</a>\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t<div class="mui-slider-handle mui-table">\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t\t<div class="card_list_item '+ cardConfig(item.BankName) +'_bg">\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t\t\t<p class="card_name">\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t\t\t\t<span class="cn">'+ item.BankName +'</span>\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t\t\t\t<span class="en">'+ getBankEnStr(item.BankName) +'</span>\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t\t\t</p>\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t\t\t<p class="card_type">'+ item.CardType +'</p>\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t\t\t<p class="card_number">' + item.CardNum + '</p>\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                  '\t\t\t\t\t\t\t\t\t</li>')
+							})
+							$('#OA_task_2').html(listDom.join(''));
+							addDeleteEvent();
+						}
+					}
+				})
+			}
+			function getBankEnStr(str) {
+				return cardConfig(str) == 'unionpay' ? 'UnionPay' :  cardConfig(str).toUpperCase()
+			}
+			function addDeleteEvent() {
+				var btnArray = ['确认', '取消'];
+				$('#OA_task_2 .mui-table-view-cell').each(function(index) {
+					$(this).on('slideleft', function(event) {
+						var elem = this;
+						mui.confirm('确认删除该银行卡吗？', '删除', btnArray, function(e) {
+							if (e.index == 0) {
+								deleteAdress(cardList[index].Id, function() {
+									elem.parentNode.removeChild(elem);
+								})
+							} else {
+								setTimeout(function() {
+									mui.swipeoutClose(elem);
+								}, 0);
+							}
+						});
+					})
+				})
+			}
 		})(mui);
-		
 	</script>
 
 </html>

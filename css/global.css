@@ -3,7 +3,19 @@ html {
 	font-size: 14px;
 	background: #fff;
 }
-
+.form_error {
+	color: red;
+	font-size: 12px;
+	position: absolute;
+	bottom: -5px;
+	left: 0;
+}
+.no_data {
+	text-align: center;
+	font-size: 14px;
+	color: #ccc;
+	padding: 20px 0;
+}
 .wf_body {
 	padding-top: 56px;
 }
@@ -176,7 +188,7 @@ html {
 	height: 7.1429rem;
 	border-radius: 50%;
 	overflow: hidden;
-	background: #007AFF;
+	background: #4FB4F8;
 	float: left;
 }
 
@@ -227,6 +239,7 @@ html {
 .wl_input_row {
 	width: 100%;
 	margin: 10px auto;
+	position: relative;
 }
 .wl_input_row input {
 	border: none;

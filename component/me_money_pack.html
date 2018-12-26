@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>我的钱包</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/global.css">
+		<link href="../css/mui.picker.css" rel="stylesheet" />
+		<link href="../css/mui.poppicker.css" rel="stylesheet" />
+		<!--App自定义的css-->
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css" />-->
+		<style>
+			html {background: #f7f7f7;}
+			.account_info {padding: 15px;display: flex; background: #fff;}
+			.account_money {flex: 1;}
+			.txt {font-size: 14px; color: #666; padding-bottom: 5px;}
+			.num {font-size: 16px; color: #333;}
+			.account_info button {
+				background: #4FB4F8; border: none;padding: 0px 20px;color: #fff;height: 30px;margin: auto;
+			}
+			.account_detail_txt {font-size: 14px; color: #666;padding: 8px 15px; }
+			.account_detail_list {background: #fff;}
+			.detail_item {border-bottom: solid 1px #eee;display: flex;padding: 10px 15px;}
+			.detail_item:last-child {border-bottom: none;}
+			.detail_date {width: 60px;color: #ccc;font-size: 12px;}
+			.detail_date .year {font-size: 16px;padding-bottom: 2px;}
+			.detail_info {flex: 1; color: #333;font-size: 16px;}
+			.detail_info .title {padding-bottom: 2px;}
+			.detail_info .content {font-size: 12px; color: ccc;}
+			.detail_num {flex: 1; text-align: right;margin: auto;}
+		</style>
+	</head>
+	<body class="wf_webview">
+		<div class="mui-navbar-inner mui-bar mui-bar-nav">
+			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+				<span class="mui-icon mui-icon-left-nav"></span>
+			</button>
+			<h1 class="mui-center mui-title">我的钱包</h1>
+		</div>
+		<div class="mui-scroll-wrapper">
+			<div class="mui-scroll wf_body">
+				<div class="account_info">
+					<div class="account_money">
+						<div class="txt">账户余额</div>
+						<div class="num"><span>1500.00</span> 元</div>
+					</div>
+					<button id="cash_btn">提现</button>
+				</div>
+				<div class="account_detail">
+					<div class="account_detail_txt">账户明细</div>
+					<div class="account_detail_list">
+						<div class="detail_item">
+							<div class="detail_date">
+								<div class="year">2018</div>
+								<div class="month">12/24</div>
+							</div>
+							<div class="detail_info">
+								<div class="title">提现</div>
+								<div class="content">提现至微信钱包</div>
+							</div>
+							<div class="detail_num">-600</div>
+						</div>
+						<div class="detail_item">
+							<div class="detail_date">
+								<div class="year">2018</div>
+								<div class="month">12/24</div>
+							</div>
+							<div class="detail_info">
+								<div class="title">游戏获取</div>
+								<div class="content">提现至微信钱包</div>
+							</div>
+							<div class="detail_num">+100</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/mui.picker.js"></script>
+	<script src="../js/mui.poppicker.js"></script>
+	<script src="../js/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/jquery.min.js"></script>
+<!-- 	<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		})
+		mui('.mui-scroll-wrapper').scroll({
+			bounce: true //是否启用回弹
+		});
+	</script> -->
+	<script>
+		function getAdressStr(str) {
+			return str.slice(0, -1)
+		}
+		(function(doc) {
+			mui.init();
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			//普通示例
+			mui.ready(function() {
+				$('#cash_btn').on('tap', function() {
+					mui.openWindow({
+						url: './me_cash.html',
+						id: 'me_cash'
+					})
+				})
+			});
+		})(document);
+		</script>
+</html>
