@@ -38,7 +38,7 @@
 				<div class="gold_coin_bg">
 					<div class="gold_coin_wrap">
 						<div class="gold_coin_txt">金币（个）</div>
-						<div class="gold_price">1400.00</div>
+						<div class="gold_price" id="gold_coin"></div>
 					</div>
 				</div>
 			</div>
@@ -53,5 +53,9 @@
 		mui('.mui-scroll-wrapper').scroll({
 			bounce: true //是否启用回弹
 		});
+		mui.plusReady(function() {
+			let goldCoin = plus.webview.getWebviewById('gold_coin').balance
+			$('#gold_coin').text(goldCoin)
+		})
 	</script>
 </html>

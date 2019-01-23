@@ -16,11 +16,11 @@
 		<style>
 			html {background: #f7f7f7;}
 			.adress_list {margin-bottom: 20px; padding:5px 0;background: #fff;display: flex; font-size: 14px;}
-			.adress_pic { width: 32px; height: 32px;margin: auto 10px;}
-			.adress_pic img { width: 100%; height: 100%; border-radius: 50%; }
+			.adress_pic { width: 32px; height: 32px;margin: auto 10px;border-radius: 50%;overflow: hidden;}
+			.boc_icon {  background: url(../img/boc_icon.png) no-repeat;background-size: 100%;}
 			.adress_info { flex: 1;}
 			.user_info { display: flex; }
-			.user_info .user_name { max-width: 70px; padding-right: 10px;}
+			.user_info .user_name {padding-right: 10px;}
 			.adress_detail {font-size: 13px; color: #555;}
 			.mui-navigate-right {float: right; right: 5px;width: 20px; height: 20px; display: block;position: relative;font-size: 20px;}
 			.mui-navigate-right:after {right: 0px;}
@@ -43,19 +43,21 @@
 		</div>
 		<div class="mui-scroll-wrapper">
 			<div class="mui-scroll wf_body">
-				<div class="adress_list" style="margin-top: 10px;">
-					<div class="adress_pic"><img src="../img/icbc_icon.png"></div>
-					<div class="adress_info">
-						<div class="user_info">
-							<div class="user_name">中国银行</div>
+				<div id="selectedCard">
+					<div class="adress_list" style="margin-top: 10px;">
+						<div class="adress_pic icbc_icon"></div>
+						<div class="adress_info">
+							<div class="user_info">
+								<div class="user_name">中国银行</div>
+							</div>
+							<div class="adress_detail">
+								<span>3333 2222 1111 232</span> <span>储存卡</span>
+							</div>
 						</div>
-						<div class="adress_detail">
-							<span>3333 2222 1111 232</span> <span>储存卡<span>
+						<div class="adress_opr">
+							<span class="mui-navigate-right"></span>
+							<!-- <span>编辑</span> -->
 						</div>
-					</div>
-					<div class="adress_opr">
-						<span class="mui-navigate-right"></span>
-						<!-- <span>编辑</span> -->
 					</div>
 				</div>
 				<div class="cash_wrap">
@@ -79,6 +81,7 @@
 	</body>
 	<script src="../js/mui.min.js"></script>
 	<script src="../js/jquery.min.js"></script>
+	<script src="../js/config.js"></script>
 	<script>
 		mui.init({
 			swipeBack:true //启用右滑关闭功能
@@ -86,13 +89,51 @@
 		mui('.mui-scroll-wrapper').scroll({
 			bounce: true //是否启用回弹
 		});
-		mui.ready(function() {
-			$('.adress_list').on('tap', function() {
-				mui.openWindow({
-					url: './me_cash_select.html',
-					id: 'me_cash_select.html'
-				})
-			})
+		mui.plusReady(function() {
+			getCardList()
 		})
+		function getCardList() {
+			$http({
+				url: '/auth/user/v2/get/card/list',
+				data: {
+					token: localStorage.getItem('token')
+				},
+				success: function(res) {
+					var selectedCard = res.msg[0]
+					console.log(JSON.stringify(res))
+					if (res.code == 10000) {
+						initSelectedCard(selectedCard)
+						$('.adress_list').on('tap', function() {
+							mui.openWindow({
+								url: './me_cash_select.html',
+								id: 'me_cash_select',
+								extras: {
+									cardList: res.msg
+								}
+								
+							})
+						})
+					}
+				}
+			})
+		}
+		
+		function initSelectedCard(selectedCard) {
+			$('#selectedCard').html("<div class=\"adress_list\" style=\"margin-top: 10px;\">\n" +
+			"\t\t\t\t\t\t<div class=\"adress_pic "+ cardConfig(selectedCard.BankName) +"_icon\"></div>\n" +
+			"\t\t\t\t\t\t<div class=\"adress_info\">\n" +
+			"\t\t\t\t\t\t\t<div class=\"user_info\">\n" +
+			"\t\t\t\t\t\t\t\t<div class=\"user_name\">"+ selectedCard.BankName +"</div>\n" +
+			"\t\t\t\t\t\t\t</div>\n" +
+			"\t\t\t\t\t\t\t<div class=\"adress_detail\">\n" +
+			"\t\t\t\t\t\t\t\t<span>"+ selectedCard.CardNum +"</span> <span>"+ selectedCard.CardType +"</span>\n" +
+			"\t\t\t\t\t\t\t</div>\n" +
+			"\t\t\t\t\t\t</div>\n" +
+			"\t\t\t\t\t\t<div class=\"adress_opr\">\n" +
+			"\t\t\t\t\t\t\t<span class=\"mui-navigate-right\"></span>\n" +
+			"\t\t\t\t\t\t\t<!-- <span>编辑</span> -->\n" +
+			"\t\t\t\t\t\t</div>\n" +
+			"\t\t\t\t\t</div>")
+		}
 	</script>
 </html>

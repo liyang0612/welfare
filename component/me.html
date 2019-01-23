@@ -46,7 +46,7 @@
 					<div class="me_username">用户1</div>
 					<div class="me_level"></div>
 					<div class="me_money">
-						<span>50 金币</span>
+						<span><span id="gold_coin_num">50<span> 金币</span>
 					</div>
 				</div>
 			</div>
@@ -81,12 +81,12 @@
 							<span>添加</span>
 						</div>
 					</div> -->
-					<div class="live_player">
+<!-- 					<div class="live_player">
 						<img src="../img/abc.png"/>
 						<div class="video_icon">
 							<img src="../img/play.png" />
 						</div>
-					</div>
+					</div> -->
 					<p class="add_live_txt">当前还没有游戏间</p>
 					<div class="add_btn">
 						<span>添加</span>
@@ -110,7 +110,7 @@
 		</div>
 	</body>
 	<script src="../js/mui.min.js"></script>
-	<script src="../js/zepto.main.js"></script>
+	<script src="../js/jquery.min.js"></script>
 	<script src="../js/config.js"></script>
 	<script>
 		mui.init({
@@ -119,6 +119,12 @@
 		mui('.mui-scroll-wrapper').scroll({
 			bounce: true //是否启用回弹
 		});
+		$('.add_btn').on('tap', function() {
+			mui.openWindow({
+				url: './open_studio.html',
+				id: 'open_studio'
+			})
+		})
 		$(function() {
 			$http({
 				url: '/auth/user/v2/get/user/info',
@@ -129,7 +135,7 @@
 					console.log(JSON.stringify(res))
 					if(res.code == 10000) {
 						$('.me_username').text(res.msg.NickName);
-						$('.me_money span').text(res.msg.Balance + '金币')
+						$('#gold_coin_num').text(res.msg.Balance + '金币')
 					}else {
 						
 					}
@@ -145,6 +151,9 @@
 			plus.webview.currentWebview().append(wsub);
 		}
 		mui.plusReady(function() {
+			$('.add_btn').on('tap', function() {
+				console.log('alskdjflkasd')
+			})
 			$('.me_info_picture').on('tap', function() {
 				createDialogview()
 			})
@@ -157,7 +166,10 @@
 			$('.me_money').on('tap', function() {
 				mui.openWindow({
 					url: './gold_coin.html',
-					id: 'gold_coin'
+					id: 'gold_coin',
+					extras: {
+						balance: $('#gold_coin_num').text()
+					}
 				})
 			})
 			mui(".mui-table-view").on('tap','.mui-table-view-cell',function(e){

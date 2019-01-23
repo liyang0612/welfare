@@ -32,7 +32,7 @@
 			.detail_date .year {font-size: 16px;padding-bottom: 2px;}
 			.detail_info {flex: 1; color: #333;font-size: 16px;}
 			.detail_info .title {padding-bottom: 2px;}
-			.detail_info .content {font-size: 12px; color: ccc;}
+			.detail_info .content {font-size: 12px; color: #ccc;}
 			.detail_num {flex: 1; text-align: right;margin: auto;}
 		</style>
 	</head>
@@ -48,7 +48,7 @@
 				<div class="account_info">
 					<div class="account_money">
 						<div class="txt">账户余额</div>
-						<div class="num"><span>1500.00</span> 元</div>
+						<div class="num"><span id="balance">1500.00</span> 元</div>
 					</div>
 					<button id="cash_btn">提现</button>
 				</div>
@@ -83,9 +83,10 @@
 		</div>
 	</body>
 	<script src="../js/mui.min.js"></script>
-	<script src="../js/mui.picker.js"></script>
+<!-- 	<script src="../js/mui.picker.js"></script>
 	<script src="../js/mui.poppicker.js"></script>
-	<script src="../js/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/city.data-3.js" type="text/javascript" charset="utf-8"></script> -->
+	<script src="../js/config.js"></script>
 	<script src="../js/jquery.min.js"></script>
 <!-- 	<script>
 		mui.init({
@@ -101,18 +102,90 @@
 		}
 		(function(doc) {
 			mui.init();
+			var billList = []
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
 			};
 			//普通示例
-			mui.ready(function() {
+			mui.plusReady(function() {
+				getBlance()
+              	getBillList()
 				$('#cash_btn').on('tap', function() {
 					mui.openWindow({
 						url: './me_cash.html',
-						id: 'me_cash'
+						id: 'me_cash',
+						extras: {
+							balance: $('#balance').text()
+						}
 					})
 				})
 			});
+			
+			function getBlance() {
+				$http({
+					url: '/auth/user/v2/get/user/balance',
+					data: {
+						token: localStorage.getItem('token'),
+					},
+					success: function(res) {
+						if (res.code == 10000) {
+							$('#balance').text(res.msg)
+						}
+					}
+				})
+			}
+			
+			function getBillList() {
+				$http({
+					url: '/auth/user/v2/get/bill/list',
+					data: {
+						token: localStorage.getItem('token'),
+						page: 1, 
+						count: 10
+					},
+					success: function(res) {
+						console.log(JSON.stringify(res));
+						var listDom = [];
+						if (res.code == 10000) {
+							res.msg.data.forEach(function (res) {
+								billList.push(res)
+							})
+							if (!res.msg.data.length) {
+								var nullList = '<div class="no_data">暂无明细</div>';
+								$('.account_detail_list').html(nullList);
+								return false;
+							}
+							res.msg.data.forEach(function(item, index) {
+								listDom.push("<div class=\"detail_item\">\n" +
+                                  "\t\t\t\t\t\t\t<div class=\"detail_date\">\n" +
+                                  "\t\t\t\t\t\t\t\t<div class=\"year\">2018</div>\n" +
+                                  "\t\t\t\t\t\t\t\t<div class=\"month\">12/24</div>\n" +
+                                  "\t\t\t\t\t\t\t</div>\n" +
+                                  "\t\t\t\t\t\t\t<div class=\"detail_info\">\n" +
+                                  "\t\t\t\t\t\t\t\t<div class=\"title\">"+ getType() + "</div>\n" +
+                                  "\t\t\t\t\t\t\t\t<div class=\"content\">"+ item.Explain + "</div>\n" +
+                                  "\t\t\t\t\t\t\t</div>\n" +
+                                  "\t\t\t\t\t\t\t<div class=\"detail_num\">"+ item.Branch + "</div>\n" +
+                                  "\t\t\t\t\t\t</div>")
+							})
+                          $('.account_detail_list').html(listDom.join(''))
+						}
+
+					}
+				})
+			}
+
+			function getType(type) {
+			  if(type == 0) {
+			    return '充值'
+			  }else if(type == 1) {
+			    return '游戏获取'
+			  }else if(type == 2) {
+                return '提现'
+              }else if(type == 3) {
+                return '提现手续费'
+              }
+			}
 		})(document);
 		</script>
 </html>

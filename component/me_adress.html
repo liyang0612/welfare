@@ -16,7 +16,10 @@
 		<style>
 			html {background: #f7f7f7;}
 			.mui-table-view {background: transparent;}
-			#OA_task_2 .mui-table-view-cell {padding: 0;border: none;}
+			#OA_task_2 .mui-table-view-cell {padding: 0;border: none;margin-bottom: 10px;}
+			.mui-table-view:after, .mui-table-view-cell:after {
+				background-color: transparent;
+			}
 			.adress_list {height: 90px;padding:10px 0;background: #fff;display: flex; font-size: 14px;}
 			.adress_pic { width: 32px; height: 32px;margin: auto 10px;}
 			.adress_pic img { width: 100%; height: 100%; border-radius: 50%; }
@@ -83,37 +86,18 @@
 // 		mui('#OA_task_2').on('slideleft', '', function(event) {
 // 			
 // 		});
-		mui.ready(function() {
+		mui.plusReady(function() {
 			//初始化页面
 			initAdressList();
 			window.addEventListener('myevent', function(event) {
-				console.log(event.detail)
+				initAdressList()
 			})
 			$('#add_btn').on('tap', function() {
 				mui.openWindow({
-					url: './add_adress.html',
-					id: 'add_adress'
+					url: './me_adress_add.html',
+					id: 'me_adress_add'
 				})
 			})
-			var btnArray = ['确认', '取消'];
-			$('#OA_task_2 .mui-table-view-cell').each(function(index) {
-				$(this).on('slideleft', function(event) {
-					var elem = this;
-					mui.confirm('确认删除该地址吗？', '删除收货地址', btnArray, function(e) {
-						if (e.index == 0) {
-							deleteAdress(adressList[index].id, function() {
-								elem.parentNode.removeChild(elem);
-							})
-						} else {
-							setTimeout(function() {
-								mui.swipeoutClose(elem);
-							}, 0);
-						}
-					});
-				})
-			});
-			
-
 		});
 
 		function initAdressList() {
@@ -126,46 +110,75 @@
 					console.log(JSON.stringify(res));
 					var listDom = [];
 					if (res.code == 10000) {
-						adressList = res.msg;
+						res.msg.forEach(function (res) {
+							adressList.unshift(res)
+						})
 						if (!res.msg.length) {
 							var nullList = '<div class="no_data">暂无数据</div>';
 							$('#OA_task_2').html(nullList);
 							return false;
 						}
 						res.msg.forEach(function(item, index) {
-							listDom.push('﻿<li class="mui-table-view-cell">\n' +
-								'\t\t\t\t\t\t\t\t\t\t<div class="mui-slider-right mui-disabled">\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t<a class="mui-btn mui-btn-red">删除</a>\n' +
-								'\t\t\t\t\t\t\t\t\t\t</div>\n' +
-								'\t\t\t\t\t\t\t\t\t\t<div class="mui-slider-handle mui-table">\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t<div class="adress_list">\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t<div class="adress_pic"><img src="../img/ccb.png"></div>\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t<div class="adress_info">\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t\t<div class="user_info">\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class="user_name">' + item.Name + '</div>\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class="user_tel">' + item.Phone + ' </div>\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t\t<div class="adress_detail">\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span>默认</span>\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t\t\t﻿' + item.Province + item.City + item.Area + item.Street + '\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t<div class="adress_opr">\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t\t<span>编辑</span>\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
-								'\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
-								'\t\t\t\t\t\t\t\t\t\t</div>\n' +
-								'\t\t\t\t\t\t\t\t\t</li>')
+							listDom.unshift('<li class="mui-table-view-cell">\n' +
+                              '\t\t\t\t\t\t<div class="mui-slider-right mui-disabled">\n' +
+                              '\t\t\t\t\t\t\t<a class="mui-btn mui-btn-red">删除</a>\n' +
+                              '\t\t\t\t\t\t</div>\n' +
+                              '\t\t\t\t\t\t<div class="mui-slider-handle mui-table">\n' +
+                              '\t\t\t\t\t\t\t<div class="adress_list">\n' +
+                              '\t\t\t\t\t\t\t\t<div class="adress_pic"><img src="../img/ccb.png"></div>\n' +
+                              '\t\t\t\t\t\t\t\t<div class="adress_info">\n' +
+                              '\t\t\t\t\t\t\t\t\t<div class="user_info">\n' +
+                              '\t\t\t\t\t\t\t\t\t\t<div class="user_name">'+item.Name+'</div>\n' +
+                              '\t\t\t\t\t\t\t\t\t\t<div class="user_tel">'+item.Phone+'</div>\n' +
+                              '\t\t\t\t\t\t\t\t\t</div>\n' +
+                              '\t\t\t\t\t\t\t\t\t<div class="adress_detail">\n' +
+                              '\t\t\t\t\t\t\t\t\t\t<span>默认</span>\n' +
+                              '\t\t\t\t\t\t\t\t\t\t'+ item.Province + ' ' + item.City + ' ' +item.Area+' '+item.Street +
+                              '\t\t\t\t\t\t\t\t\t</div>\n' +
+                              '\t\t\t\t\t\t\t\t</div>\n' +
+                              '\t\t\t\t\t\t\t\t<div class="adress_opr">\n' +
+                              '\t\t\t\t\t\t\t\t\t<span>编辑</span>\n' +
+                              '\t\t\t\t\t\t\t\t</div>\n' +
+                              '\t\t\t\t\t\t\t</div>\n' +
+                              '\t\t\t\t\t\t</div>\n' +
+                              '\t\t\t\t\t</li>')
 						});
 						$('#OA_task_2').html(listDom.join(''))
+						
+						var btnArray = ['确认', '取消'];
+						$('#OA_task_2 .mui-table-view-cell').each(function(index) {
+							$(this).on('slideleft', function(event) {
+								var elem = this;
+								mui.confirm('确认删除该地址吗？', '删除收货地址', btnArray, function(e) {
+									if (e.index == 0) {
+										deleteAdress(adressList[index].Id, function() {
+											elem.parentNode.removeChild(elem);
+										})
+									} else {
+										setTimeout(function() {
+											mui.swipeoutClose(elem);
+										}, 0);
+									}
+								});
+							})
+						});
+						
+						$('#OA_task_2 .mui-table-view-cell .adress_opr').each(function(index) {
+							$(this).on('tap', function() {
+								console.log(JSON.stringify(adressList[index]))
+								mui.openWindow({
+									url: './me_adress_add.html?id='+adressList[index].Id,
+									id: 'me_adress_add_edit',
+									extras: adressList[index]
+								})
+							})
+						})
 					}
 				}
 			})
 		}
 
 		function deleteAdress(id, callback) {
-			console.log(id);
-			callback();
 			$http({
 				url: '/auth/user/v2/del/receiving/address',
 				data: {
@@ -176,6 +189,7 @@
 					console.log(JSON.stringify(res));
 					if (res.code == 10000) {
 						plus.nativeUI.toast('删除成功')
+						callback();
 					} else {
 						plus.nativeUI.toast('删除失败，请重试')
 					}

@@ -219,7 +219,7 @@ html {
 	font-size: 12px;
 }
 
-.me_money span {
+.me_money > span {
 	border-radius: 8px;
 	padding: 4px 15px;
 	border: solid 1px #eee;
