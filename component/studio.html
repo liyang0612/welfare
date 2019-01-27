@@ -72,8 +72,9 @@
 		color: #fff;
 	}
 	.dialog { display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 99; background: rgba(0, 0, 0, .7);}
-	.dialog-content { position: relative; width: 90%; height: 80%; margin: 54px auto; background: #fff;border-radius: 12px;}
-	.dialog-top { width: 100%; height: 50%; background: #e9f5fe; border-radius: 12px 12px 0 0;}
+	.dialog-content { position: relative; width: 86%; height: 76%; margin: 54px auto; background: #fff;border-radius: 12px;}
+	.dialog-top { width: 100%; height: 50%; background: #e9f5fe; border-radius: 12px 12px 0 0;position: relative;}
+	.dialog-bottom {width: 100%; height: 50%; background: #fff; border-radius: 0 0 12px 12px;position: relative;}
 	.dialog-bottom .btns {
 		position: absolute;
 		bottom: 0;
@@ -86,10 +87,33 @@
 	.dialog-bottom .btns > div {
 		flex: 1; color: #4FB4F8;
 	}
+	
+	.dialog-bottom .pay_btns_wrap { position: absolute; width: 94%; margin: 0 auto; background: #fff; height: 100%; top: -15px;left:0;right:0; }
+	.pay_btns_wrap h4 { font-size: 12px; padding: 3px 10px; margin-bottom: 10px; }
+	.pay_btns {width: 100%;}
+	.pay_btns::after {content: '';display: block;clear: both;}
+	.pay_btns .pay_btn {width: 33.33%; float: left; padding: 0 5px; margin-bottom: 10px;}
+	.pay_btns .pay_btn .btn { height: 2.8rem; border-radius: 6px; text-align: center; box-shadow: 0 0 10px rgba(0, 0, 0, .1); padding: 0.36rem }
+	.pay_btns .pay_btn .btn p { margin-bottom: 0; color: #fcdc06; font-size: 14px; line-height: 14px; }
+	.pay_btns .pay_btn .btn .rmb {font-size: 12px; line-height: 12px;padding-top: 0.2rem;}
+	.wraning {font-size: 16px; color: #4FB4F8; text-align: center; margin-top: 10px;}
+	
 	.dialog-select-goods { position: absolute; top: 40px; width: 90%;left: 0; right: 0; margin: 0 auto; }
-	.dialog-select-goods .bg { width: 100%; overflow: hidden; }
+	.dialog-select-goods .bg {overflow: hidden;    margin: 0 auto;width: 17.5rem;height: 17.5rem}
 	.dialog-select-goods .bg img { width: 100%; }
 	.select-goods-txt { width: 100%; margin-top: 20px; line-height: 24px; color: #f6be5d; font-size: 16px; text-align: center;}
+	
+	.dialog_get_goods { position: absolute; top: 60px; width: 14rem; height: 14rem; left: 0; right: 0; margin: 0 auto; }
+	.dialog_get_goods .bg { width: 100%; overflow: hidden; }
+	.goods_pic { width: 64%; height: 64%; border-radius: 8px; overflow: hidden; position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto;background: #fff; }
+	.goods_pic img { width: 100%; }
+	.dialog_get_goods .bg img { width: 100%; }
+	.get_goods_txt { color: #e64357 }
+	
+	.pay_gold_coin {position: absolute;bottom: 45px; width: 100%;}
+	.pay_gold_coin .bg { width: 8rem; height: 7rem; margin: 0 auto; }
+	.pay_gold_coin .bg img { width: 100%; }
+	.pay_gold_coin .txt {color: #fcdc06; font-size: 14px; text-align: center;}
 	</style>
 	<body>
 		<div class="dialog" id="select_goods">
@@ -112,6 +136,90 @@
 				</div>
 			</div>
 		</div>
+		<!--获取商品通知-->
+		<div class="dialog" id="get_goods" style="display: none;">
+			<div class="dialog-content">
+				<div class="dialog_get_goods">
+					<div class="bg">
+						<div class="goods_pic">
+							<img src="../img/amount_symbol.png">
+						</div>
+						<img src="../img/goods_bg.png" />
+					</div>
+					<div class="select-goods-txt get_goods_txt">
+						恭喜你<br/>
+						获得价值<span>299元</span>的<span>蓝牙耳机</span>一副
+					</div>
+				</div>
+				<div class="dialog-top"></div>
+				<div class="dialog-bottom">
+					<div class="btns">
+						<div id="cancelBtn">填写收获地址</div>
+						<div id="okBtn">赠送给微信好友</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--充值金币-->
+		<div class="dialog" id="gold_coin_pay" style="display: block;">
+			<div class="dialog-content">
+				<div class="dialog-top">
+					<div class="pay_gold_coin">
+						<div class="bg">
+							<img src="../img/gold_coin.png">
+						</div>
+						<div class="txt">游戏单价：<span>10</span>金币/次</div>
+					</div>
+				</div>
+				<div class="dialog-bottom">
+					<div class="pay_btns_wrap">
+						<h4>请选择充值金额</h4>
+						<div class="pay_btns">
+							<div class="pay_btn">
+								<div class="btn">
+									<p class="gold">10金币</p>
+									<p class="rmb">10元</p>
+								</div>
+							</div>
+							<div class="pay_btn">
+								<div class="btn">
+									<p class="gold">20金币</p>
+									<p class="rmb">20元</p>
+								</div>
+							</div>
+							<div class="pay_btn">
+								<div class="btn">
+									<p class="gold">50金币</p>
+									<p class="rmb">50元</p>
+								</div>
+							</div>
+							<div class="pay_btn">
+								<div class="btn">
+									<p class="gold">100金币</p>
+									<p class="rmb">100元</p>
+								</div>
+							</div>
+							<div class="pay_btn">
+								<div class="btn">
+									<p class="gold">150金币</p>
+									<p class="rmb">150元</p>
+								</div>
+							</div>
+							<div class="pay_btn">
+								<div class="btn">
+									<p class="gold">200金币</p>
+									<p class="rmb">200元</p>
+								</div>
+							</div>
+						</div>
+						<div class="wraning">金币不足，请先充值</div>
+					</div>
+					<div class="btns">
+						<div id="okBtn">微信支付</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="content">
 			<div class="right-wrap">
 				<div class="menu-item">
@@ -126,7 +234,7 @@
 					<div class="icon icon_share"></div>
 					<div class="txt">转发</div>
 				</div>
-				<div class="menu-item">
+				<div class="menu-item" id="show_dialog_glod">
 					<div class="icon icon_glod_coin"></div>
 					<div class="txt">10金币</div>
 				</div>
@@ -168,8 +276,12 @@
 				})
 			})
 			
-			$('#cancelBtn').on('tap', function() {
+			$('#select_goods #cancelBtn').on('tap', function() {
 				$('.dialog').hide();
+			})
+			
+			$('#show_dialog_glod').on('tap', function() {
+				$('#gold_coin_pay').show()
 			})
 		})
 		mui.plusReady(function () {
