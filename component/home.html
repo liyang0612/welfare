@@ -32,7 +32,7 @@
 			<!-- <a class="wf_icon_nav"><span class="wf_icon_setting"><img src="img/seeting.jpg"></span></a> -->
 		</header>
 		<div>
-			<div id="video" style="width:100%;background-color:#fff;margin: 2px auto 0 auto"></div>
+			<div id="video" style="width:100%;background-color:#fff;"></div>
 			<button id="reset_launch">重置引导页</button>
 			<button onclick="createSubview()">弹幕</button>
 		</div>
@@ -50,8 +50,9 @@
 	<script src="../js/mui.min.js"></script>
 	<script src="../js/jquery.min.js"></script>
 	<script type="text/javascript">
-		let currentHeight = document.documentElement.clientHeight
-		$('#video').css('height', currentHeight - 108 + 'px')
+		var currentHeight = document.documentElement.clientHeight, vedioHeight = currentHeight - 108 + 'px',
+			currentWidth = document.documentElement.clientWidth
+		$('#video').css('height', vedioHeight)
 		//创建弹幕webview
 		var wsub = null;
 		function createSubview(){
@@ -59,24 +60,13 @@
 				wsub.close();wsub = null;
 				return;
 			}
-			var topoffset = document.getElementById('video').offsetTop;
-			wsub=plus.webview.create('./barrage.html','sub',{top:topoffset,height:'300px',position:'static',scrollIndicator:'none',background:'transparent'});
+			wsub=plus.webview.create('./studio.html','sub',{width: currentWidth + 'px', height: currentHeight + 'px', position:'static',scrollIndicator:'none',background:'transparent'});
 			plus.webview.currentWebview().append(wsub);
 		}
 		mui.plusReady(function() {
-			$('#meHref').on('tap', function() {
-				mui.openWindow({
-					url: './me.html',
-					id: 'me',
-					show: {
-						aniShow: 'none',
-						//				            duration: 5
-					},
-					waiting: {
-						autoShow: false, //自动显示等待框，默认为true
-					}
-				})
-			})
+			setTimeout(function() {
+				createSubview()
+			}, 500)
 			// 更新为播放状态
 			function playVideo() {
 				var path = document.getElementById('path').value;
@@ -91,42 +81,9 @@
 			video = new plus.video.VideoPlayer('video', {
 				src: 'rtmp://fd.jktwo.com/live/40871_7129c404c6a772a26414a0c6ec6ad85b',
 				controls: false,
-				autoplay: true
+				autoplay: true,
+				objectFit: 'fill'
 			});		
-
-			document.getElementById("reset_launch").addEventListener("tap", function() {
-				/**
-				 * 系统确认对话框
-				 * http://www.html5plus.org/doc/zh_cn/nativeui.html#plus.nativeUI.confirm
-				 */
-				plus.nativeUI.confirm("是否重置首次打开app？", function(event) {
-					/**
-					 * 按钮的索引，从0开始；
-					 */
-					var index = event.index;
-					if(index == 0) {
-						/**
-						 * 通过key值删除键值对存储的数据
-						 * http://www.html5plus.org/doc/zh_cn/storage.html#plus.storage.removeItem
-						 */
-						plus.storage.removeItem("launchFlag");
-						/**
-						 * 自动消失提示，位置为center；
-						 * http://www.html5plus.org/doc/zh_cn/nativeui.html#plus.nativeUI.ToastOption
-						 */
-						plus.nativeUI.toast("重置成功，2秒后重启app。", {
-							verticalAlign: "center"
-						});
-						/**
-						 * 2秒后重启应用
-						 * http://www.html5plus.org/doc/zh_cn/runtime.html#plus.runtime.restart
-						 */
-						setTimeout(function() {
-							plus.runtime.restart();
-						}, 2000);
-					}
-				}, "重置启动", ["重置", "放弃"]);
-			});
 		})
 		var first = null;
 		mui.back = function() {

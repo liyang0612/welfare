@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/global.css" rel="stylesheet" />
+	</head>
+	<style>
+	html,body {
+		background: transparent;
+	}
+	.content {
+		margin-top: 54px;
+		position: relative;
+		background: rgba(0, 0, 0, .05);
+	}
+	footer {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		color: #fff;
+		padding: 30px 10px;
+		line-height: 28px;
+		font-size: 16px;
+		pointer-events: none;
+	}
+	.right-wrap {
+		position: absolute;
+		right: 0;
+		bottom: 20px;
+	}
+	.menu-item {
+		width: 60px;
+		margin-bottom: 10px;
+	}
+	.menu-item .icon {
+		width: 40px;
+		height: 40px;
+		margin: 0 auto;
+	}
+	.icon_online_num {
+		background: url(../img/online_number.png) no-repeat;
+		background-size: 100%;
+	}
+	.icon_msg {
+		background: url(../img/msg_btn.png) no-repeat;
+		background-size: 100%;
+	}
+	.icon_share {
+		background: url(../img/share.png) no-repeat;
+		background-size: 100%;
+	}
+	.icon_glod_coin {
+		background: url(../img/gold_coin.png) no-repeat;
+		background-size: 100%;
+	}
+	.menu-item .txt {
+		font-size: 14px;
+		line-height: 22px;
+		color: #fff;
+		text-align: center;
+	}
+	.block {
+		float: left;
+		width: 25%;
+		height: 16.66%;
+		color: #fff;
+	}
+	.dialog { display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 99; background: rgba(0, 0, 0, .7);}
+	.dialog-content { position: relative; width: 90%; height: 80%; margin: 54px auto; background: #fff;border-radius: 12px;}
+	.dialog-top { width: 100%; height: 50%; background: #e9f5fe; border-radius: 12px 12px 0 0;}
+	.dialog-bottom .btns {
+		position: absolute;
+		bottom: 0;
+		text-align: center;
+		width: 100%; display: flex;
+		border-top: solid 1px #ddd;
+		height: 54px;
+		line-height: 54px;
+	}
+	.dialog-bottom .btns > div {
+		flex: 1; color: #4FB4F8;
+	}
+	.dialog-select-goods { position: absolute; top: 40px; width: 90%;left: 0; right: 0; margin: 0 auto; }
+	.dialog-select-goods .bg { width: 100%; overflow: hidden; }
+	.dialog-select-goods .bg img { width: 100%; }
+	.select-goods-txt { width: 100%; margin-top: 20px; line-height: 24px; color: #f6be5d; font-size: 16px; text-align: center;}
+	</style>
+	<body>
+		<div class="dialog" id="select_goods">
+			<div class="dialog-content">
+				<div class="dialog-select-goods">
+					<div class="bg">
+						<img src="../img/select_goods.png" />
+					</div>
+					<div class="select-goods-txt">
+						确认选择第<span class="goods_num">1</span>个货道 <br/>
+						消费10金币
+					</div>
+				</div>
+				<div class="dialog-top"></div>
+				<div class="dialog-bottom">
+					<div class="btns">
+						<div id="cancelBtn">取消</div>
+						<div id="okBtn">确定</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content">
+			<div class="right-wrap">
+				<div class="menu-item">
+					<div class="icon icon_online_num"></div>
+					<div class="txt"><span id="online_txt">10<span>人</div>
+				</div>
+				<div class="menu-item">
+					<div class="icon icon_msg"></div>
+					<div class="txt">消息</div>
+				</div>
+				<div class="menu-item">
+					<div class="icon icon_share"></div>
+					<div class="txt">转发</div>
+				</div>
+				<div class="menu-item">
+					<div class="icon icon_glod_coin"></div>
+					<div class="txt">10金币</div>
+				</div>
+			</div>
+			<footer>
+				@All<br />
+				欢迎来到线上福袋机游戏间<br/>
+				请选择点击你选择的福袋开始游戏
+			</footer>
+		</div>
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="./component/home.html">
+				<div class="me_nav_icon home_icon active"></div>
+				<!-- <span class="mui-tab-label">首页</span> -->
+			</a>
+			<a id="meHref" class="mui-tab-item" href="./component/me.html">
+				<div class="me_nav_icon me_icon"></div>
+				<!-- <span class="mui-tab-label">我的</span> -->
+			</a>
+		</nav>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/barrage.js"></script>
+	<script>
+		$(function() {
+			var currentHeight = document.documentElement.clientHeight
+			$('.content').css('height', currentHeight - 108 + 'px')
+			var blocks = [];
+			for(var i = 0; i < 24; i++) {
+				blocks.push('<div class="block"></div>');
+			}
+			$('.content').append(blocks.join(''))
+			
+			$(".block").each(function(index) {
+				$(this).on('tap', function(event) {
+					$('#select_goods').show();
+					$('.goods_num').text(index + 1)
+				})
+			})
+			
+			$('#cancelBtn').on('tap', function() {
+				$('.dialog').hide();
+			})
+		})
+		mui.plusReady(function () {
+		    $('#meHref').on('tap', function() {
+		    	mui.openWindow({
+		    		url: './me.html',
+		    		id: 'me',
+		    		show: {
+		    			aniShow: 'none',
+		    			//				            duration: 5
+		    		},
+		    		waiting: {
+		    			autoShow: false, //自动显示等待框，默认为true
+		    		}
+		    	})
+		    })
+		})
+	</script>
+</html>
