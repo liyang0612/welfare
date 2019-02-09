@@ -98,7 +98,7 @@
 	.pay_btns .pay_btn .btn .rmb {font-size: 12px; line-height: 12px;padding-top: 0.2rem;}
 	.wraning {font-size: 16px; color: #4FB4F8; text-align: center; margin-top: 10px;}
 	
-	.dialog-select-goods { position: absolute; top: 40px; width: 90%;left: 0; right: 0; margin: 0 auto; }
+	.dialog-select-goods { position: absolute; top: 40px; width: 90%;left: 0; right: 0; margin: 0 auto;z-index: 99 }
 	.dialog-select-goods .bg {overflow: hidden;    margin: 0 auto;width: 17.5rem;height: 17.5rem}
 	.dialog-select-goods .bg img { width: 100%; }
 	.select-goods-txt { width: 100%; margin-top: 20px; line-height: 24px; color: #f6be5d; font-size: 16px; text-align: center;}
@@ -116,6 +116,13 @@
 	.pay_gold_coin .txt {color: #fcdc06; font-size: 14px; text-align: center;}
 	</style>
 	<body>
+		<header class="mui-navbar-inner mui-bar mui-bar-nav">
+			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+				<span class="mui-icon mui-icon-left-nav"></span>
+			</button>
+			<h1 id="title" class="mui-title">游戏间</h1>
+			<!-- <a class="wf_icon_nav"><span class="wf_icon_setting"><img src="img/seeting.jpg"></span></a> -->
+		</header>
 		<div class="dialog" id="select_goods">
 			<div class="dialog-content">
 				<div class="dialog-select-goods">
@@ -126,6 +133,7 @@
 						确认选择第<span class="goods_num">1</span>个货道 <br/>
 						消费10金币
 					</div>
+					
 				</div>
 				<div class="dialog-top"></div>
 				<div class="dialog-bottom">
@@ -245,16 +253,14 @@
 				请选择点击你选择的福袋开始游戏
 			</footer>
 		</div>
-		<nav class="mui-bar mui-bar-tab">
+<!-- 		<nav class="mui-bar mui-bar-tab">
 			<a class="mui-tab-item mui-active" href="./component/home.html">
 				<div class="me_nav_icon home_icon active"></div>
-				<!-- <span class="mui-tab-label">首页</span> -->
 			</a>
 			<a id="meHref" class="mui-tab-item" href="./component/me.html">
 				<div class="me_nav_icon me_icon"></div>
-				<!-- <span class="mui-tab-label">我的</span> -->
 			</a>
-		</nav>
+		</nav> -->
 	</body>
 	<script src="../js/mui.min.js"></script>
 	<script src="../js/jquery.min.js"></script>
@@ -262,7 +268,7 @@
 	<script>
 		$(function() {
 			var currentHeight = document.documentElement.clientHeight
-			$('.content').css('height', currentHeight - 108 + 'px')
+			$('.content').css('height', currentHeight - 54 + 'px')
 			var blocks = [];
 			for(var i = 0; i < 24; i++) {
 				blocks.push('<div class="block"></div>');

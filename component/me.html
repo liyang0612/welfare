@@ -8,7 +8,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/global.css" />
 	</head>
 	<style>
 		.live_player {
@@ -18,17 +18,110 @@
 			background: #999999;
 			position: relative;
 		}
+
 		.video_icon {
 			width: 10rem;
 			position: absolute;
 			top: 7.1555rem;
 			left: 7.1111rem;
 		}
-		.video_icon img { width: 100%; }
-		.live_player img {
+
+		.video_icon img {
 			width: 100%;
 		}
-		.add_live_txt {margin: 30px auto;}
+
+		.live_player>img {
+			width: 100%;
+		}
+
+		.add_live_txt {
+			margin: 30px auto;
+		}
+
+		.live_title {
+			padding: 20px 20px 0;
+			margin: 0 15px;
+		}
+
+		.live_content {
+			padding: 0;
+		}
+
+		.live_content ::after {
+			content: '';
+			clear: both;
+			display: block;
+		}
+
+		.live_content .room-list-item {
+			margin: 15px 0 0 3%;
+			width: 45.5%;
+			float: left;
+			padding: 5px 5px 15px;
+			border-radius: 6px;
+			border: solid 2px #ccc;
+		}
+
+		.room-list-item-img {
+			padding: 25px 0;
+			width: 100%;
+			height: 150px;
+			background: url(../img/room-bg.png) no-repeat;
+			background-size: cover;
+		}
+
+		.room-list-item-img img {
+			width: 100px;
+			height: 100px;
+			margin: 0 auto;
+			display: block;
+		}
+
+		.room-list-name {
+			padding: 4px 0;
+			text-align: left;
+		}
+
+		.room-list-flex {
+			display: flex;
+		}
+
+		.room-list-flex>div {
+			flex: 1;
+		}
+
+		.room-sysmol-icon {
+			width: 16px;
+			height: 16px;
+			left: 0;
+			top: 2px;
+			position: absolute;
+			background: url(../img/gold-coin-icon.png) no-repeat;
+			background-size: 100%;
+		}
+
+		.room-list-btn {
+			text-align: right;
+		}
+
+		.room-list-flex .btn {
+			padding: 2px 6px 0;
+			line-height: 18px;
+			background: #73e24e;
+			color: #fff;
+			border-radius: 10px;
+			font-size: 14px;
+			display: inline-block;
+		}
+
+		.room-list-num {
+			position: relative;
+			font-size: 16px;
+		}
+
+		.gaming {
+			background: #fb6362 !important;
+		}
 	</style>
 	<body class="wf_webview">
 		<header class="mui-bar mui-bar-nav">
@@ -37,65 +130,65 @@
 		</header>
 		<div class="mui-scroll-wrapper">
 			<div class="mui-scroll" style="padding: 54px 0;">
-			<div class="wf_me_info wf_lay">
-				<div class="me_info_picture">
-					<img src="../img/wechart_icon.png"/>
-					<span></span>
-				</div>
-				<div class="me_info_con">
-					<div class="me_username">用户1</div>
-					<div class="me_level"></div>
-					<div class="me_money">
-						<span><span id="gold_coin_num">50<span> 金币</span>
+				<div class="wf_me_info wf_lay">
+					<div class="me_info_picture">
+						<img src="../img/wechart_icon.png" />
+						<span></span>
+					</div>
+					<div class="me_info_con">
+						<div class="me_username">用户1</div>
+						<div class="me_level"></div>
+						<div class="me_money">
+							<span id="gold_coin_num"></span>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="wf_me_menu wf_lay">
-				<p class="me_menu_status">目前没有状态信息</>
-				<div class="wf_grid_wrap">
-					<ul class="mui-table-view mui-grid-view mui-grid-9">
+				<div class="wf_me_menu wf_lay">
+					<p class="me_menu_status">目前没有状态信息</p>
+					<div class="wf_grid_wrap">
+						<ul class="mui-table-view mui-grid-view mui-grid-9">
 							<li id="me_money_pack" class="mui-table-view-cell mui-media mui-col-xs-4"><a href="#">
-											<div class="me_menu_icon"><img src="../img/me_package.png"/></div>
-											<div class="mui-media-body">我的钱包</div></a></li>
+									<div class="me_menu_icon"><img src="../img/me_package.png" /></div>
+									<div class="mui-media-body">我的钱包</div>
+								</a></li>
 							<li id="me_goods" class="mui-table-view-cell mui-media mui-col-xs-4"><a href="#">
-											<div class="me_menu_icon"><img src="../img/me_goods.png"/></div>
-											<div class="mui-media-body">我的物品</div></a></li>
+									<div class="me_menu_icon"><img src="../img/me_goods.png" /></div>
+									<div class="mui-media-body">我的物品</div>
+								</a></li>
 							<li id="me_adress" class="mui-table-view-cell mui-media mui-col-xs-4"><a href="#">
-											<div class="me_menu_icon"><img src="../img/me_adress.png"/></div>
-											<div class="mui-media-body">我的地址</div></a></li>
-					</ul> 
-				</div>
-			</div>
-			<div class="wf_hr"></div>
-			<div class="wf_live wf_lay">
-				<div class="live_title">
-					<div class="live_icon_pen">
-						<img src="../img/me_live_pen.jpg"/>
+									<div class="me_menu_icon"><img src="../img/me_adress.png" /></div>
+									<div class="mui-media-body">我的地址</div>
+								</a></li>
+						</ul>
 					</div>
-					我的游戏间
 				</div>
-				<div class="live_content">
-<!-- 					<div class="live_null">
-						<p>当前还没有游戏间</p>
-						<div class="add_btn">
-							<span>添加</span>
+				<div class="wf_hr"></div>
+				<div class="wf_live">
+					<div class="live_title">
+						<div class="live_icon_pen">
+							<img src="../img/me_live_pen.jpg" />
 						</div>
-					</div> -->
-<!-- 					<div class="live_player">
-						<img src="../img/abc.png"/>
-						<div class="video_icon">
-							<img src="../img/play.png" />
-						</div>
-					</div> -->
-					<p class="add_live_txt">当前还没有游戏间</p>
-					<div class="add_btn">
-						<span>添加</span>
+						我的游戏间
 					</div>
-					<!-- <div class="live_player">
-						<video id="video" controls src="http://hd.yinyuetai.com/uploads/videos/common/0D7601345B999963CD41FB5D5CF356C0.flv"></video>
-					</div> -->
+					<div class="live_content" id="liveContent">
+						<div class="room-list" id="roomList">
+							<div class="room-list-item">
+								<div class="room-list-item-img">
+									<img src="../img/xxx.png" />
+								</div>
+								<div class="room-list-name">猪猪公仔</div>
+								<div class="room-list-flex">
+									<div class="room-list-num">
+										<span class="room-sysmol-icon"></span> 5/次
+									</div>
+									<div class="room-list-btn">
+										<span class="btn">空 闲 中</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
 			</div>
 			<nav class="mui-bar mui-bar-tab">
 				<a id="homeHref" class="mui-tab-item mui-active" href="./component/home.html">
@@ -114,7 +207,7 @@
 	<script src="../js/config.js"></script>
 	<script>
 		mui.init({
-			swipeBack:true //启用右滑关闭功能
+			swipeBack: true //启用右滑关闭功能
 		});
 		mui('.mui-scroll-wrapper').scroll({
 			bounce: true //是否启用回弹
@@ -126,6 +219,7 @@
 			})
 		})
 		$(function() {
+			//获取个人信息
 			$http({
 				url: '/auth/user/v2/get/user/info',
 				data: {
@@ -133,26 +227,91 @@
 				},
 				success: function(res) {
 					console.log(JSON.stringify(res))
-					if(res.code == 10000) {
+					if (res.code == 10000) {
 						$('.me_username').text(res.msg.NickName);
 						$('#gold_coin_num').text(res.msg.Balance + '金币')
-					}else {
-						
+					} else {
+
+					}
+				}
+			})
+			//获取直播间列表
+			$http({
+				url: '/auth/user/v2/get/my/live/list',
+				data: {
+					token: localStorage.getItem('token'),
+					page: 1,
+					count: 10
+				},
+				success: function(res) {
+					var roomListHtml = []
+					if (res.code == 10000) {
+						console.log('jiangdongmei')
+						console.log(res)
+						if (!res.msg.data.length) {
+
+							$('#liveContent').html('<div class="live_null">\n' +
+								'\t\t\t\t\t\t<p>当前还没有游戏间</p>\n' +
+								'\t\t\t\t\t\t<div class="add_btn">\n' +
+								'\t\t\t\t\t\t\t<span>添加</span>\n' +
+								'\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t</div>')
+							return false
+						}
+						res.msg.data.forEach(function(res) {
+							roomListHtml.push('\t\t\t\t\t\t<div class="room-list" id="roomList">\n' +
+								'\t\t\t\t\t\t\t<div class="room-list-item">\n' +
+								'\t\t\t\t\t\t\t\t<div class="room-list-item-img">\n' +
+								'\t\t\t\t\t\t\t\t\t<img src="../img/xxx.png"/>\n' +
+								'\t\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t\t\t<div class="room-list-name">猪猪公仔</div>\n' +
+								'\t\t\t\t\t\t\t\t<div class="room-list-flex">\n' +
+								'\t\t\t\t\t\t\t\t\t<div class="room-list-num">\n' +
+								'\t\t\t\t\t\t\t\t\t\t<span class="room-sysmol-icon"></span> 5/次\n' +
+								'\t\t\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t\t\t\t<div class="room-list-btn">\n' +
+								'\t\t\t\t\t\t\t\t\t\t<span class="btn">空 闲 中</span>\n' +
+								'\t\t\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t</div>')
+						})
+						$('#liveContent').html(roomListHtml.join(''))
+					} else {
+
 					}
 				}
 			})
 		})
-		function createDialogview(){
-// 			if(wsub) {
-// 				wsub.close();wsub = null;
-// 				return;
-// 			}
-			var wsub=plus.webview.create('./bindingDialog.html','bindingDialog',{top: 0,height:'100%',position:'static',scrollIndicator:'none',background:'transparent', zindex: 9999});
+
+		function createDialogview() {
+			// 			if(wsub) {
+			// 				wsub.close();wsub = null;
+			// 				return;
+			// 			}
+			var wsub = plus.webview.create('./bindingDialog.html', 'bindingDialog', {
+				top: 0,
+				height: '100%',
+				position: 'static',
+				scrollIndicator: 'none',
+				background: 'transparent',
+				zindex: 9999
+			});
 			plus.webview.currentWebview().append(wsub);
 		}
 		mui.plusReady(function() {
+			//进入直播间
+			$('.room-list-item').each(function(e, index) {
+				$(this).on('tap', function() {
+					mui.openWindow({
+						url: './studio_page.html',
+						id: 'studio_page' + index
+					})
+				})
+			})
+			//添加直播间
 			$('.add_btn').on('tap', function() {
-				console.log('alskdjflkasd')
+				addLiveStudio()
 			})
 			$('.me_info_picture').on('tap', function() {
 				createDialogview()
@@ -172,12 +331,12 @@
 					}
 				})
 			})
-			mui(".mui-table-view").on('tap','.mui-table-view-cell',function(e){
+			mui(".mui-table-view").on('tap', '.mui-table-view-cell', function(e) {
 				mui.openWindow({
 					url: './' + this.id + '.html',
 					id: this.id
 				})
-			}) 
+			})
 			// createDialogview()
 			$('#homeHref').on('tap', function() {
 				mui.openWindow({
@@ -193,24 +352,41 @@
 				})
 			})
 		})
+		function addLiveStudio() {
+			$http({
+				url: '/auth/user/v2/open/live',
+				data: {
+					token: localStorage.getItem('token'),
+					id: 1
+				},
+				success: function(res) {
+					console.log(JSON.stringify(res))
+					if(res.code == 10000) {
+						plus.nativeUI.toast('添加成功！');
+					}else {
+						plus.nativeUI.toast('添加失败！');
+					}
+				}
+			})
+		}
 		var first = null;
 		mui.back = function() {
-			if(!first) {
+			if (!first) {
 				first = new Date().getTime();
 				/**
-				* 自动消失提示信息
-				* http://www.html5plus.org/doc/zh_cn/nativeui.html#plus.nativeUI.toast
-				*/
+				 * 自动消失提示信息
+				 * http://www.html5plus.org/doc/zh_cn/nativeui.html#plus.nativeUI.toast
+				 */
 				plus.nativeUI.toast("再按一次退出应用");
 				setTimeout(function() {
 					first = null;
 				}, 1000);
 			} else {
-				if(new Date().getTime() - first < 1000) {
+				if (new Date().getTime() - first < 1000) {
 					/**
-					* 退出应用，仅安卓有效；
-					* http://www.html5plus.org/doc/zh_cn/runtime.html#plus.runtime.quit
-					*/
+					 * 退出应用，仅安卓有效；
+					 * http://www.html5plus.org/doc/zh_cn/runtime.html#plus.runtime.quit
+					 */
 					plus.runtime.quit();
 				}
 			}

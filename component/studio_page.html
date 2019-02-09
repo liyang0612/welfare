@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/global.css" rel="stylesheet" />
+	</head>
+	<style>
+	.ellipsis {white-space: nowrap;text-overflow: ellipsis;overflow: hidden}
+	.bs-example{padding: 10px;border: 1px solid #999;margin: 2px;}
+	.bs-example span{font-size: 10px;color:red;}
+	.layer_barrage{ position:fixed; top:135px; width:100%; z-index: 9999;}
+	.layer_barrage ul{ display:box; display:-webkit-box; display:-moz-box; display: -ms-box; margin-bottom:20px;  }
+	.layer_barrage ul li{
+	    transform: translateX(0px)
+	}
+	.layer_barrage ul:nth-child(even){ padding-left:20px;}
+	.layer_barrage li{ font-size:12px; margin-right:28px; padding-right:30px;color:#fff; display: block; white-space: nowrap;text-overflow: ellipsis; height:22px; line-height:22px; background:rgba(0,0,0,0.68); border-radius:11px;transform: translateX(0px);}
+	.layer_barrage li span{display:inline-block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}
+	.layer_barrage img{ width:18px; height:18px; border-radius:50%; float: left; margin:2px 6px 0 2px;}
+	.layer_barrage .active{ background:rgba(20,185,148,0.9);}
+	.layer_barrage .reward{ position:absolute; right:50px; bottom:58px;} 
+	.layer_barrage .reward img{ width:40px; height:auto;}
+	</style>
+	
+	<body class="wf_webview">
+		<div style="margin-top: 54px">
+			<div id="video" style="width:100%;background-color:#fff;"></div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/jquery.min.js"></script>
+	<script type="text/javascript">
+		mui.init();
+		var currentHeight = document.documentElement.clientHeight, vedioHeight = currentHeight - 54 + 'px',
+			currentWidth = document.documentElement.clientWidth
+		$('#video').css('height', vedioHeight)
+		//创建弹幕webview
+		var wsub = null;
+		function createSubview(){
+			if(wsub) {
+				wsub.close();wsub = null;
+				return;
+			}
+			wsub=plus.webview.create('./studio.html','sub',{width: '100%', height: '100%', position:'absolute', top: 0, left: 0, bottom: 0, scrollIndicator:'none',background:'transparent'});
+			plus.webview.currentWebview().append(wsub);
+		}
+		mui.plusReady(function() {
+			setTimeout(function() {
+				createSubview()
+			}, 300)
+			// 创建视频播放控件
+			video = new plus.video.VideoPlayer('video', {
+				src: 'rtmp://fd.jktwo.com/live/40871_7129c404c6a772a26414a0c6ec6ad85b',
+				controls: false,
+				autoplay: true,
+				objectFit: 'fill'
+			});		
+		})
+	</script>
+
+</html>

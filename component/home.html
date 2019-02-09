@@ -7,9 +7,12 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../css/mui.min.css" rel="stylesheet" />
 		<link href="../css/global.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css">
 	</head>
 	<style>
-	.ellipsis {white-space: nowrap;text-overflow: ellipsis;overflow: hidden}
+		.home {margin-top: 54px;}
+		.wf_webview>header.mui-bar-nav {width: 100%;position: fixed;}
+		.ellipsis {white-space: nowrap;text-overflow: ellipsis;overflow: hidden}
 	.bs-example{padding: 10px;border: 1px solid #999;margin: 2px;}
 	.bs-example span{font-size: 10px;color:red;}
 	.layer_barrage{ position:fixed; top:135px; width:100%; z-index: 9999;}
@@ -24,17 +27,98 @@
 	.layer_barrage .active{ background:rgba(20,185,148,0.9);}
 	.layer_barrage .reward{ position:absolute; right:50px; bottom:58px;} 
 	.layer_barrage .reward img{ width:40px; height:auto;}
+	.swiper-slide img {height: 100%; width: 100%;}
+	.my-bullet-active {background: #fff}
+	.content {margin-bottom: 54px;}
+	.content .room-title { padding: 10px 15px;width: 100%;}
+	.content ::after { content: ''; clear: both;display: block; }
+	.content .room-list-item {margin: 0 0 15px 3%;width: 45.5%;float: left; padding: 5px 5px 15px;border-radius: 6px;border: solid 2px #ccc;}
+	.room-list-item-img {padding: 25px 0; width: 100%; height: 150px; background: url(../img/room-bg.png) no-repeat; background-size: cover;}
+	.room-list-item-img img {width: 100px;height: 100px;margin: 0 auto; display: block;}
+	.room-list-name {padding: 4px 0;}
+	.room-list-flex {display: flex;}
+	.room-list-flex > div { flex: 1;}
+	.room-sysmol-icon {width: 16px; height: 16px; left: 0; top: 2px; position: absolute; background: url(../img/gold-coin-icon.png) no-repeat;
+	background-size: 100%;}
+	.room-list-btn {text-align: right;}
+	.room-list-flex .btn {padding: 2px 6px 0; line-height: 18px; background: #73e24e; color: #fff; border-radius: 10px;font-size: 14px;display: inline-block;}
+	.room-list-num {padding-left: 20px;position: relative;font-size: 16px;}
+	.gaming {background: #fb6362 !important;}
 	</style>
-	
+
 	<body class="wf_webview">
 		<header class="mui-bar mui-bar-nav">
-			<h1 id="title" class="mui-title">首页</h1>
+			<h1 id="title" class="mui-title">YG嗨购城</h1>
 			<!-- <a class="wf_icon_nav"><span class="wf_icon_setting"><img src="img/seeting.jpg"></span></a> -->
 		</header>
-		<div>
-			<div id="video" style="width:100%;background-color:#fff;"></div>
-			<button id="reset_launch">重置引导页</button>
-			<button onclick="createSubview()">弹幕</button>
+		<div class="home">
+			<div class="swiper-container">
+			  <div class="swiper-wrapper">
+				<div class="swiper-slide"><img src="../img/banner1.png" /></div>
+				<div class="swiper-slide"><img src="../img/banner2.png" /></div>
+				<div class="swiper-slide"><img src="../img/banner3.png" /></div>
+			  </div>
+			  <div class="swiper-pagination"></div>
+			</div>
+			<div class="content">
+				<div class="room-title">房间列表</div>
+				<div class="room-list">
+					<div class="room-list-item">
+						<div class="room-list-item-img">
+							<img src="../img/xxx.png"/>
+						</div>
+						<div class="room-list-name">猪猪公仔</div>
+						<div class="room-list-flex">
+							<div class="room-list-num">
+								<span class="room-sysmol-icon"></span> 5/次
+							</div>
+							<div class="room-list-btn">
+								<span class="btn">空 闲 中</span>
+							</div>
+						</div>
+					</div>
+					<div class="room-list-item">
+						<div class="room-list-item-img">
+							<img src="../img/xxx.png"/>
+						</div>
+						<div class="room-list-name">猪猪公仔</div>
+						<div class="room-list-flex">
+							<div class="room-list-num">
+								<span class="room-sysmol-icon"></span> 5/次
+							</div>
+							<div class="room-list-btn">
+								<span class="btn gaming">游 戏 中</span>
+							</div>
+						</div>
+					</div>
+					<div class="room-list-item">
+						<div class="room-list-item-img">
+							<img src="../img/xxx.png"/>
+						</div>
+						<div class="room-list-name">猪猪公仔</div>
+						<div class="room-list-flex">
+							<div class="room-list-num">
+								<span class="room-sysmol-icon"></span> 5/次
+							</div>
+							<div class="room-list-btn">
+								<span class="btn">空 闲 中</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+			</div>
+			<!-- <div>
+				<div class="banner_wrap">
+					<div class="swiper-container">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide"><img src="../img/banner1.png" /></div>
+							<div class="swiper-slide"><img src="../img/banner2.png" /></div>
+							<div class="swiper-slide"><img src="../img/banner3.png" /></div>
+						</div>
+					</div>
+				</div>
+			</div> -->
 		</div>
 		<nav class="mui-bar mui-bar-tab">
 			<a class="mui-tab-item mui-active" href="./component/home.html">
@@ -46,67 +130,79 @@
 				<!-- <span class="mui-tab-label">我的</span> -->
 			</a>
 		</nav>
-	</body>
-	<script src="../js/mui.min.js"></script>
-	<script src="../js/jquery.min.js"></script>
-	<script type="text/javascript">
-		var currentHeight = document.documentElement.clientHeight, vedioHeight = currentHeight - 108 + 'px',
-			currentWidth = document.documentElement.clientWidth
-		$('#video').css('height', vedioHeight)
-		//创建弹幕webview
-		var wsub = null;
-		function createSubview(){
-			if(wsub) {
-				wsub.close();wsub = null;
-				return;
-			}
-			wsub=plus.webview.create('./studio.html','sub',{width: currentWidth + 'px', height: currentHeight + 'px', position:'static',scrollIndicator:'none',background:'transparent'});
-			plus.webview.currentWebview().append(wsub);
-		}
-		mui.plusReady(function() {
-			setTimeout(function() {
-				createSubview()
-			}, 500)
-			// 更新为播放状态
-			function playVideo() {
-				var path = document.getElementById('path').value;
-				if(path && path.length > 0) {
-					video.setOptions({
-						src: path
-					});
-					video.play();
-				}
-			}
-			// 创建视频播放控件
-			video = new plus.video.VideoPlayer('video', {
-				src: 'rtmp://fd.jktwo.com/live/40871_7129c404c6a772a26414a0c6ec6ad85b',
-				controls: false,
-				autoplay: true,
-				objectFit: 'fill'
-			});		
-		})
-		var first = null;
-		mui.back = function() {
-			if(!first) {
-				first = new Date().getTime();
-				/**
-				* 自动消失提示信息
-				* http://www.html5plus.org/doc/zh_cn/nativeui.html#plus.nativeUI.toast
-				*/
-				plus.nativeUI.toast("再按一次退出应用");
-				setTimeout(function() {
-					first = null;
-				}, 1000);
-			} else {
-				if(new Date().getTime() - first < 1000) {
-					/**
-					* 退出应用，仅安卓有效；
-					* http://www.html5plus.org/doc/zh_cn/runtime.html#plus.runtime.quit
-					*/
-					plus.runtime.quit();
-				}
-			}
-		};
-	</script>
 
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js"></script>
+		<script src="../js/config.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				var mySwiper = new Swiper('.swiper-container', {
+					autoplay: true,//可选选项，自动滑动
+					pagination: {
+					  el: '.swiper-pagination',
+					  bulletActiveClass: 'my-bullet-active',
+					},
+				})
+				
+				//获取直播间列表
+				$http({
+					url: '/auth/user/v2/get/my/live/list',
+					data: {
+						token: localStorage.getItem('token'),
+						page: 1,
+						count: 10
+					},
+					success: function(res) {
+						console.log('liyang')
+						console.log(JSON.stringify(res))
+						if(res.code == 10000) {
+							
+						}else {
+							
+						}
+					}
+				})
+			})
+			$('#meHref').on('tap', function() {
+				mui.openWindow({
+					url: './me.html',
+					id: 'me'
+				})
+			})
+			mui.plusReady(function() {
+				$('.room-list-item').each(function(e, index) {
+					$(this).on('tap', function() {
+						mui.openWindow({
+							url: './studio_page.html',
+							id: 'studio_page' + index
+						})
+					})
+				})
+			})
+			var first = null;
+			mui.back = function() {
+				if (!first) {
+					first = new Date().getTime();
+					/**
+					 * 自动消失提示信息
+					 * http://www.html5plus.org/doc/zh_cn/nativeui.html#plus.nativeUI.toast
+					 */
+					plus.nativeUI.toast("再按一次退出应用");
+					setTimeout(function() {
+						first = null;
+					}, 1000);
+				} else {
+					if (new Date().getTime() - first < 1000) {
+						/**
+						 * 退出应用，仅安卓有效；
+						 * http://www.html5plus.org/doc/zh_cn/runtime.html#plus.runtime.quit
+						 */
+						plus.runtime.quit();
+					}
+				}
+			};
+		</script>
+
+	</body>
 </html>
