@@ -144,8 +144,10 @@
 	.pay_gold_coin .bg { width: 8rem; height: 7rem; margin: 0 auto; }
 	.pay_gold_coin .bg img { width: 100%; }
 	.pay_gold_coin .txt {color: #fcdc06; font-size: 14px; text-align: center;}
-	#loading_wrap {position: fixed;width: 100%;height: 100%;z-index: 999;}
-	.loading_block {width: 80px; height: 100px; background: rgba(0, 0, 0, .2); border-radius: 8px; text-align: center;line-height: 100px;}
+	#loading_wrap {position: fixed;width: 100%;height: 100%;z-index: 999;top: 0; left: 0;}
+	.mui-spinner { width: 32px; height: 32px; }
+	.loading_block {width: 80px; height: 70px;position: absolute; left: 50%; top: 50%; margin-left: -40px; margin-top: -35px; border-radius: 8px; text-align: center;}
+	.loading_block .txt { color: #fff; text-shadow: 2px 0 2px rgba(0, 0, 0, .4); padding: 5px}
 	</style>
 	<body>
 		<header class="mui-navbar-inner mui-bar mui-bar-nav">
@@ -155,11 +157,13 @@
 			<h1 id="title" class="mui-title">游戏间</h1>
 			<!-- <a class="wf_icon_nav"><span class="wf_icon_setting"><img src="img/seeting.jpg"></span></a> -->
 		</header>
-		<div id="loading_wrap">
+		<div id="loading_wrap" style="display: none;">
 			<div class="loading_block">
-				<span class="mui-spinner"></span>
+				<div><span class="mui-spinner"></span></div>
+				<div class="txt">等待中</div>
 			</div>
 		</div>
+		<!--选择货道-->
 		<div class="dialog" id="select_goods">
 			<div class="dialog-content">
 				<div class="dialog-select-goods">
@@ -276,7 +280,7 @@
 					<div class="icon icon_msg"></div>
 					<div class="txt">消息</div>
 				</div>
-				<div class="menu-item">
+				<div class="menu-item" id="shareBtn">
 					<div class="icon icon_share"></div>
 					<div class="txt">转发</div>
 				</div>
@@ -349,6 +353,7 @@
 		})
 		function startGame(id, way) {
 			$('#select_goods').hide();
+			$('#loading_wrap').show();
 			$http({
 				url: '/auth/user/v2/start/game',
 				data: {
@@ -359,17 +364,19 @@
 				success: function(res) {
 					if(res.code == 10000) {
 						console.log(JSON.stringify(res))
-						mui.toast('开始游戏！');
+						$('#loading_wrap').hide();
 					}else {
 						
 					}
 				},
-// 				error: function(res) {
-// 					console.log(JSON.stringify(res))
-// 				}
 			})
 		}
 		mui.plusReady(function () {
+			updateSerivces()
+			//分享
+			$('#shareBtn').on('tap', function() {
+				shareWeb()
+			})
 		    $('#meHref').on('tap', function() {
 		    	mui.openWindow({
 		    		url: './me.html',
@@ -384,6 +391,66 @@
 		    	})
 		    })
 		})
+		// 分享
+		function share(srv, msg, button){
+		  if(!srv){
+		    plus.nativeUI.toast('无效的分享服务！');
+		    return;
+		  }
+		  button&&(msg.extra=button.extra);
+			// 发送分享
+			if(srv.authenticated){
+				plus.nativeUI.toast('---已授权---');
+				doShare(srv, msg);
+			}else{
+				plus.nativeUI.toast('---未授权---');
+				srv.authorize(function(){
+					doShare(srv, msg);
+				}, function(e){
+					plus.nativeUI.toast('认证授权失败：'+JSON.stringify(e));
+				});
+			}  
+		}
+		var shares=null;
+		var sweixin=null;
+		var buttons=[
+		  {title:'我的好友',extra:{scene:'WXSceneSession'}},
+		  {title:'朋友圈',extra:{scene:'WXSceneTimeline'}},
+		  {title:'我的收藏',extra:{scene:'WXSceneFavorite'}}
+		];
+		/**
+		 * 更新分享服务
+		 */
+		function updateSerivces(){
+			plus.share.getServices(function(s){
+				shares={};
+				for(var i in s){
+					var t=s[i];
+					shares[t.id]=t;
+				}
+		    sweixin=shares['weixin'];
+			}, function(e){
+				plus.nativeUI.toast('获取分享服务列表失败：'+e.message);
+			});
+		}
+
+		// 分享网页
+		function shareWeb(){
+		    var msg={type:'web',thumbs:['_www/logo.png'], href: 'https://www.baidu.com', title: '测试数据', content: "百度 测试地址"};
+		    sweixin?plus.nativeUI.actionSheet({title:'分享网页到微信',cancel:'取消',buttons:buttons}, function(e){
+		  	  (e.index>0)&&share(sweixin, msg, buttons[e.index-1]);
+		    }):plus.nativeUI.alert('当前环境不支持微信分享操作!'); 
+		}
+
+		// 发送分享
+		function doShare(srv, msg){
+//			plus.nativeUI.toast(JSON.stringify(msg));
+			srv.send(msg, function(){
+				plus.nativeUI.toast('分享到"'+srv.description+'"成功！');
+			}, function(e){
+				plus.nativeUI.toast('分享到"'+srv.description+'"失败: '+JSON.stringify(e));
+			});
+		}
 // 		var oldBack = mui.back;
 // 		mui.back = function() {
 // 			plus.webview.getElementById('studio_page').reload()

@@ -8,7 +8,9 @@
 	"index.html": {
 		"refer": [
 			"guide.html",
-			"main.html"
+			"main.html",
+			"login.html",
+			"component/home.html"
 		],
 		"resources": []
 	},
@@ -27,7 +29,22 @@
 			"component/barrage.html"
 		],
 		"refer": [
-			"component/barrage.html"
+			"component/barrage.html",
+			"component/me.html",
+			"component/studio_page.html"
+		]
+	},
+	"login.html": {
+		"refer": [
+			"component/home.html"
+		]
+	},
+	"component/studio_page.html": {
+		"resources": [
+			"component/studio.html"
+		],
+		"refer": [
+			"component/studio.html"
 		]
 	}
 }
