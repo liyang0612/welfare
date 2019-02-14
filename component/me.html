@@ -171,19 +171,17 @@
 						我的游戏间
 					</div>
 					<div class="live_content" id="liveContent">
-						<div class="room-list" id="roomList">
-							<div class="room-list-item">
-								<div class="room-list-item-img">
-									<img src="../img/xxx.png" />
+						<div class="room-list-item">
+							<div class="room-list-item-img">
+								<img src="../img/xxx.png" />
+							</div>
+							<div class="room-list-name">猪猪公仔</div>
+							<div class="room-list-flex">
+								<div class="room-list-num">
+									<span class="room-sysmol-icon"></span> 5/次
 								</div>
-								<div class="room-list-name">猪猪公仔</div>
-								<div class="room-list-flex">
-									<div class="room-list-num">
-										<span class="room-sysmol-icon"></span> 5/次
-									</div>
-									<div class="room-list-btn">
-										<span class="btn">空 闲 中</span>
-									</div>
+								<div class="room-list-btn">
+									<span class="btn">空 闲 中</span>
 								</div>
 							</div>
 						</div>
@@ -206,6 +204,11 @@
 	<script src="../js/jquery.min.js"></script>
 	<script src="../js/config.js"></script>
 	<script>
+		var statusObj = {
+			free: '空 闲 中',
+			maintenance: '下架维护中',
+			gaming: '游 戏 中'
+		}
 		mui.init({
 			swipeBack: true //启用右滑关闭功能
 		});
@@ -247,7 +250,7 @@
 					var roomListHtml = []
 					if (res.code == 10000) {
 						console.log('jiangdongmei')
-						console.log(res)
+						console.log(JSON.stringify(res))
 						if (!res.msg.data.length) {
 
 							$('#liveContent').html('<div class="live_null">\n' +
@@ -258,25 +261,36 @@
 								'\t\t\t\t\t</div>')
 							return false
 						}
-						res.msg.data.forEach(function(res) {
-							roomListHtml.push('\t\t\t\t\t\t<div class="room-list" id="roomList">\n' +
-								'\t\t\t\t\t\t\t<div class="room-list-item">\n' +
-								'\t\t\t\t\t\t\t\t<div class="room-list-item-img">\n' +
-								'\t\t\t\t\t\t\t\t\t<img src="../img/xxx.png"/>\n' +
-								'\t\t\t\t\t\t\t\t</div>\n' +
-								'\t\t\t\t\t\t\t\t<div class="room-list-name">猪猪公仔</div>\n' +
-								'\t\t\t\t\t\t\t\t<div class="room-list-flex">\n' +
-								'\t\t\t\t\t\t\t\t\t<div class="room-list-num">\n' +
-								'\t\t\t\t\t\t\t\t\t\t<span class="room-sysmol-icon"></span> 5/次\n' +
-								'\t\t\t\t\t\t\t\t\t</div>\n' +
-								'\t\t\t\t\t\t\t\t\t<div class="room-list-btn">\n' +
-								'\t\t\t\t\t\t\t\t\t\t<span class="btn">空 闲 中</span>\n' +
-								'\t\t\t\t\t\t\t\t\t</div>\n' +
-								'\t\t\t\t\t\t\t\t</div>\n' +
+						res.msg.data.forEach(function(item) {
+							roomListHtml.push('<div class="room-list-item">\n' +
+								'\t\t\t\t\t\t<div class="room-list-item-img">\n' +
+								'\t\t\t\t\t\t\t<img src="http://211.149.179.254:7002'+ item.Photo +'"/>\n' +
+								'\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t<div class="room-list-name">' + item.Name + '</div>\n' +
+								'\t\t\t\t\t\t<div class="room-list-flex">\n' +
+								'\t\t\t\t\t\t\t<div class="room-list-num">\n' +
+								'\t\t\t\t\t\t\t\t<span class="room-sysmol-icon"></span> ' + item.Coins + '/次\n' +
 								'\t\t\t\t\t\t\t</div>\n' +
-								'\t\t\t\t\t\t</div>')
+								'\t\t\t\t\t\t\t<div class="room-list-btn">\n' +
+								'\t\t\t\t\t\t\t\t<span class="btn " + ' + getStatus(item.Status) + '>' + statusObj[getStatus(item.Status)] +
+								'</span>\n' +
+								'\t\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t\t</div>\n' +
+								'\t\t\t\t\t</div>')
 						})
 						$('#liveContent').html(roomListHtml.join(''))
+
+						$('.room-list-item').each(function(index, e) {
+							$(this).on('tap', function() {
+								var detailPage = plus.webview.getWebviewById('studio_page');
+								mui.fire(detailPage, 'studioInfo', {
+									url: res.msg.data[index].Pull
+								});
+								mui.openWindow({
+									id: 'studio_page'
+								})
+							})
+						})
 					} else {
 
 					}
@@ -305,13 +319,16 @@
 				$(this).on('tap', function() {
 					mui.openWindow({
 						url: './studio_page.html',
-						id: 'studio_page' + index
+						id: 'studio_page'
 					})
 				})
 			})
 			//添加直播间
 			$('.add_btn').on('tap', function() {
-				addLiveStudio()
+				mui.openWindow({
+					url: './open_studio.html',
+					id: 'open_studio'
+				})
 			})
 			$('.me_info_picture').on('tap', function() {
 				createDialogview()
@@ -352,22 +369,16 @@
 				})
 			})
 		})
-		function addLiveStudio() {
-			$http({
-				url: '/auth/user/v2/open/live',
-				data: {
-					token: localStorage.getItem('token'),
-					id: 1
-				},
-				success: function(res) {
-					console.log(JSON.stringify(res))
-					if(res.code == 10000) {
-						plus.nativeUI.toast('添加成功！');
-					}else {
-						plus.nativeUI.toast('添加失败！');
-					}
-				}
-			})
+
+		function getStatus(status) {
+			switch (status) {
+				case 1:
+					return 'free'
+				case 2:
+					return 'maintenance'
+				case 3:
+					return 'gaming'
+			}
 		}
 		var first = null;
 		mui.back = function() {

@@ -340,6 +340,24 @@
 			view.addEventListener('pageBack', function(e) {
 				//				console.log(e.detail.page.id + ' back');
 			});
+			
+			function addLiveStudio() {
+				$http({
+					url: '/auth/user/v2/open/live',
+					data: {
+						token: localStorage.getItem('token'),
+						id: 1
+					},
+					success: function(res) {
+						console.log(JSON.stringify(res))
+						if(res.code == 10000) {
+							plus.nativeUI.toast('添加成功！');
+						}else {
+							plus.nativeUI.toast('添加失败！');
+						}
+					}
+				})
+			}
 		})(mui);
 		
 	</script>

@@ -36,7 +36,7 @@
 	<script type="text/javascript">
 		mui.init();
 		var currentHeight = document.documentElement.clientHeight, vedioHeight = currentHeight - 54 + 'px',
-			currentWidth = document.documentElement.clientWidth
+			currentWidth = document.documentElement.clientWidth, pullUrl = ''
 		$('#video').css('height', vedioHeight)
 		//创建弹幕webview
 		var wsub = null;
@@ -52,13 +52,16 @@
 			setTimeout(function() {
 				createSubview()
 			}, 300)
+			var studioInfo = window.localStorage.getItem('currentStudioInfo')
+			var studiosInfoMap = studioInfo && JSON.parse(studioInfo)
 			// 创建视频播放控件
 			video = new plus.video.VideoPlayer('video', {
-				src: 'rtmp://fd.jktwo.com/live/40871_7129c404c6a772a26414a0c6ec6ad85b',
+				src: studiosInfoMap.Pull,
 				controls: false,
 				autoplay: true,
 				objectFit: 'fill'
-			});		
+			});	
+				
 		})
 	</script>
 

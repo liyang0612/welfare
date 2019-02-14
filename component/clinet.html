@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>菜鸟教程(runoob.com)</title>
+    <script type="text/javascript" src="../js/client.js"></script>
+    <script type="text/javascript">
+    function WebSocketTest(){
+        //用户进入房间函数，每个用户进入房间，在线人数加1
+        function Addpeople(data){
+            console.log(data);
+        }
+        //游戏结果返回回调函数
+        function GameEnd(data){
+            console.log(data);
+        }
+        //被服务器踢出回调
+        function Kickout(){
+            console.log("被服务器踢出");
+        }
+        //服务重启或者关闭回调
+        function Serverclose(){
+            console.log("服务器关闭");
+        }
+        //注册回调函数
+        RegisterCallBackFunc(Addpeople,GameEnd,Kickout,Serverclose);
+        WebSocketStart("ws://211.149.179.254:5250?room=836&uid=2")
+    }
+       
+    </script>
+
+</head>
+
+<body>
+    <div id="sse">
+        <a href="javascript:WebSocketTest()">运行 WebSocket</a>
+    </div>
+
+</body>
+
+</html>

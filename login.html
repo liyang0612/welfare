@@ -288,6 +288,7 @@
 										}
 									});
 									localStorage.setItem('token', res.msg.token);
+									localStorage.setItem('userInfo', JSON.stringify(res.msg));
 								}else {
 									plus.nativeUI.toast('登录失败，请重试')
 									localStorage.clear()

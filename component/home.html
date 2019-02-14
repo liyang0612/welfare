@@ -53,33 +53,19 @@
 		</header>
 		<div class="home">
 			<div class="swiper-container">
-			  <div class="swiper-wrapper">
-				<div class="swiper-slide"><img src="../img/banner1.png" /></div>
-				<div class="swiper-slide"><img src="../img/banner2.png" /></div>
-				<div class="swiper-slide"><img src="../img/banner3.png" /></div>
-			  </div>
-			  <div class="swiper-pagination"></div>
+				<div class="swiper-wrapper">
+					<div class="swiper-slide"><img src="../img/banner1.png" /></div>
+					<div class="swiper-slide"><img src="../img/banner2.png" /></div>
+					<div class="swiper-slide"><img src="../img/banner3.png" /></div>
+				</div>
+				<div class="swiper-pagination"></div>
 			</div>
 			<div class="content">
-				<div class="room-title">房间列表</div>
-				<div class="room-list">
+				<div class="room-title">房间详情</div>
+				<div id="liveContent">
 					<div class="room-list-item">
 						<div class="room-list-item-img">
-							<img src="../img/xxx.png"/>
-						</div>
-						<div class="room-list-name">猪猪公仔</div>
-						<div class="room-list-flex">
-							<div class="room-list-num">
-								<span class="room-sysmol-icon"></span> 5/次
-							</div>
-							<div class="room-list-btn">
-								<span class="btn">空 闲 中</span>
-							</div>
-						</div>
-					</div>
-					<div class="room-list-item">
-						<div class="room-list-item-img">
-							<img src="../img/xxx.png"/>
+							<img src="../img/xxx.png" />
 						</div>
 						<div class="room-list-name">猪猪公仔</div>
 						<div class="room-list-flex">
@@ -93,7 +79,7 @@
 					</div>
 					<div class="room-list-item">
 						<div class="room-list-item-img">
-							<img src="../img/xxx.png"/>
+							<img src="../img/xxx.png" />
 						</div>
 						<div class="room-list-name">猪猪公仔</div>
 						<div class="room-list-flex">
@@ -101,12 +87,13 @@
 								<span class="room-sysmol-icon"></span> 5/次
 							</div>
 							<div class="room-list-btn">
-								<span class="btn">空 闲 中</span>
+								<span class="btn gaming">游 戏 中</span>
 							</div>
 						</div>
 					</div>
 				</div>
-			
+
+
 			</div>
 			<!-- <div>
 				<div class="banner_wrap">
@@ -136,48 +123,89 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js"></script>
 		<script src="../js/config.js"></script>
 		<script type="text/javascript">
+			var statusObj = {
+				free: '空 闲 中',
+				maintenance: '下架维护中',
+				gaming: '游 戏 中'
+			}
 			$(function() {
+				// window.localStorage.clear()
 				var mySwiper = new Swiper('.swiper-container', {
-					autoplay: true,//可选选项，自动滑动
+					autoplay: true, //可选选项，自动滑动
 					pagination: {
-					  el: '.swiper-pagination',
-					  bulletActiveClass: 'my-bullet-active',
+						el: '.swiper-pagination',
+						bulletActiveClass: 'my-bullet-active',
 					},
 				})
-				
-				//获取直播间列表
+				mui.plusReady(function() {
+					//获取直播间列表
+					getList()
+				})
+			})
+
+			function getList() {
 				$http({
-					url: '/auth/user/v2/get/my/live/list',
+					url: '/auth/user/v2/get/live/list',
 					data: {
 						token: localStorage.getItem('token'),
 						page: 1,
 						count: 10
 					},
 					success: function(res) {
-						console.log('liyang')
+						var roomListHtml = []
 						console.log(JSON.stringify(res))
-						if(res.code == 10000) {
-							
-						}else {
-							
+						if (res.code == 10000) {
+							res.msg.data.forEach(function(item) {
+								roomListHtml.push('<div class="room-list-item">\n' +
+									'\t\t\t\t\t\t<div class="room-list-item-img">\n' +
+									'\t\t\t\t\t\t\t<img src="http://211.149.179.254:7002'+ item.Photo +'"/>\n' +
+									'\t\t\t\t\t\t</div>\n' +
+									'\t\t\t\t\t\t<div class="room-list-name">' + item.Name + '</div>\n' +
+									'\t\t\t\t\t\t<div class="room-list-flex">\n' +
+									'\t\t\t\t\t\t\t<div class="room-list-num">\n' +
+									'\t\t\t\t\t\t\t\t<span class="room-sysmol-icon"></span> ' + item.Coins + '/次\n' +
+									'\t\t\t\t\t\t\t</div>\n' +
+									'\t\t\t\t\t\t\t<div class="room-list-btn">\n' +
+									'\t\t\t\t\t\t\t\t<span class="btn " + ' + getStatus(item.Status) + '>'+ statusObj[getStatus(item.Status)] +'</span>\n' +
+									'\t\t\t\t\t\t\t</div>\n' +
+									'\t\t\t\t\t\t</div>\n' +
+									'\t\t\t\t\t</div>')
+							})
+							$('#liveContent').html(roomListHtml.join(''))
+
+							$('.room-list-item').each(function(index, e) {
+								$(this).on('tap', function() {
+									console.log('rnima')
+									var detailPage = plus.webview.getWebviewById('studio_page');
+									window.localStorage.setItem('currentStudioInfo', JSON.stringify(res.msg.data[index]))
+									mui.openWindow({
+										url: './studio_page.html',
+										id: 'studio_page'
+									})
+								})
+							})
+						} else {
+
 						}
 					}
 				})
-			})
+
+			}
+
+			function getStatus(status) {
+				switch (status) {
+					case 1:
+						return 'free'
+					case 2:
+						return 'maintenance'
+					case 3: 
+						return 'gaming'
+				}
+			}
 			$('#meHref').on('tap', function() {
 				mui.openWindow({
 					url: './me.html',
 					id: 'me'
-				})
-			})
-			mui.plusReady(function() {
-				$('.room-list-item').each(function(e, index) {
-					$(this).on('tap', function() {
-						mui.openWindow({
-							url: './studio_page.html',
-							id: 'studio_page' + index
-						})
-					})
 				})
 			})
 			var first = null;

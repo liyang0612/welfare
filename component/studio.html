@@ -10,6 +10,35 @@
 		<link href="../css/mui.min.css" rel="stylesheet" />
 		<link href="../css/global.css" rel="stylesheet" />
 	</head>
+	<script src="../js/client.js"></script>
+	<script type="text/javascript">
+	function initWebsocket(){
+		var studioInfo = window.localStorage.getItem('currentStudioInfo')
+		var studiosInfoMap = studioInfo && JSON.parse(studioInfo)
+		var userInfo = window.localStorage.getItem('userInfo')
+		var userInfoMap = userInfo && JSON.parse(userInfo)
+			//用户进入房间函数，每个用户进入房间，在线人数加1
+			function Addpeople(data){
+					console.log(data, '人数加一');
+			}
+			//游戏结果返回回调函数
+			function GameEnd(data){
+					console.log(data, '结果返回');
+			}
+			//被服务器踢出回调
+			function Kickout(){
+					console.log("被服务器踢出");
+			}
+			//服务重启或者关闭回调
+			function Serverclose(){
+					console.log("服务器关闭");
+			}
+			//注册回调函数
+			RegisterCallBackFunc(Addpeople,GameEnd,Kickout,Serverclose);
+			WebSocketStart("ws://211.149.179.254:5250?room="+ studiosInfoMap.RoomId +"&uid="+userInfoMap.uid)
+	}
+	initWebsocket()
+	</script>
 	<style>
 	html,body {
 		background: transparent;
@@ -71,6 +100,7 @@
 		height: 16.66%;
 		color: #fff;
 	}
+	.dialog-content .mui-icon {position: absolute;right: 5px; top: 5px; z-index: 99;}
 	.dialog { display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 99; background: rgba(0, 0, 0, .7);}
 	.dialog-content { position: relative; width: 86%; height: 76%; margin: 54px auto; background: #fff;border-radius: 12px;}
 	.dialog-top { width: 100%; height: 50%; background: #e9f5fe; border-radius: 12px 12px 0 0;position: relative;}
@@ -114,15 +144,22 @@
 	.pay_gold_coin .bg { width: 8rem; height: 7rem; margin: 0 auto; }
 	.pay_gold_coin .bg img { width: 100%; }
 	.pay_gold_coin .txt {color: #fcdc06; font-size: 14px; text-align: center;}
+	#loading_wrap {position: fixed;width: 100%;height: 100%;z-index: 999;}
+	.loading_block {width: 80px; height: 100px; background: rgba(0, 0, 0, .2); border-radius: 8px; text-align: center;line-height: 100px;}
 	</style>
 	<body>
 		<header class="mui-navbar-inner mui-bar mui-bar-nav">
-			<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+			<button id="backPage" type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
 				<span class="mui-icon mui-icon-left-nav"></span>
 			</button>
 			<h1 id="title" class="mui-title">游戏间</h1>
 			<!-- <a class="wf_icon_nav"><span class="wf_icon_setting"><img src="img/seeting.jpg"></span></a> -->
 		</header>
+		<div id="loading_wrap">
+			<div class="loading_block">
+				<span class="mui-spinner"></span>
+			</div>
+		</div>
 		<div class="dialog" id="select_goods">
 			<div class="dialog-content">
 				<div class="dialog-select-goods">
@@ -171,6 +208,7 @@
 		<!--充值金币-->
 		<div class="dialog" id="gold_coin_pay" style="display: none;">
 			<div class="dialog-content">
+				<span id="close" class="mui-icon mui-icon-closeempty"></span>
 				<div class="dialog-top">
 					<div class="pay_gold_coin">
 						<div class="bg">
@@ -263,6 +301,7 @@
 		</nav> -->
 	</body>
 	<script src="../js/mui.min.js"></script>
+	<script src="../js/config.js"></script>
 	<script src="../js/jquery.min.js"></script>
 	<script src="../js/barrage.js"></script>
 	<script>
@@ -270,6 +309,9 @@
 			var currentHeight = document.documentElement.clientHeight
 			$('.content').css('height', currentHeight - 54 + 'px')
 			var blocks = [];
+			var studioInfo = window.localStorage.getItem('currentStudioInfo')
+			var studiosInfoMap = studioInfo && JSON.parse(studioInfo)
+			
 			for(var i = 0; i < 24; i++) {
 				blocks.push('<div class="block"></div>');
 			}
@@ -282,6 +324,11 @@
 				})
 			})
 			
+			$('#select_goods #okBtn').on('tap', function() {
+				var way = $('.goods_num').text()
+				startGame(studiosInfoMap.RoomId, way)
+			})
+			
 			$('#select_goods #cancelBtn').on('tap', function() {
 				$('.dialog').hide();
 			})
@@ -289,7 +336,39 @@
 			$('#show_dialog_glod').on('tap', function() {
 				$('#gold_coin_pay').show()
 			})
+			
+			$('#gold_coin_pay').on('tap', function(e) {
+				if( e.target.id == 'gold_coin_pay' || e.target.id == 'close'){
+					$('#gold_coin_pay').hide()
+				}
+			})
+			
+// 			$('#backPage').on('tap', function() {
+// 				history.back()
+// 			})
 		})
+		function startGame(id, way) {
+			$('#select_goods').hide();
+			$http({
+				url: '/auth/user/v2/start/game',
+				data: {
+					id: id,
+					way: way,
+					token: localStorage.getItem('token')
+				},
+				success: function(res) {
+					if(res.code == 10000) {
+						console.log(JSON.stringify(res))
+						mui.toast('开始游戏！');
+					}else {
+						
+					}
+				},
+// 				error: function(res) {
+// 					console.log(JSON.stringify(res))
+// 				}
+			})
+		}
 		mui.plusReady(function () {
 		    $('#meHref').on('tap', function() {
 		    	mui.openWindow({
@@ -305,5 +384,10 @@
 		    	})
 		    })
 		})
+// 		var oldBack = mui.back;
+// 		mui.back = function() {
+// 			plus.webview.getElementById('studio_page').reload()
+// 			oldBack()
+// 		}
 	</script>
 </html>
