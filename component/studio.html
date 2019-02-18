@@ -290,7 +290,7 @@
 	<script src="../js/barrage.js"></script>
 	<script>
 		$(function() {
-			// initWebsocket()
+			initWebsocket()
 			var currentHeight = document.documentElement.clientHeight
 			$('.content').css('height', currentHeight - 54 + 'px')
 			var blocks = [];
@@ -473,20 +473,21 @@
 			//游戏结果返回回调函数
 			function GameEnd(res){
 				console.log('结果返回');
-				console.log(res)
+				console.log(JSON.stringify(res))
 				// if(!res.data) return false;
+				var response = JSON.parse(res)
 				$('#get_goods').show()
-				if(userInfoMap.uid === res.Uid){
+				if(userInfoMap.uid === response.Uid){
 					$('#meGet').show()
 					$('#otherGet').hide()
 					$('#getGoodsUserName').text('你')
 				}else {
 					$('#meGet').hide()
 					$('#otherGet').show()
-					$('#getGoodsUserName').text(res.Name)
+					$('#getGoodsUserName').text(response.Name)
 				}
-				$('#goodsPrice').text(res.GoodPric)
-				$('#goodsName').text(res.GoodName)
+				$('#goodsPrice').text(response.GoodPric)
+				$('#goodsName').text(response.GoodName)
 			}
 			//被服务器踢出回调
 			function Kickout(){
