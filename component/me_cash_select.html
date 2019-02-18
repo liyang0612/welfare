@@ -39,7 +39,7 @@
 			<div class="mui-scroll wf_body">
 				<div id="cardList">
 					<div class="adress_list">
-						<div class="adress_pic"></div>
+						<div class="adress_pic"><img src="../img/wechart_icon.png"></div>
 						<div class="adress_info">
 							<div class="user_info">
 								<div class="user_name">中国银行</div>
@@ -100,12 +100,12 @@
                   "\t\t\t\t\t\t\t\t<span>﻿" + item.CardNum + "</span> <span></span>\n" +
                   "\t\t\t\t\t\t\t</div>\n" +
                   "\t\t\t\t\t\t</div> \n" +
-                  "\t\t\t\t\t\t<div class=\"adress_opr active\">\n" +
+                  "\t\t\t\t\t\t<div class=\"adress_opr"+ (index === 0 ? 'active' : '') +"\">\n" +
                   "\t\t\t\t\t\t\t<span class=\"mui-icon mui-icon-checkmarkempty\"></span>\n" +
                   "\t\t\t\t\t\t</div>\n" +
                   "\t\t\t\t\t</div>")
 			})
-			// $('#cardList').html(listDom.join(''))
+			$('#cardList').html(listDom.join(''))
 			
 			$(".adress_list").on('tap', function() {
 				$(this).find('.adress_opr').addClass('active').parent().siblings().find('.adress_opr').removeClass('active')

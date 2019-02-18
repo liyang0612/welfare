@@ -175,8 +175,6 @@
 
 							$('.room-list-item').each(function(index, e) {
 								$(this).on('tap', function() {
-									console.log('rnima')
-									var detailPage = plus.webview.getWebviewById('studio_page');
 									window.localStorage.setItem('currentStudioInfo', JSON.stringify(res.msg.data[index]))
 									mui.openWindow({
 										url: './studio_page.html',

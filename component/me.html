@@ -122,6 +122,8 @@
 		.gaming {
 			background: #fb6362 !important;
 		}
+		
+		.level_icon {width: 20px; height: 20px; display: inline-block;margin-right: 5px; background: url(../img/level.png) no-repeat; background-size: 100%;}
 	</style>
 	<body class="wf_webview">
 		<header class="mui-bar mui-bar-nav">
@@ -137,7 +139,9 @@
 					</div>
 					<div class="me_info_con">
 						<div class="me_username">用户1</div>
-						<div class="me_level"></div>
+						<div class="me_level">
+							<i class="level_icon"></i><i class="level_icon"></i><i class="level_icon"></i>
+						</div>
 						<div class="me_money">
 							<span id="gold_coin_num"></span>
 						</div>
@@ -282,11 +286,9 @@
 
 						$('.room-list-item').each(function(index, e) {
 							$(this).on('tap', function() {
-								var detailPage = plus.webview.getWebviewById('studio_page');
-								mui.fire(detailPage, 'studioInfo', {
-									url: res.msg.data[index].Pull
-								});
+								window.localStorage.setItem('currentStudioInfo', JSON.stringify(res.msg.data[index]))
 								mui.openWindow({
+									url: './studio_page.html',
 									id: 'studio_page'
 								})
 							})

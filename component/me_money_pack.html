@@ -48,14 +48,14 @@
 				<div class="account_info">
 					<div class="account_money">
 						<div class="txt">账户余额</div>
-						<div class="num"><span id="balance">1500.00</span> 元</div>
+						<div class="num"><span id="balance">0</span> 元</div>
 					</div>
 					<button id="cash_btn">提现</button>
 				</div>
 				<div class="account_detail">
 					<div class="account_detail_txt">账户明细</div>
 					<div class="account_detail_list">
-						<div class="detail_item">
+<!-- 						<div class="detail_item">
 							<div class="detail_date">
 								<div class="year">2018</div>
 								<div class="month">12/24</div>
@@ -76,7 +76,7 @@
 								<div class="content">提现至微信钱包</div>
 							</div>
 							<div class="detail_num">+100</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -158,11 +158,11 @@
 							res.msg.data.forEach(function(item, index) {
 								listDom.push("<div class=\"detail_item\">\n" +
                                   "\t\t\t\t\t\t\t<div class=\"detail_date\">\n" +
-                                  "\t\t\t\t\t\t\t\t<div class=\"year\">2018</div>\n" +
-                                  "\t\t\t\t\t\t\t\t<div class=\"month\">12/24</div>\n" +
+                                  "\t\t\t\t\t\t\t\t<div class=\"year\">"+ getDate(item.Time, 'year') +"</div>\n" +
+                                  "\t\t\t\t\t\t\t\t<div class=\"month\">"+ getDate(item.Time) +"</div>\n" +
                                   "\t\t\t\t\t\t\t</div>\n" +
                                   "\t\t\t\t\t\t\t<div class=\"detail_info\">\n" +
-                                  "\t\t\t\t\t\t\t\t<div class=\"title\">"+ getType() + "</div>\n" +
+                                  "\t\t\t\t\t\t\t\t<div class=\"title\">"+ getType(item.Kind) + "</div>\n" +
                                   "\t\t\t\t\t\t\t\t<div class=\"content\">"+ item.Explain + "</div>\n" +
                                   "\t\t\t\t\t\t\t</div>\n" +
                                   "\t\t\t\t\t\t\t<div class=\"detail_num\">"+ item.Branch + "</div>\n" +
@@ -174,7 +174,17 @@
 					}
 				})
 			}
-
+			function getDate(date, type) {
+				var date =  new Date(date * 1000)
+				var dateDay =  date.getDate() > 9 ? date.getDate() : '0' + date.getDate();
+				var getMonth = date.getMonth() + 1;
+				var month =  getMonth > 9 ? getMonth : '0' + getMonth
+				if(type == 'year') {
+					return date.getFullYear()
+				}else {
+					return month + '/' + dateDay
+				}
+			}
 			function getType(type) {
 			  if(type == 0) {
 			    return '充值'

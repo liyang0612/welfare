@@ -89,8 +89,8 @@
 			</div>
 			<div class="wf_tab_content mui-scroll-wrapper">
 				<div class="mui-scroll">
-					<div style="padding-top: 100px; margin: 0 15px">
-						<div class="goods_item">
+					<div style="padding-top: 100px; margin: 0 15px" id="goodsGrid">
+<!-- 						<div class="goods_item">
 							<div class="goods_head">
 								<div class="store_name"><div class="store_icon"></div>xxx生活馆</div>
 								<div class="goods_status">商家已发货</div>
@@ -114,73 +114,81 @@
 								共<span class="total_info">1</span>件商品 &nbsp;&nbsp;&nbsp;&nbsp;
 								合计¥ <span class="total_price">300</span>
 							</div>
-						</div>
-						<div class="goods_item">
-							<div class="goods_head">
-								<div class="store_name"><div class="store_icon"></div>xxx生活馆</div>
-								<div class="goods_status">商家已发货</div>
-							</div>
-							<div class="goods_content">
-								<div class="goods_img">
-									<img src="../img/bocom.png"/>
-								</div>
-								<div class="goods_info_wrap">
-									<div class="info">
-										<div class="goods_info">迪奥烈焰蓝金口红999热门色号</div>
-										<div class="goods_unit">烈焰蓝光规格</div>
-									</div>
-									<div class="goods_price">
-										<div>¥ 299</div>
-										<div class="goods_num">x1</div>
-									</div>
-								</div>
-							</div>
-							<div class="goods_total">
-								共<span class="total_info">1</span>件商品 &nbsp;&nbsp;&nbsp;&nbsp;
-								合计¥ <span class="total_price">300</span>
-							</div>
-						</div>
-						<div class="goods_item">
-							<div class="goods_head">
-								<div class="store_name"><div class="store_icon"></div>xxx生活馆</div>
-								<div class="goods_status">商家已发货</div>
-							</div>
-							<div class="goods_content">
-								<div class="goods_img">
-									<img src="../img/bocom.png"/>
-								</div>
-								<div class="goods_info_wrap">
-									<div class="info">
-										<div class="goods_info">迪奥烈焰蓝金口红999热门色号</div>
-										<div class="goods_unit">烈焰蓝光规格</div>
-									</div>
-									<div class="goods_price">
-										<div>¥ 299</div>
-										<div class="goods_num">x1</div>
-									</div>
-								</div>
-							</div>
-							<div class="goods_total">
-								共<span class="total_info">1</span>件商品 &nbsp;&nbsp;&nbsp;&nbsp;
-								合计¥ <span class="total_price">300</span>
-							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/jquery.min.js"></script>
+		<script src="../js/config.js"></script>
 		<script>
 			mui.init({
 				swipeBack: false
 			});
 			mui('.mui-scroll-wrapper').scroll({
-				bounce: true //是否启用回弹
+				bounce: true //是否启用回弹 
 			});
 			$(".wf_tab_txt").on('tap', function(i){
 			   $(this).find('span').addClass('active').parent().siblings().find('span').removeClass('active')
 			});
+			mui.plusReady(function() {
+				getGoodsList()
+			})
+			function getGoodsList() {
+				$http({
+					url: '/auth/user/v2/get/goods/list',
+					data: {
+						token: localStorage.getItem('token'),
+						"page":1,
+						"count":10,
+						"status": 0
+					},
+					success: function(res) {
+						if (res.code == 10000) {
+							console.log(JSON.stringify(res))
+							var goodsListDom = []
+							res.msg.data.forEach(function(good) {
+								goodsListDom.push('<div class="goods_item">\n' +
+                                  '\t\t\t\t\t\t\t<div class="goods_head">\n' +
+                                  '\t\t\t\t\t\t\t\t<div class="store_name"><div class="store_icon"></div>'+ good.Merchants +'</div>\n' +
+                                  '\t\t\t\t\t\t\t\t<div class="goods_status">'+ getGoodsStatus(good.Status) +'</div>\n' +
+                                  '\t\t\t\t\t\t\t</div>\n' +
+                                  '\t\t\t\t\t\t\t<div class="goods_content">\n' +
+                                  '\t\t\t\t\t\t\t\t<div class="goods_img">\n' +
+                                  '\t\t\t\t\t\t\t\t\t<img src="http://211.149.179.254:7002'+ good.GoodsPhoto +'"/>\n' +
+                                  '\t\t\t\t\t\t\t\t</div>\n' +
+                                  '\t\t\t\t\t\t\t\t<div class="goods_info_wrap">\n' +
+                                  '\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t<div class="goods_info">'+ good.GoodsName +'</div>\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t<div class="goods_unit">'+ good.GoodsSpecification +'</div>\n' +
+                                  '\t\t\t\t\t\t\t\t\t</div>\n' +
+                                  '\t\t\t\t\t\t\t\t\t<div class="goods_price">\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t<div>¥ '+ good.GoodsPrice +'</div>\n' +
+                                  '\t\t\t\t\t\t\t\t\t\t<div class="goods_num">x1</div>\n' +
+                                  '\t\t\t\t\t\t\t\t\t</div>\n' +
+                                  '\t\t\t\t\t\t\t\t</div>\n' +
+                                  '\t\t\t\t\t\t\t</div>\n' +
+                                  '\t\t\t\t\t\t\t<div class="goods_total">\n' +
+                                  '\t\t\t\t\t\t\t\t共<span class="total_info">'+ good.Count +'</span>件商品 &nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                                  '\t\t\t\t\t\t\t\t合计¥ <span class="total_price">'+ good.GoodsPrice * good.Count +'</span>\n' +
+                                  '\t\t\t\t\t\t\t</div>\n' +
+                                  '\t\t\t\t\t\t</div>')
+							})
+							$('#goodsGrid').html(goodsListDom.join(''))
+						}
+					}
+				})
+			}
+			function getGoodsStatus(status) {
+              //用户商品状态常量 const (  WaitDelivery = 1 //待发货  WaitReceive  = 2 //待接收  EndOrder     = 3 //已完成 )
+			  var obj = {
+                '1': '待发货',
+                '2': '待接收',
+                '3': '已完成'
+			  }
+			  return obj[status]
+			}
 		</script>
 
 	</body>

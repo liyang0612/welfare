@@ -11,34 +11,6 @@
 		<link href="../css/global.css" rel="stylesheet" />
 	</head>
 	<script src="../js/client.js"></script>
-	<script type="text/javascript">
-	function initWebsocket(){
-		var studioInfo = window.localStorage.getItem('currentStudioInfo')
-		var studiosInfoMap = studioInfo && JSON.parse(studioInfo)
-		var userInfo = window.localStorage.getItem('userInfo')
-		var userInfoMap = userInfo && JSON.parse(userInfo)
-			//用户进入房间函数，每个用户进入房间，在线人数加1
-			function Addpeople(data){
-					console.log(data, '人数加一');
-			}
-			//游戏结果返回回调函数
-			function GameEnd(data){
-					console.log(data, '结果返回');
-			}
-			//被服务器踢出回调
-			function Kickout(){
-					console.log("被服务器踢出");
-			}
-			//服务重启或者关闭回调
-			function Serverclose(){
-					console.log("服务器关闭");
-			}
-			//注册回调函数
-			RegisterCallBackFunc(Addpeople,GameEnd,Kickout,Serverclose);
-			WebSocketStart("ws://211.149.179.254:5250?room="+ studiosInfoMap.RoomId +"&uid="+userInfoMap.uid)
-	}
-	initWebsocket()
-	</script>
 	<style>
 	html,body {
 		background: transparent;
@@ -122,6 +94,8 @@
 	.pay_btns_wrap h4 { font-size: 12px; padding: 3px 10px; margin-bottom: 10px; }
 	.pay_btns {width: 100%;}
 	.pay_btns::after {content: '';display: block;clear: both;}
+	.pay_btns .active .btn {background: #fcdc06;}
+	.pay_btns .pay_btn.active .btn > p {color: #000}
 	.pay_btns .pay_btn {width: 33.33%; float: left; padding: 0 5px; margin-bottom: 10px;}
 	.pay_btns .pay_btn .btn { height: 2.8rem; border-radius: 6px; text-align: center; box-shadow: 0 0 10px rgba(0, 0, 0, .1); padding: 0.36rem }
 	.pay_btns .pay_btn .btn p { margin-bottom: 0; color: #fcdc06; font-size: 14px; line-height: 14px; }
@@ -133,7 +107,7 @@
 	.dialog-select-goods .bg img { width: 100%; }
 	.select-goods-txt { width: 100%; margin-top: 20px; line-height: 24px; color: #f6be5d; font-size: 16px; text-align: center;}
 	
-	.dialog_get_goods { position: absolute; top: 60px; width: 14rem; height: 14rem; left: 0; right: 0; margin: 0 auto; }
+	.dialog_get_goods { position: absolute; z-index: 99; top: 6rem; width: 17rem; height: 17rem; left: 0; right: 0; margin: 0 auto; }
 	.dialog_get_goods .bg { width: 100%; overflow: hidden; }
 	.goods_pic { width: 64%; height: 64%; border-radius: 8px; overflow: hidden; position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto;background: #fff; }
 	.goods_pic img { width: 100%; }
@@ -188,6 +162,7 @@
 		<!--获取商品通知-->
 		<div class="dialog" id="get_goods" style="display: none;">
 			<div class="dialog-content">
+				<span id="close" class="mui-icon mui-icon-closeempty"></span>
 				<div class="dialog_get_goods">
 					<div class="bg">
 						<div class="goods_pic">
@@ -196,15 +171,20 @@
 						<img src="../img/goods_bg.png" />
 					</div>
 					<div class="select-goods-txt get_goods_txt">
-						恭喜你<br/>
-						获得价值<span>299元</span>的<span>蓝牙耳机</span>一副
+						恭喜<span id="getGoodsUserName">你</span><br/>
+						获得价值<span id="goodsPrice">299</span>元的<span id="goodsName">蓝牙耳机</span>一副
 					</div>
 				</div>
 				<div class="dialog-top"></div>
-				<div class="dialog-bottom">
+				<div class="dialog-bottom" id="meGet" style="display: none;">
 					<div class="btns">
 						<div id="cancelBtn">填写收获地址</div>
 						<div id="okBtn">赠送给微信好友</div>
+					</div>
+				</div>
+				<div class="dialog-bottom" id="otherGet" style="display: none;">
+					<div class="btns">
+						<div id="okBtn">确定</div>
 					</div>
 				</div>
 			</div>
@@ -274,19 +254,19 @@
 			<div class="right-wrap">
 				<div class="menu-item">
 					<div class="icon icon_online_num"></div>
-					<div class="txt"><span id="online_txt">10<span>人</div>
+					<div class="txt"><span id="online_txt">0<span>人</div>
 				</div>
-				<div class="menu-item">
+<!-- 				<div class="menu-item">
 					<div class="icon icon_msg"></div>
 					<div class="txt">消息</div>
-				</div>
+				</div> -->
 				<div class="menu-item" id="shareBtn">
 					<div class="icon icon_share"></div>
-					<div class="txt">转发</div>
+					<div class="txt">分享</div>
 				</div>
 				<div class="menu-item" id="show_dialog_glod">
 					<div class="icon icon_glod_coin"></div>
-					<div class="txt">10金币</div>
+					<div class="txt">0金币</div>
 				</div>
 			</div>
 			<footer>
@@ -310,11 +290,13 @@
 	<script src="../js/barrage.js"></script>
 	<script>
 		$(function() {
+			// initWebsocket()
 			var currentHeight = document.documentElement.clientHeight
 			$('.content').css('height', currentHeight - 54 + 'px')
 			var blocks = [];
-			var studioInfo = window.localStorage.getItem('currentStudioInfo')
-			var studiosInfoMap = studioInfo && JSON.parse(studioInfo)
+			var studioInfo = window.localStorage.getItem('currentStudioInfo')  //当前直播间信息
+			var studiosInfoMap = studioInfo && JSON.parse(studioInfo)			//对象
+			var money = 0  //充值金币
 			
 			for(var i = 0; i < 24; i++) {
 				blocks.push('<div class="block"></div>');
@@ -328,29 +310,57 @@
 				})
 			})
 			
+			//选择货道
 			$('#select_goods #okBtn').on('tap', function() {
 				var way = $('.goods_num').text()
 				startGame(studiosInfoMap.RoomId, way)
 			})
-			
+			//取消选择货道
 			$('#select_goods #cancelBtn').on('tap', function() {
 				$('.dialog').hide();
 			})
-			
+			//充值金币
 			$('#show_dialog_glod').on('tap', function() {
 				$('#gold_coin_pay').show()
 			})
-			
-			$('#gold_coin_pay').on('tap', function(e) {
-				if( e.target.id == 'gold_coin_pay' || e.target.id == 'close'){
-					$('#gold_coin_pay').hide()
+			//关闭充值金币
+			$('.dialog').on('tap', function(e) {
+				console.log(e.target.classList[0] == 'dialog')
+				if( e.target.classList[0] == 'dialog' || e.target.id == 'close'){
+					$('.dialog').hide()
 				}
 			})
+			//选择充值金额
+			$('.pay_btns .pay_btn').on('tap', function() {
+				$(this).addClass('active').siblings().removeClass('active')
+				money = $(this).find('.rmb').text().slice(0, -1)
+				console.log(money)
+			})
 			
-// 			$('#backPage').on('tap', function() {
-// 				history.back()
-// 			})
+			$('#gold_coin_pay #okBtn').on('tap', function() {
+				if(!money) {
+					plus.nativeUI.toast('请先选择充值金额', 2)
+					return false
+				}
+				recharge(parseInt(money))
+			})
 		})
+		//充值
+		function recharge(num) {
+			$http({
+				url: '/auth/user/v2/user/wechat/recharge',
+				data: {
+					token: localStorage.getItem('token'),
+					"money": num
+				},
+				success: function(res) {
+					console.log(JSON.stringify(res))
+					if(res.code == 10000) {
+						plus.nativeUI.toast('充值成功')
+					}
+				}
+			})
+		}
 		function startGame(id, way) {
 			$('#select_goods').hide();
 			$('#loading_wrap').show();
@@ -415,8 +425,8 @@
 		var sweixin=null;
 		var buttons=[
 		  {title:'我的好友',extra:{scene:'WXSceneSession'}},
-		  {title:'朋友圈',extra:{scene:'WXSceneTimeline'}},
-		  {title:'我的收藏',extra:{scene:'WXSceneFavorite'}}
+// 		  {title:'朋友圈',extra:{scene:'WXSceneTimeline'}},
+// 		  {title:'我的收藏',extra:{scene:'WXSceneFavorite'}}
 		];
 		/**
 		 * 更新分享服务
@@ -437,7 +447,7 @@
 		// 分享网页
 		function shareWeb(){
 		    var msg={type:'web',thumbs:['_www/logo.png'], href: 'https://www.baidu.com', title: '测试数据', content: "百度 测试地址"};
-		    sweixin?plus.nativeUI.actionSheet({title:'分享网页到微信',cancel:'取消',buttons:buttons}, function(e){
+		    sweixin?plus.nativeUI.actionSheet({title:'分享到微信',cancel:'取消',buttons:buttons}, function(e){
 		  	  (e.index>0)&&share(sweixin, msg, buttons[e.index-1]);
 		    }):plus.nativeUI.alert('当前环境不支持微信分享操作!'); 
 		}
@@ -451,10 +461,44 @@
 				plus.nativeUI.toast('分享到"'+srv.description+'"失败: '+JSON.stringify(e));
 			});
 		}
-// 		var oldBack = mui.back;
-// 		mui.back = function() {
-// 			plus.webview.getElementById('studio_page').reload()
-// 			oldBack()
-// 		}
+		function initWebsocket(){
+			var studioInfo = window.localStorage.getItem('currentStudioInfo')
+			var studiosInfoMap = studioInfo && JSON.parse(studioInfo)
+			var userInfo = window.localStorage.getItem('userInfo')
+			var userInfoMap = userInfo && JSON.parse(userInfo)
+			//用户进入房间函数，每个用户进入房间，在线人数加1
+			function Addpeople(data){
+					console.log(data, '人数加一');
+			}
+			//游戏结果返回回调函数
+			function GameEnd(res){
+				console.log('结果返回');
+				console.log(res)
+				// if(!res.data) return false;
+				$('#get_goods').show()
+				if(userInfoMap.uid === res.Uid){
+					$('#meGet').show()
+					$('#otherGet').hide()
+					$('#getGoodsUserName').text('你')
+				}else {
+					$('#meGet').hide()
+					$('#otherGet').show()
+					$('#getGoodsUserName').text(res.Name)
+				}
+				$('#goodsPrice').text(res.GoodPric)
+				$('#goodsName').text(res.GoodName)
+			}
+			//被服务器踢出回调
+			function Kickout(){
+					console.log("被服务器踢出");
+			}
+			//服务重启或者关闭回调
+			function Serverclose(){
+					console.log("服务器关闭");
+			}
+			//注册回调函数
+			RegisterCallBackFunc(Addpeople,GameEnd,Kickout,Serverclose);
+			WebSocketStart("ws://211.149.179.254:5250?room="+ studiosInfoMap.RoomId +"&uid="+userInfoMap.uid)
+		}
 	</script>
 </html>
