@@ -344,6 +344,13 @@
 				}
 				recharge(parseInt(money))
 			})
+			
+			$('#get_goods #cancelBtn').on('tap', function() {
+				mui.openWindow({
+					url: './me_adress.html',
+					id: 'me_adress'
+				})
+			})
 		})
 		//充值
 		function recharge(num) {
