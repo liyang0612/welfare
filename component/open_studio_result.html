@@ -228,7 +228,7 @@
 				<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
 					<span class="mui-icon mui-icon-left-nav"></span>
 				</button>
-				<h1 class="wf_title">开通直播间</h1>
+				<h1 class="wf_title">开通成功</h1>
 			</div>
 			<!--页面标题栏结束-->
 			<!--页面主内容区开始-->
@@ -236,54 +236,9 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<div class="studio_header">
-							<p>购买线上福袋机</p>
-							<div class="studio_amount">
-								<span>
-									<i class="amount_symbol"></i>
-									<span id="amount">299.0</span>
-								</span>
-							</div>
-						</div>
-						<div class="select_pay">
-							<p>选择支付方式</p>
-							<div class="pay_content">
-								<div class="pay_icon">
-									
-								</div>
-								<div class="pay_text">
-									微信支付
-								</div>
-							</div>
-						</div>
-						<div class="wl_input_row" style="padding: 10px 20px">
-							<button id="open_studio_btn" type="button" class="wl_btn" onclick="return false;">确定</button>
-
-						</div>
-<!-- 						<ul class="mui-table-view mui-table-view-chevron">
-							<li class="mui-table-view-cell">
-								<a href="#account">退出</a>
-							</li>
-						</ul> -->
-					</div>
-				</div>
-			</div>
-			<!--页面主内容区结束-->
-		</div>
-		<!--单页面结束-->
-		<div id="open_studio" class="mui-page">
-			<div class="mui-navbar-inner mui-bar mui-bar-nav">
-				<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
-					<span class="mui-icon mui-icon-left-nav"></span>
-				</button>
-				<h1 class="mui-center mui-title">开通成功</h1>
-			</div>
-			<div class="mui-page-content">
-				<div class="mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<div class="studio_header">
 							<div class="studio_amount">
 								<div class="open_result_icon">
-									<i class="open_icon_block open_success"></i>
+									<i id="iconId" class="open_icon_block open_success"></i>
 									<!-- <i class="open_icon_block open_fail"></i> -->
 								</div>
 								<span class="open_result">
@@ -301,15 +256,12 @@
 					</div>
 				</div>
 			</div>
+			<!--页面主内容区结束-->
 		</div>
-		<div id="dcontent">
-			<p id="info" style="padding: 0 1em;text-align:left;">支付通道信息：
-			</p>
-		</div>
+		
 	</body>
 	<script src="../js/mui.min.js "></script>
 	<script src="../js/mui.view.js "></script>
-	<script src="../js/config.js"></script>
 	<script src="../js/jquery.min.js"></script>
 	<script src='../js/feedback.js'></script>
 	<script>
@@ -318,120 +270,58 @@
 		var viewApi = mui('#app').view({
 			defaultPage: '#setting'
 		});
-		mui.plusReady(function() {
-			$('#open_studio_btn').on('tap', function() {
-				// addLiveStudio()
-				pay('wxpay')
-			})
-			
-			// initPay()
-			
-// 			setTimeout(function() {
-// 				pay('wxpay')
-// 			}, 2000)
-		})
 		//初始化单页的区域滚动
 		mui('.mui-scroll-wrapper').scroll();
 		var view = viewApi.view;
-		(function($) {
+		(function($$) {
 			//处理view的后退与webview后退
-			var oldBack = $.back;
-			$.back = function() {
+			var oldBack = $$.back;
+			$$.back = function() {
 				if (viewApi.canBack()) { //如果view可以后退，则执行view的后退
 					viewApi.back();
 				} else { //执行webview后退
 					oldBack();
 				}
 			};
-		})(mui);
-		function addLiveStudio() {
-			$http({
-				url: '/auth/user/v2/open/live',
-				data: {
-					token: localStorage.getItem('token')
-				},
-				success: function(res) {
-					console.log(JSON.stringify(res))
-					if(res.code == 10000) {
-						// plus.nativeUI.toast('添加成功！');
+			//监听页面切换事件方案1,通过view元素监听所有页面切换事件，目前提供pageBeforeShow|pageShow|pageBeforeBack|pageBack四种事件(before事件为动画开始前触发)
+			//第一个参数为事件名称，第二个参数为事件回调，其中e.detail.page为当前页面的html对象
+			view.addEventListener('pageBeforeShow', function(e) {
+				//				console.log(e.detail.page.id + ' beforeShow');
+			});
+			view.addEventListener('pageShow', function(e) {
+				//				console.log(e.detail.page.id + ' show');
+			});
+			view.addEventListener('pageBeforeBack', function(e) {
+				//				console.log(e.detail.page.id + ' beforeBack');
+			});
+			view.addEventListener('pageBack', function(e) {
+				//				console.log(e.detail.page.id + ' back');
+			});
+			
+			
+			mui.plusReady(function() {
+				var currentPage = plus.webview.getWebviewById('open_studio_result')
+				if(!currentPage.result) {
+					$('.wf_title').text('开通失败')
+					$('#iconId').removeClass('open_success').addClass('open_fail')
+					$('.open_result').text('开通失败')
+					$('#enter_studio').text('重新支付')
+				}
+				$('#enter_studio').on('tap', function() {
+					var res = currentPage.result
+					if(res) {
+						// window.localStorage.setItem('currentStudioInfo', JSON.stringify(res.msg.data[index]))
 						mui.openWindow({
-							url: './open_studio_result.html',
-							id: 'open_studio_result',
-							extras: { result: res }
+							url: './studio_page.html',
+							id: 'studio_page'
 						})
 					}else {
-						plus.nativeUI.toast('添加失败！');
+						oldBack();
 					}
-				}
+				})
 			})
-		}
-		var pays = {}
-		function initPay(){
-			// 获取支付通道
-			plus.payment.getChannels(function(channels){
-				var content=document.getElementById('dcontent');
-				var info=document.getElementById('info');
-				var txt='支付通道信息：';
-				for(var i in channels){
-					console.log(JSON.stringify(channels))
-					var channel=channels[i];
-					if(channel.id=='qhpay'||channel.id=='qihoo'){	// 过滤掉不支持的支付通道：暂不支持360相关支付
-						continue;
-					}
-					pays[channel.id]=channel;
-					checkServices(channel);
-				}
-				info.innerText=txt;
-			},function(e){
-				console.log('获取支付通道失败：'+e.message);
-			});
-		}
-		function checkServices(pc){
-			if(!pc.serviceReady){
-				var txt=null;
-				switch(pc.id){
-					case 'alipay':
-					txt='检测到系统未安装“支付宝快捷支付服务”，无法完成支付操作，是否立即安装？';
-					break;
-					default:
-					txt='系统未安装“'+pc.description+'”服务，无法完成支付，是否立即安装？';
-					break;
-				}
-				plus.nativeUI.confirm(txt, function(e){
-					if(e.index==0){
-						pc.installService();
-					}
-				}, pc.description);
-			}
-		}
-		var w=null;
-		// 支付
-		function pay(id){
-			if(w){return;}//检查是否请求订单中
-			w=plus.nativeUI.showWaiting();
-			$http({
-				url: '/auth/user/v2/user/wechat/recharge',
-				data: {
-					token: localStorage.getItem('token'),
-					money: 200
-				},
-				success: function(res) {
-					console.log(JSON.stringify(res))
-					w.close();w=null;
-					if(res.code === 10000) {
-						plus.payment.request(pays[id],res,function(result){
-							plus.nativeUI.alert('支付成功',function(){
-								back();
-							},'购买');
-						},function(e){
-							plus.nativeUI.alert('支付失败，请稍后重试', null, '支付失败：'+e.code);
-						});
-					}else {
-						plus.nativeUI.toast(res.msg || '支付失败，请重试')
-					}
-				}
-			})
-		}
+		})(mui);
+		
 	</script>
 
 </html>

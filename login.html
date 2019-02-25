@@ -8,6 +8,7 @@
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link href="css/style.css" rel="stylesheet" />
 		<style>
+			body {background: #fff;}
 			.area {
 				margin: 20px auto 0px auto;
 			}
@@ -54,6 +55,16 @@
 				padding: 0px 8px;
 			}
 			
+			.oauth-wrap {
+				position: relative;
+				width: 100%;
+				bottom: 0;
+				left: 0;
+				height: 100px;
+				margin-top: 90px;
+				z-index: 9999;
+			}
+			
 			.oauth-area {
 				position: absolute;
 				bottom: 20px;
@@ -63,18 +74,22 @@
 				padding: 0px;
 				margin: 0px;
 			}
+			#password {
+				height: 42px;
+				padding: 0 15px;
+			}
 			
 			.oauth-area .oauth-btn {
 				display: inline-block;
-				width: 50px;
-				height: 50px;
-				background-size: 30px 30px;
-				background-position: center center;
-				background-repeat: no-repeat;
+				width: 70px;
+				height: 70px;
+				/* background-size: 30px 30px; */
+				/* background-position: center center; */
 				margin: 0px 20px;
 				/*-webkit-filter: grayscale(100%); */
-				border: solid 1px #ddd;
-				border-radius: 25px;
+				/* border: solid 1px #ddd; */
+				border-radius: 35px;
+				background: url(img/weixin.png);
 			}
 			
 			.oauth-area .oauth-btn:active {
@@ -84,88 +99,95 @@
 			.oauth-area .oauth-btn.disabled {
 				background-color: #ddd;
 			}
+			.header_logo {height: 250px; width: 100%; text-align: center;}
+			.header_logo img {width: 80%;margin: 20px auto;}
+			.mui-content {background: #fff;padding: 20px 0 0 0}
+			#login-form {padding: 0 30px}
+			.mui-input-row input {width: 100%; border: none;border-bottom: solid 1px #eee;}
+			.mui-content-padded {padding: 0 20px;}
+			#login {background: #4FB4F8; color: #fff;height: 42px;border: 1px solid #4FB4F8;
+			line-height: 42px;padding: 0}
+			.smscode {position: relative;}
+			#getCode {display: inline-block;position: absolute;right: 0px;top: 5px; background: #ed4d5b; color: #fff;
+			 border-radius: 20px;padding: 3px 20px; font-size: 12px;z-index: 9999;}
 		</style>
 
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav">
-			<h1 class="mui-title">登录</h1>
-		</header>
+		<div class="header_logo">
+			<img src="img/logo.png">
+		</div>
 		<div class="mui-content">
-			<form id='login-form' class="mui-input-group">
+			<form id='login-form'>
 				<div class="mui-input-row">
-					<label>账号</label>
-					<input id='account' type="tel" class="mui-input-clear mui-input" placeholder="请输入账号">
+					<input id='account' type="tel" class="mui-input-clear mui-input" placeholder="请输入手机号">
 				</div>
-				<div class="mui-input-row">
-					<label>密码</label>
-					<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
+				<div class="mui-input-row smscode">
+					<input id='password' class="mui-input-clear mui-input" placeholder="请输入验证码">
+					<span id="getCode">发送验证码</span>
 				</div>
-			</form>
-			<form class="mui-input-group">
-				<ul class="mui-table-view mui-table-view-chevron">
-<!-- 					<li class="mui-table-view-cell">
-						自动登录
-						<div id="autoLogin" class="mui-switch">
-							<div class="mui-switch-handle"></div>
-						</div>
-					</li> -->
-				</ul>
 			</form>
 			<div class="mui-content-padded">
-				<button id='getCode' class="mui-btn mui-btn-block mui-btn-primary">获取验证码</button>
-				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
-				<div class="link-area"><a id='reg'>注册账号</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a>
-				</div>
+				<!-- <button id='' class="mui-btn mui-btn-block mui-btn-primary"></button> -->
+				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登 &nbsp;录&nbsp; LOGIN</button>
 			</div>
+		</div>
+		<div class="oauth-wrap">
 			<div class="mui-content-padded oauth-area">
-
+				<!-- <div class="oauth-btn"></div> -->
 			</div>
 		</div>
 		<script src="js/mui.min.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
-		<script src="js/zepto.main.js"></script>
+		<script src="./js/jquery.min.js"></script>
 		<script src="js/app.js"></script>
 		<script src="js/config.js"></script>
 		<script>
-			(function($, doc) {
-				$.init({
+// 			$(function() {
+// 				// $('.oauth-wrap').css("height", document.documentElement.clientHeight - 80 + 'px');
+// 			})
+			$(function () {
+				$('.oauth-wrap').css("margin-top", document.documentElement.clientHeight - 550 + 'px');
+			});
+			(function(m, doc) {
+				m.init({
 					statusBarBackground: '#f7f7f7'
 				});
-				$.plusReady(function() {					
+				m.plusReady(function() {					
 					plus.screen.lockOrientation("portrait-primary");
 					var settings = app.getSettings();
 					var state = app.getState();
-					var mainPage = plus.webview.getWebviewById("main");
+					// var mainPage = plus.webview.getWebviewById("main");
 					var main_loaded_flag = false;
-					if(!mainPage){
-						mainPage = $.preload({
-							"id": 'home',
-							"url": './component/home.html'
-						});
-					}else{
-						main_loaded_flag = true;
-					}
-					
-					mainPage.addEventListener("loaded",function () {
-						main_loaded_flag = true;
-					});
+// 					if(!mainPage){
+// 						mainPage = m.preload({
+// 							"id": 'home',
+// 							"url": './component/home.html'
+// 						});
+// 					}else{
+// 						main_loaded_flag = true;
+// 					}
+// 					
+// 					mainPage.addEventListener("loaded",function () {
+// 						main_loaded_flag = true;
+// 					});
 					var toMain = function() {
 						//使用定时器的原因：
 						//可能执行太快，main页面loaded事件尚未触发就执行自定义事件，此时必然会失败
-						console.log('tomain')
-						var id = setInterval(function () {
-							if(main_loaded_flag){
-								clearInterval(id);
-								$.fire(mainPage, 'show', null);
-								mainPage.show("pop-in");
-							}
-						},20);
+// 						console.log('tomain')
+// 						var id = setInterval(function () {
+// 							if(main_loaded_flag){
+// 								clearInterval(id);
+// 								m.fire(mainPage, 'show', null);
+// 								mainPage.show("pop-in");
+// 							}
+// 						},20);
 					};
 					//检查 "登录状态/锁屏状态" 开始
 					if (state.token && settings.gestures) {
-						$.openWindow({
+						console.log(111111111)
+						m.openWindow({
 							url: 'unlock.html',
 							id: 'unlock',
 							show: {
@@ -177,10 +199,12 @@
 						});
 					} else if (state.token) {
 						toMain();
+						console.log(222222222)
 					} else {
 						app.setState(null);
+						console.log(3333333333)
 						//第三方登录
-						var authBtns = ['qihoo', 'weixin', 'sinaweibo', 'qq']; //配置业务支持的第三方登录
+						var authBtns = ['weixin']; //配置业务支持的第三方登录
 						var auths = {};
 						var oauthArea = doc.querySelector('.oauth-area');
 						plus.oauth.getServices(function(services) {
@@ -193,11 +217,16 @@
 									//如果微信未安装，则为不启用状态
 									btn.setAttribute('class', 'oauth-btn' + (!isInstalled && service.id === 'weixin' ? (' disabled') : ''));
 									btn.authId = service.id;
-									btn.style.backgroundImage = 'url("images/' + service.id + '.png")'
+									btn.style.background = 'url(img/weixin.png)'
+									btn.style.backgroundSize = '90%'
+									btn.style.backgroundPosition = '2px 2px';
+									btn.style.backgroundRepeat = 'no-repeat';
 									oauthArea.appendChild(btn);
+									console.log(btn.className)
 								}
 							}
-							$(oauthArea).on('tap', '.oauth-btn', function() {
+							m(oauthArea).on('tap', '.oauth-btn', function() {
+								console.log(this.classList)
 								if (this.classList.contains('disabled')) {
 									plus.nativeUI.toast('您尚未安装微信客户端');
 									return;
@@ -206,13 +235,49 @@
 								var waiting = plus.nativeUI.showWaiting();
 								auth.login(function() {
 									waiting.close();
-									plus.nativeUI.toast("登录认证成功");
+									// plus.nativeUI.toast("登录认证成功");
 									auth.getUserInfo(function() {
-										plus.nativeUI.toast("获取用户信息成功");
-										var name = auth.userInfo.nickname || auth.userInfo.name;
-										app.createState(name, function() {
-											toMain();
-										});
+// 										plus.nativeUI.toast("获取用户信息成功");
+// 										var name = auth.userInfo.nickname || auth.userInfo.name;
+// 										app.createState(name, function() {
+// 											toMain();
+// 										});
+										$http({
+											url: "/auth/user/v2/wechat/login",
+											data: {
+												nickname: auth.userInfo.nickname,
+												openid: auth.userInfo.openid,
+												refresh_token: auth.authResult.refresh_token,
+												unionid: auth.userInfo.unionid
+											},
+											success: function(res) {
+												console.log(JSON.stringify(res))
+												if(res.code == 10000) {
+													plus.nativeUI.toast('微信授权登录成功')
+													console.log('success')
+													// toMain();
+													mui.openWindow({
+														url: "./component/home.html",
+														id: "home",
+														extras: {
+															mark: "index" //额外的参数，仅仅是个标识，实际开发中不用；
+														},
+														show: {
+															aniShow: 'none',
+															//				            duration: 5
+														},
+														waiting: {
+															autoShow: false, //自动显示等待框，默认为true
+														}
+													});
+													localStorage.setItem('token', res.msg.token);
+													localStorage.setItem('userInfo', JSON.stringify(res.msg));
+												}else {
+													plus.nativeUI.toast('登录失败，请重试')
+													localStorage.clear()
+												}
+											}
+										})
 									}, function(e) {
 										plus.nativeUI.toast("获取用户信息失败：" + e.message);
 									});
@@ -289,6 +354,8 @@
 									});
 									localStorage.setItem('token', res.msg.token);
 									localStorage.setItem('userInfo', JSON.stringify(res.msg));
+								}else if(res.code === 10001){
+									plus.nativeUI.toast(res.msg)
 								}else {
 									plus.nativeUI.toast('登录失败，请重试')
 									localStorage.clear()
@@ -296,32 +363,16 @@
 							}
 						})
 					})
-					$.enterfocus('#login-form input', function() {
-						$.trigger(loginButton, 'tap');
+					m.enterfocus('#login-form input', function() {
+						m.trigger(loginButton, 'tap');
 					});
-					regButton.addEventListener('tap', function(event) {
-						$.openWindow({
-							url: 'reg.html',
-							id: 'reg',
-							preload: true,
-// 							show: {
-// 								aniShow: 'pop-in'
-// 							},
-// 							styles: {
-// 								popGesture: 'hide'
-// 							},
-// 							waiting: {
-// 								autoShow: false
-// 							}
-						});
-					}, false);
 					//
 					window.addEventListener('resize', function() {
 						oauthArea.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
 					}, false);
 					//
 					var backButtonPress = 0;
-					$.back = function(event) {
+					m.back = function(event) {
 						backButtonPress++;
 						if (backButtonPress > 1) {
 							plus.runtime.quit();
@@ -335,6 +386,7 @@
 					};
 				});
 			}(mui, document));
+		
 		</script>
 	</body>
 

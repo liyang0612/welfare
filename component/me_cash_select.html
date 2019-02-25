@@ -77,14 +77,22 @@
 	<script src="../js/jquery.min.js"></script>
 	<script src="../js/config.js"></script>
 	<script>
+		var bankList = [], defaultBank = null
 		mui.init({
 			swipeBack:true //启用右滑关闭功能
 		})
 		mui('.mui-scroll-wrapper').scroll({
 			bounce: true //是否启用回弹
 		}); 
+// 		$(function() {
+// 			$(".adress_list").on('tap', function() {
+// 				$(this).find('.adress_opr').addClass('active').parent().siblings().find('.adress_opr').removeClass('active')
+// 				console.log($(this).find('.adress_opr').addClass('active').parent().siblings().find('.adress_opr'))
+// 			})
+// 		})
 		mui.plusReady(function() {
 			var list = plus.webview.getWebviewById('me_cash_select').cardList
+			bankList = list
 			initList(list)
 		})
 		function initList(list) {
@@ -100,16 +108,28 @@
                   "\t\t\t\t\t\t\t\t<span>﻿" + item.CardNum + "</span> <span></span>\n" +
                   "\t\t\t\t\t\t\t</div>\n" +
                   "\t\t\t\t\t\t</div> \n" +
-                  "\t\t\t\t\t\t<div class=\"adress_opr"+ (index === 0 ? 'active' : '') +"\">\n" +
+                  "\t\t\t\t\t\t<div class=\"adress_opr "+ (index === 0 ? 'active' : '') +"\">\n" +
                   "\t\t\t\t\t\t\t<span class=\"mui-icon mui-icon-checkmarkempty\"></span>\n" +
                   "\t\t\t\t\t\t</div>\n" +
                   "\t\t\t\t\t</div>")
 			})
 			$('#cardList').html(listDom.join(''))
 			
-			$(".adress_list").on('tap', function() {
-				$(this).find('.adress_opr').addClass('active').parent().siblings().find('.adress_opr').removeClass('active')
+			$('.adress_list').each(function(index) {
+				$(this).on('tap', function() {
+					$(this).find('.adress_opr').addClass('active').parent().siblings().find('.adress_opr').removeClass('active')
+					defaultBank = bankList[index]
+				})
 			})
 		}
+		$(function() {
+			$('.wl_btn').on('tap', function() {
+				console.log(123123123)
+				mui.fire(plus.webview.getWebviewById('me_cash'),'defalutBank',{
+					defalutBank: defaultBank
+				});
+				mui.back()
+			})
+		})
 	</script>
 </html>

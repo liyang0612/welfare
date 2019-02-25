@@ -242,7 +242,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="wraning">金币不足，请先充值</div>
+						<div class="wraning"></div>
 					</div>
 					<div class="btns">
 						<div id="okBtn">微信支付</div>
@@ -266,7 +266,7 @@
 				</div>
 				<div class="menu-item" id="show_dialog_glod">
 					<div class="icon icon_glod_coin"></div>
-					<div class="txt">0金币</div>
+					<div class="txt"><span id="gold_coin_num"></span>金币</div>
 				</div>
 			</div>
 			<footer>
@@ -290,6 +290,9 @@
 	<script src="../js/barrage.js"></script>
 	<script>
 		$(function() {
+			var Balance = 0
+			var onlineStr = ''
+			
 			initWebsocket()
 			var currentHeight = document.documentElement.clientHeight
 			$('.content').css('height', currentHeight - 54 + 'px')
@@ -310,6 +313,7 @@
 				})
 			})
 			
+			getGoldcoin()
 			//选择货道
 			$('#select_goods #okBtn').on('tap', function() {
 				var way = $('.goods_num').text()
@@ -322,6 +326,9 @@
 			//充值金币
 			$('#show_dialog_glod').on('tap', function() {
 				$('#gold_coin_pay').show()
+				if(Balance < 10) {
+					$('.wraning').text('金币不足，请先充值')
+				}
 			})
 			//关闭充值金币
 			$('.dialog').on('tap', function(e) {
@@ -352,6 +359,24 @@
 				})
 			})
 		})
+		//获取金币
+		function getGoldcoin() {
+			$http({
+				url: '/auth/user/v2/get/user/info',
+				data: {
+					token: localStorage.getItem('token')
+				},
+				success: function(res) {
+					Balance = res.msg.Balance
+					console.log(JSON.stringify(res))
+					if (res.code == 10000) {
+						$('#gold_coin_num').text(Balance)
+					} else {
+						
+					}
+				}
+			})
+		}
 		//充值
 		function recharge(num) {
 			$http({
@@ -364,6 +389,7 @@
 					console.log(JSON.stringify(res))
 					if(res.code == 10000) {
 						plus.nativeUI.toast('充值成功')
+						getGoldcoin()
 					}
 				}
 			})
@@ -476,6 +502,11 @@
 			//用户进入房间函数，每个用户进入房间，在线人数加1
 			function Addpeople(data){
 					console.log(data, '人数加一');
+					onlineStr = JSON.parse(data).Online
+					window.setTimeout(function() {
+						$('#online_txt').html(onlineStr + '人')
+						console.log(onlineStr)
+					}, 500)
 			}
 			//游戏结果返回回调函数
 			function GameEnd(res){

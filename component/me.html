@@ -52,14 +52,23 @@
 			clear: both;
 			display: block;
 		}
-
+		
+		.live_content .add-room-list {
+			font-size: 48px;
+			color: #ccc;
+			line-height: 190px;
+			text-align: center;
+			background: #f0f0f0;
+		}
+		
 		.live_content .room-list-item {
-			margin: 15px 0 0 3%;
-			width: 45.5%;
+			margin: 15px 3%;
+			width: 44%;
+			height: 215px;
 			float: left;
 			padding: 5px 5px 15px;
 			border-radius: 6px;
-			border: solid 2px #ccc;
+			border: solid 2px #eee;
 		}
 
 		.room-list-item-img {
@@ -79,6 +88,8 @@
 
 		.room-list-name {
 			padding: 4px 0;
+			font-size: 14px;
+			color: #999;
 			text-align: left;
 		}
 
@@ -116,7 +127,7 @@
 
 		.room-list-num {
 			position: relative;
-			font-size: 16px;
+			font-size: 14px;
 		}
 
 		.gaming {
@@ -175,7 +186,7 @@
 						我的游戏间
 					</div>
 					<div class="live_content" id="liveContent">
-						<div class="room-list-item">
+						<!-- <div class="room-list-item">
 							<div class="room-list-item-img">
 								<img src="../img/xxx.png" />
 							</div>
@@ -188,7 +199,7 @@
 									<span class="btn">空 闲 中</span>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -210,7 +221,7 @@
 	<script>
 		var statusObj = {
 			free: '空 闲 中',
-			maintenance: '下架维护中',
+			maintenance: '维 护 中',
 			gaming: '游 戏 中'
 		}
 		mui.init({
@@ -253,10 +264,8 @@
 				success: function(res) {
 					var roomListHtml = []
 					if (res.code == 10000) {
-						console.log('jiangdongmei')
 						console.log(JSON.stringify(res))
-						if (!res.msg.data.length) {
-
+						if (!res.msg.data || !res.msg.data.length) {
 							$('#liveContent').html('<div class="live_null">\n' +
 								'\t\t\t\t\t\t<p>当前还没有游戏间</p>\n' +
 								'\t\t\t\t\t\t<div class="add_btn">\n' +
@@ -265,7 +274,7 @@
 								'\t\t\t\t\t</div>')
 							return false
 						}
-						res.msg.data.forEach(function(item) {
+						res.msg.data && res.msg.data.forEach(function(item) {
 							roomListHtml.push('<div class="room-list-item">\n' +
 								'\t\t\t\t\t\t<div class="room-list-item-img">\n' +
 								'\t\t\t\t\t\t\t<img src="http://211.149.179.254:7002'+ item.Photo +'"/>\n' +
@@ -282,15 +291,24 @@
 								'\t\t\t\t\t\t</div>\n' +
 								'\t\t\t\t\t</div>')
 						})
+						roomListHtml.push('<div class="room-list-item add-room-list">+</div>')
 						$('#liveContent').html(roomListHtml.join(''))
 
 						$('.room-list-item').each(function(index, e) {
 							$(this).on('tap', function() {
-								window.localStorage.setItem('currentStudioInfo', JSON.stringify(res.msg.data[index]))
-								mui.openWindow({
-									url: './studio_page.html',
-									id: 'studio_page'
-								})
+								if(index == res.msg.data.length) {
+									mui.openWindow({
+										url: './open_studio.html',
+										id: 'open_studio'
+									})
+									return false
+								}else {
+									window.localStorage.setItem('currentStudioInfo', JSON.stringify(res.msg.data[index]))
+									mui.openWindow({
+										url: './studio_page.html',
+										id: 'studio_page'
+									})
+								}
 							})
 						})
 					} else {
@@ -317,14 +335,14 @@
 		}
 		mui.plusReady(function() {
 			//进入直播间
-			$('.room-list-item').each(function(e, index) {
-				$(this).on('tap', function() {
-					mui.openWindow({
-						url: './studio_page.html',
-						id: 'studio_page'
-					})
-				})
-			})
+// 			$('.room-list-item').each(function(e, index) {
+// 				$(this).on('tap', function() {
+// 					mui.openWindow({
+// 						url: './studio_page.html',
+// 						id: 'studio_page'
+// 					})
+// 				})
+// 			})
 			//添加直播间
 			$('.add_btn').on('tap', function() {
 				mui.openWindow({

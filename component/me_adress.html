@@ -42,7 +42,7 @@
 		<div class="mui-scroll-wrapper">
 			<div class="mui-scroll wf_body">
 				<ul id="OA_task_2" class="mui-table-view">
-					<li class="mui-table-view-cell">
+<!-- 					<li class="mui-table-view-cell">
 						<div class="mui-slider-right mui-disabled">
 							<a class="mui-btn mui-btn-red">删除</a>
 						</div>
@@ -64,7 +64,7 @@
 								</div>
 							</div>
 						</div>
-					</li>
+					</li> -->
 				</ul>
 				<div class="wl_input_row" style="padding: 0 15px;">
 					<button id="add_btn" class="wl_btn">添加收货地址</button>
@@ -118,6 +118,7 @@
 							$('#OA_task_2').html(nullList);
 							return false;
 						}
+						// <span>默认</span>
 						res.msg.forEach(function(item, index) {
 							listDom.unshift('<li class="mui-table-view-cell">\n' +
                               '\t\t\t\t\t\t<div class="mui-slider-right mui-disabled">\n' +
@@ -132,7 +133,7 @@
                               '\t\t\t\t\t\t\t\t\t\t<div class="user_tel">'+item.Phone+'</div>\n' +
                               '\t\t\t\t\t\t\t\t\t</div>\n' +
                               '\t\t\t\t\t\t\t\t\t<div class="adress_detail">\n' +
-                              '\t\t\t\t\t\t\t\t\t\t<span>默认</span>\n' +
+                              '\t\t\t\t\t\t\t\t\t\t\n' +
                               '\t\t\t\t\t\t\t\t\t\t'+ item.Province + ' ' + item.City + ' ' +item.Area+' '+item.Street +
                               '\t\t\t\t\t\t\t\t\t</div>\n' +
                               '\t\t\t\t\t\t\t\t</div>\n' +

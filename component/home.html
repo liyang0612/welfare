@@ -32,17 +32,17 @@
 	.content {margin-bottom: 54px;}
 	.content .room-title { padding: 10px 15px;width: 100%;}
 	.content ::after { content: ''; clear: both;display: block; }
-	.content .room-list-item {margin: 0 0 15px 3%;width: 45.5%;float: left; padding: 5px 5px 15px;border-radius: 6px;border: solid 2px #ccc;}
+	.content .room-list-item {margin: 0 0 15px 3%;width: 45.5%;height: 215px;float: left; padding: 5px 5px 15px;border-radius: 6px;border: solid 2px #ccc;}
 	.room-list-item-img {padding: 25px 0; width: 100%; height: 150px; background: url(../img/room-bg.png) no-repeat; background-size: cover;}
 	.room-list-item-img img {width: 100px;height: 100px;margin: 0 auto; display: block;}
-	.room-list-name {padding: 4px 0;}
+	.room-list-name {padding: 4px 0;font-size: 14px;color: #999;}
 	.room-list-flex {display: flex;}
 	.room-list-flex > div { flex: 1;}
 	.room-sysmol-icon {width: 16px; height: 16px; left: 0; top: 2px; position: absolute; background: url(../img/gold-coin-icon.png) no-repeat;
 	background-size: 100%;}
 	.room-list-btn {text-align: right;}
 	.room-list-flex .btn {padding: 2px 6px 0; line-height: 18px; background: #73e24e; color: #fff; border-radius: 10px;font-size: 14px;display: inline-block;}
-	.room-list-num {padding-left: 20px;position: relative;font-size: 16px;}
+	.room-list-num {padding-left: 20px;position: relative;font-size: 14px;}
 	.gaming {background: #fb6362 !important;}
 	</style>
 
@@ -63,7 +63,7 @@
 			<div class="content">
 				<div class="room-title">房间详情</div>
 				<div id="liveContent">
-					<div class="room-list-item">
+<!-- 					<div class="room-list-item">
 						<div class="room-list-item-img">
 							<img src="../img/xxx.png" />
 						</div>
@@ -90,7 +90,7 @@
 								<span class="btn gaming">游 戏 中</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 
 
@@ -125,7 +125,7 @@
 		<script type="text/javascript">
 			var statusObj = {
 				free: '空 闲 中',
-				maintenance: '下架维护中',
+				maintenance: '维 护 中',
 				gaming: '游 戏 中'
 			}
 			$(function() {

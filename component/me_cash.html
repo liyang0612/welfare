@@ -32,6 +32,30 @@
 			.add_input, input[type=tel] {width: 100%;border: none;height: 44px;padding: 0 35px;}
 			.cash_info{padding: 8px 10px; color: #999;border-top: solid 1px #eee; font-size: 14px;}
 			.cash_all_btn {color: #6cb290;padding-left: 30px;}
+			.wl_h2{font-size: 18px;}
+			.tel_content {    position: absolute;
+    padding: 20px 0;
+    width: 80%;
+    height: 400px;
+    border-radius: 16px;
+    top: 0;
+    margin: auto;
+    background: #fff;
+    bottom: 0;
+    left: 0;
+    right: 0;}
+	.dialog .mui-icon {position: absolute;right: 5px; top: 5px; z-index: 99;}
+			.dialog { display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 9999; background: rgba(0, 0, 0, .7);}
+	#getSmscode {    border-radius: 4px;
+    display: inline-block;
+    height: 48px;
+    color: #fff;
+    border: none;
+    background: #4FB4F8;
+    margin-left: 5px;
+    line-height: 48px;
+    font-size: 14px;
+    padding: 0 10px;}
 		</style>
 	</head>
 	<body class="wf_webview">
@@ -69,13 +93,31 @@
 						</div>
 					</form>
 					<div class="cash_info">
-						可提现余额 <span>1400.00</span>元
+						可提现余额 <span id="balance">1400.00</span>元
 						<span class="cash_all_btn">全部提现</span>
 					</div>
 				</div>
 				<div class="wl_input_row" style="padding: 0 15px;margin-top: 40px">
-					<button class="wl_btn">确认提现</button>
+					<button class="wl_btn" id="showDialog">提 现</button>
 				</div>
+			</div>
+		</div>
+		<div class="dialog">
+			<div class="tel_content">
+				<span id="close" class="mui-icon mui-icon-closeempty"></span>
+				<h2 class="wl_h2">银行预留手机号</h2>
+				<form class="wl_input_group">
+					<div class="wl_input_row">
+						<input name="telNumber" id="telNumber" type="tel" placeholder="输入手机号" style="padding: 0 15px">
+					</div>
+					<div class="wl_input_row wl_auth_code">
+						<input name="authCode" id="authCode" type="text" placeholder="验证码">
+						<span id="getSmscode">获取验证码</span>
+					</div>
+					<div class="wl_input_row" style="padding-top: 7rem">
+						<button type="button" class="wl_btn" id="deposit">确定</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</body>
@@ -83,15 +125,87 @@
 	<script src="../js/jquery.min.js"></script>
 	<script src="../js/config.js"></script>
 	<script>
+		var code_key = ""
+		var selectedCard = {}
 		mui.init({
-			swipeBack:true //启用右滑关闭功能
+			swipeBack: true //启用右滑关闭功能
 		})
 		mui('.mui-scroll-wrapper').scroll({
 			bounce: true //是否启用回弹
 		});
 		mui.plusReady(function() {
 			getCardList()
+			var me_cash = plus.webview.getWebviewById('me_cash')
+			$('#balance').text(me_cash.balance)
+
+			$('.cash_all_btn').on('tap', function() {
+				$('#money').val($('#balance').text())
+			})
+
+			$('#showDialog').on('tap', function(e) {
+				$('.dialog').show()
+			})
+
+			$('#close').on('tap', function(e) {
+				$('.dialog').hide()
+			})
+			$('#getSmscode').on('tap', function(event) {
+				event.preventDefault()
+				$http({
+					url: "/auth/user/v2/send/verify/code",
+					data: {
+						phone: $('#telNumber').val(),
+					},
+					success: function(res) {
+						console.log(JSON.stringify(res))
+						if (res.code == 10000) {
+							plus.nativeUI.toast('已成功发送验证码')
+							code_key = res.msg;
+						} else if (res.code == 10001) {
+							plus.nativeUI.toast(res.msg)
+						} else {
+							plus.nativeUI.toast('发送验证码失败，请稍后重试')
+						}
+					}
+				})
+			})
+			//提现接口
+			$('#deposit').on('tap', function() {
+				console.log(JSON.stringify({
+						cardId: selectedCard.Id,
+						code: $('#authCode').val(),
+						money: $('#money').val(),
+						phone: $('#telNumber').val()
+					}))
+				$http({
+					url: '/auth/user/v2/apply/bank/deposit',
+					data: {
+						token: localStorage.getItem('token'),
+						cardId: selectedCard.Id,
+						code: $('#authCode').val(),
+						codeKey: code_key,
+						money: $('#money').val(),
+						phone: $('#telNumber').val()
+					},
+					success: function(res) {
+						console.log(JSON.stringify(res))
+						if (res.code == 10000) {
+							plus.nativeUI.toast('提现成功')
+							mui.back()
+						} else if (res.code == 10001) {
+							plus.nativeUI.toast(res.msg)
+						} else {
+							plus.nativeUI.toast('发送验证码失败，请稍后重试')
+						}
+					}
+				})
+			})
+
+			window.addEventListener('defalutBank', function(event) {
+				initSelectedCard(event.detail.defalutBank)
+			})
 		})
+
 		function getCardList() {
 			$http({
 				url: '/auth/user/v2/get/card/list',
@@ -99,8 +213,8 @@
 					token: localStorage.getItem('token')
 				},
 				success: function(res) {
-					var selectedCard = res.msg[0]
 					console.log(JSON.stringify(res))
+					selectedCard = res.msg[0]
 					if (res.code == 10000) {
 						initSelectedCard(selectedCard)
 						$('.adress_list').on('tap', function() {
@@ -110,30 +224,30 @@
 								extras: {
 									cardList: res.msg
 								}
-								
+
 							})
 						})
 					}
 				}
 			})
 		}
-		
+
 		function initSelectedCard(selectedCard) {
 			$('#selectedCard').html("<div class=\"adress_list\" style=\"margin-top: 10px;\">\n" +
-			"\t\t\t\t\t\t<div class=\"adress_pic "+ cardConfig(selectedCard.BankName) +"_icon\"></div>\n" +
-			"\t\t\t\t\t\t<div class=\"adress_info\">\n" +
-			"\t\t\t\t\t\t\t<div class=\"user_info\">\n" +
-			"\t\t\t\t\t\t\t\t<div class=\"user_name\">"+ selectedCard.BankName +"</div>\n" +
-			"\t\t\t\t\t\t\t</div>\n" +
-			"\t\t\t\t\t\t\t<div class=\"adress_detail\">\n" +
-			"\t\t\t\t\t\t\t\t<span>"+ selectedCard.CardNum +"</span> <span>"+ selectedCard.CardType +"</span>\n" +
-			"\t\t\t\t\t\t\t</div>\n" +
-			"\t\t\t\t\t\t</div>\n" +
-			"\t\t\t\t\t\t<div class=\"adress_opr\">\n" +
-			"\t\t\t\t\t\t\t<span class=\"mui-navigate-right\"></span>\n" +
-			"\t\t\t\t\t\t\t<!-- <span>编辑</span> -->\n" +
-			"\t\t\t\t\t\t</div>\n" +
-			"\t\t\t\t\t</div>")
+				"\t\t\t\t\t\t<div class=\"adress_pic " + cardConfig(selectedCard.BankName) + "_icon\"></div>\n" +
+				"\t\t\t\t\t\t<div class=\"adress_info\">\n" +
+				"\t\t\t\t\t\t\t<div class=\"user_info\">\n" +
+				"\t\t\t\t\t\t\t\t<div class=\"user_name\">" + selectedCard.BankName + "</div>\n" +
+				"\t\t\t\t\t\t\t</div>\n" +
+				"\t\t\t\t\t\t\t<div class=\"adress_detail\">\n" +
+				"\t\t\t\t\t\t\t\t<span>" + selectedCard.CardNum + "</span> <span>" + selectedCard.CardType + "</span>\n" +
+				"\t\t\t\t\t\t\t</div>\n" +
+				"\t\t\t\t\t\t</div>\n" +
+				"\t\t\t\t\t\t<div class=\"adress_opr\">\n" +
+				"\t\t\t\t\t\t\t<span class=\"mui-navigate-right\"></span>\n" +
+				"\t\t\t\t\t\t\t<!-- <span>编辑</span> -->\n" +
+				"\t\t\t\t\t\t</div>\n" +
+				"\t\t\t\t\t</div>")
 		}
 	</script>
 </html>
