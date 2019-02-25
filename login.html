@@ -242,6 +242,12 @@
 // 										app.createState(name, function() {
 // 											toMain();
 // 										});
+										console.log(JSON.stringify({
+												nickname: auth.userInfo.nickname,
+												openid: auth.userInfo.openid,
+												refresh_token: auth.authResult.refresh_token,
+												unionid: auth.userInfo.unionid
+											}))
 										$http({
 											url: "/auth/user/v2/wechat/login",
 											data: {
