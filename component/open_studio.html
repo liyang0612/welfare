@@ -469,14 +469,19 @@
 // 		
 		// 支付
 		function pay(id){
-			console.log(plus.runtime.appid)
+			console.log(JSON.stringify({
+					token: localStorage.getItem('token'),
+					money: 200,
+					openid: localStorage.getItem('openid')
+				}))
 			if(w){return;}//检查是否请求订单中
 			w=plus.nativeUI.showWaiting();
 			$http({
 				url: '/auth/user/v2/user/wechat/recharge',
 				data: {
 					token: localStorage.getItem('token'),
-					money: 200
+					money: 200,
+					openid: localStorage.getItem('openid')
 				},
 				success: function(res) {
 					console.log(JSON.stringify(res))
