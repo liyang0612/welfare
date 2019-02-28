@@ -230,12 +230,6 @@
 		mui('.mui-scroll-wrapper').scroll({
 			bounce: true //是否启用回弹
 		});
-		$('.add_btn').on('tap', function() {
-			mui.openWindow({
-				url: './open_studio.html',
-				id: 'open_studio'
-			})
-		})
 		$(function() {
 			//获取个人信息
 			$http({
@@ -272,6 +266,13 @@
 								'\t\t\t\t\t\t\t<span>添加</span>\n' +
 								'\t\t\t\t\t\t</div>\n' +
 								'\t\t\t\t\t</div>')
+							$('.add_btn').on('tap', function() {
+								console.log('click')
+								mui.openWindow({
+									url: './open_studio.html',
+									id: 'open_studio'
+								})
+							})
 							return false
 						}
 						res.msg.data && res.msg.data.forEach(function(item) {
@@ -344,12 +345,12 @@
 // 				})
 // 			})
 			//添加直播间
-			$('.add_btn').on('tap', function() {
-				mui.openWindow({
-					url: './open_studio.html',
-					id: 'open_studio'
-				})
-			})
+//			$('.add_btn').on('tap', function() {
+//				mui.openWindow({
+//					url: './open_studio.html',
+//					id: 'open_studio'
+//				})
+//			})
 			$('.me_info_picture').on('tap', function() {
 				createDialogview()
 			})

@@ -237,16 +237,16 @@
 // 									console.log(1)
 // 								})
 // 								return false
-								auth.authorize(function() {
-									plus.nativeUI.toast("授权成功");
-								}, function(err) {
-									console.log(JSON.stringify(err))
-								}, {
-									scope:'snsapi_userinfo',
-									state:'authorize',
-									appid:'wx40a99bf64cf20513',
-									appsecret: '6fad7f62cb2daafca74d3f7d8a30a96f'
-								})
+//								auth.authorize(function() {
+//									plus.nativeUI.toast("授权成功");
+//								}, function(err) {
+//									console.log(JSON.stringify(err))
+//								}, {
+//									scope:'snsapi_userinfo',
+//									state:'authorize',
+//									appid:'wx40a99bf64cf20513',
+//									appsecret: '6fad7f62cb2daafca74d3f7d8a30a96f'
+//								})
 								auth.login(function() {
 									waiting.close();
 									plus.nativeUI.toast("登录认证成功");

@@ -480,19 +480,20 @@
 				url: '/auth/user/v2/user/wechat/recharge',
 				data: {
 					token: localStorage.getItem('token'),
-					money: 200,
+					money: 1,
 					openid: localStorage.getItem('openid')
 				},
 				success: function(res) {
 					console.log(JSON.stringify(res))
+					plus.nativeUI.toast(JSON.stringify(res))
 					w.close();w=null;
 					if(res.code === 10000) {
-						plus.payment.request(pays[id],res,function(result){
+						plus.payment.request(pays[id],res.msg,function(result){
 							plus.nativeUI.alert('支付成功',function(){
 								back();
 							},'购买');
 						},function(e){
-							plus.nativeUI.alert('支付失败，请稍后重试', null, '支付失败：'+e.code);
+							plus.nativeUI.alert('支付失败，请稍后重试', null, '支付失败：'+e.code+"e_____"+e+"pays[id]:"+pays[id]);
 						});
 					}else {
 						plus.nativeUI.toast(res.msg || '支付失败，请重试')
