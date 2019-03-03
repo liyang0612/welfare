@@ -186,7 +186,6 @@
 					};
 					//检查 "登录状态/锁屏状态" 开始
 					if (state.token && settings.gestures) {
-						console.log(111111111)
 						m.openWindow({
 							url: 'unlock.html',
 							id: 'unlock',
@@ -199,10 +198,8 @@
 						});
 					} else if (state.token) {
 						toMain();
-						console.log(222222222)
 					} else {
 						app.setState(null);
-						console.log(3333333333)
 						//第三方登录
 						var authBtns = ['weixin']; //配置业务支持的第三方登录
 						var auths = {};
@@ -233,27 +230,8 @@
 								}
 								var auth = auths[this.authId];
 								var waiting = plus.nativeUI.showWaiting();
-// 								auth.logout(function () {
-// 									console.log(1)
-// 								})
-// 								return false
-//								auth.authorize(function() {
-//									plus.nativeUI.toast("授权成功");
-//								}, function(err) {
-//									console.log(JSON.stringify(err))
-//								}, {
-//									scope:'snsapi_userinfo',
-//									state:'authorize',
-//									appid:'wx40a99bf64cf20513',
-//									appsecret: '6fad7f62cb2daafca74d3f7d8a30a96f'
-//								})
 								auth.login(function() {
-									waiting.close();
-									plus.nativeUI.toast("登录认证成功");
-									console.log(JSON.stringify(auth))
-									// return false
 									auth.getUserInfo(function() {
-										window.localStorage.setItem('openid', auth.userInfo.openid)
 										$http({
 											url: "/auth/user/v2/wechat/login",
 											data: {
@@ -263,10 +241,12 @@
 												unionid: auth.userInfo.unionid
 											},
 											success: function(res) {
+												waiting.close();
 												console.log(JSON.stringify(res))
 												if(res.code == 10000) {
 													plus.nativeUI.toast('微信授权登录成功')
-													console.log('success')
+                                                    window.localStorage.setItem('bindPhone', res.msg.phone)
+													window.localStorage.setItem('openid', auth.userInfo.openid)
 													// toMain();
 													mui.openWindow({
 														url: "./component/home.html",
@@ -285,6 +265,7 @@
 													localStorage.setItem('token', res.msg.token);
 													localStorage.setItem('userInfo', JSON.stringify(res.msg));
 												}else {
+													waiting.close();
 													plus.nativeUI.toast('登录失败，请重试')
 													localStorage.clear()
 												}
@@ -348,9 +329,8 @@
 							success: function(res) {
 								console.log(JSON.stringify(res))
 								if(res.code == 10000) {
+                                    window.localStorage.setItem('bindPhone', accountBox.value)
 									plus.nativeUI.toast('登录成功')
-									console.log('success')
-									// toMain();
 									mui.openWindow({
 										url: "./component/home.html",
 										id: "home",
@@ -359,7 +339,6 @@
 										},
 										show: {
 											aniShow: 'none',
-											//				            duration: 5
 										},
 										waiting: {
 											autoShow: false, //自动显示等待框，默认为true

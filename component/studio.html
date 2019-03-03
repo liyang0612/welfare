@@ -289,6 +289,7 @@
 	<script src="../js/jquery.min.js"></script>
 	<script src="../js/barrage.js"></script>
 	<script>
+		var money = 0  //充值金币
 		$(function() {
 			var Balance = 0
 			var onlineStr = ''
@@ -298,9 +299,7 @@
 			$('.content').css('height', currentHeight - 54 + 'px')
 			var blocks = [];
 			var studioInfo = window.localStorage.getItem('currentStudioInfo')  //当前直播间信息
-			var studiosInfoMap = studioInfo && JSON.parse(studioInfo)			//对象
-			var money = 0  //充值金币
-			
+			var studiosInfoMap = studioInfo && JSON.parse(studioInfo)			//对象	
 			for(var i = 0; i < 24; i++) {
 				blocks.push('<div class="block"></div>');
 			}
@@ -341,15 +340,6 @@
 			$('.pay_btns .pay_btn').on('tap', function() {
 				$(this).addClass('active').siblings().removeClass('active')
 				money = $(this).find('.rmb').text().slice(0, -1)
-				console.log(money)
-			})
-			
-			$('#gold_coin_pay #okBtn').on('tap', function() {
-				if(!money) {
-					plus.nativeUI.toast('请先选择充值金额', 2)
-					return false
-				}
-				recharge(parseInt(money))
 			})
 			
 			$('#get_goods #cancelBtn').on('tap', function() {
@@ -379,20 +369,7 @@
 		}
 		//充值
 		function recharge(num) {
-			$http({
-				url: '/auth/user/v2/user/wechat/recharge',
-				data: {
-					token: localStorage.getItem('token'),
-					"money": num
-				},
-				success: function(res) {
-					console.log(JSON.stringify(res))
-					if(res.code == 10000) {
-						plus.nativeUI.toast('充值成功')
-						getGoldcoin()
-					}
-				}
-			})
+      pay('wxpay')
 		}
 		function startGame(id, way) {
 			$('#select_goods').hide();
@@ -415,24 +392,33 @@
 			})
 		}
 		mui.plusReady(function () {
+			initPay()
 			updateSerivces()
+			//确定充值
+			$('#gold_coin_pay #okBtn').on('tap', function() {
+				if(!money) {
+					plus.nativeUI.toast('请先选择充值金额')
+					return false
+				}
+				recharge(parseInt(money))
+			})
 			//分享
 			$('#shareBtn').on('tap', function() {
 				shareWeb()
 			})
-		    $('#meHref').on('tap', function() {
-		    	mui.openWindow({
-		    		url: './me.html',
-		    		id: 'me',
-		    		show: {
-		    			aniShow: 'none',
-		    			//				            duration: 5
-		    		},
-		    		waiting: {
-		    			autoShow: false, //自动显示等待框，默认为true
-		    		}
-		    	})
-		    })
+			$('#meHref').on('tap', function() {
+				mui.openWindow({
+					url: './me.html',
+					id: 'me',
+					show: {
+						aniShow: 'none',
+						//				            duration: 5
+					},
+					waiting: {
+						autoShow: false, //自动显示等待框，默认为true
+					}
+				})
+			})
 		})
 		// 分享
 		function share(srv, msg, button){
@@ -458,8 +444,6 @@
 		var sweixin=null;
 		var buttons=[
 		  {title:'我的好友',extra:{scene:'WXSceneSession'}},
-// 		  {title:'朋友圈',extra:{scene:'WXSceneTimeline'}},
-// 		  {title:'我的收藏',extra:{scene:'WXSceneFavorite'}}
 		];
 		/**
 		 * 更新分享服务
@@ -476,7 +460,6 @@
 				plus.nativeUI.toast('获取分享服务列表失败：'+e.message);
 			});
 		}
-
 		// 分享网页
 		function shareWeb(){
 		    var msg={type:'web',thumbs:['_www/logo.png'], href: 'https://www.baidu.com', title: '测试数据', content: "百度 测试地址"};
@@ -484,7 +467,6 @@
 		  	  (e.index>0)&&share(sweixin, msg, buttons[e.index-1]);
 		    }):plus.nativeUI.alert('当前环境不支持微信分享操作!'); 
 		}
-
 		// 发送分享
 		function doShare(srv, msg){
 //			plus.nativeUI.toast(JSON.stringify(msg));
@@ -494,6 +476,7 @@
 				plus.nativeUI.toast('分享到"'+srv.description+'"失败: '+JSON.stringify(e));
 			});
 		}
+
 		function initWebsocket(){
 			var studioInfo = window.localStorage.getItem('currentStudioInfo')
 			var studiosInfoMap = studioInfo && JSON.parse(studioInfo)
@@ -538,6 +521,80 @@
 			//注册回调函数
 			RegisterCallBackFunc(Addpeople,GameEnd,Kickout,Serverclose);
 			WebSocketStart("ws://211.149.179.254:5250?room="+ studiosInfoMap.RoomId +"&uid="+userInfoMap.uid)
+		}
+		var pays = {}
+		function initPay(){
+			// 获取支付通道
+			plus.payment.getChannels(function(channels){
+				var content=document.getElementById('dcontent');
+				var info=document.getElementById('info');
+				var txt='支付通道信息：';
+				for(var i in channels){
+					console.log(JSON.stringify(channels))
+					var channel=channels[i];
+					if(channel.id=='qhpay'||channel.id=='qihoo'){	// 过滤掉不支持的支付通道：暂不支持360相关支付
+						continue;
+					}
+					pays[channel.id]=channel;
+					checkServices(channel);
+				}
+				info.innerText=txt;
+			},function(e){
+				console.log('获取支付通道失败：'+e.message);
+			});
+		}
+		function checkServices(pc){
+			if(!pc.serviceReady){
+				var txt=null;
+				switch(pc.id){
+					case 'alipay':
+					txt='检测到系统未安装“支付宝快捷支付服务”，无法完成支付操作，是否立即安装？';
+					break;
+					default:
+					txt='系统未安装“'+pc.description+'”服务，无法完成支付，是否立即安装？';
+					break;
+				}
+				plus.nativeUI.confirm(txt, function(e){
+					if(e.index==0){
+						pc.installService();
+					}
+				}, pc.description);
+			}
+		}
+		var w=null;
+		// 支付
+		function pay(id){
+			console.log(JSON.stringify({
+					token: localStorage.getItem('token'),
+					money: 200,
+					openid: localStorage.getItem('openid')
+				}))
+			if(w){return;}//检查是否请求订单中
+			w=plus.nativeUI.showWaiting();
+			$http({
+				url: '/auth/user/v2/user/wechat/recharge',
+				data: {
+					token: localStorage.getItem('token'),
+					money: 1,
+					openid: localStorage.getItem('openid')
+				},
+				success: function(res) {
+					console.log(JSON.stringify(res))
+					plus.nativeUI.toast(JSON.stringify(res))
+					w.close();w=null;
+					if(res.code === 10000) {
+						plus.payment.request(pays[id],res.msg,function(result){
+							plus.nativeUI.alert('支付成功',function(){
+								back();
+							},'购买');
+						},function(e){
+							plus.nativeUI.alert('支付失败，请稍后重试', null, '支付失败：'+e.code+"e_____"+e+"pays[id]:"+pays[id]);
+						});
+					}else {
+						plus.nativeUI.toast(res.msg || '支付失败，请重试')
+					}
+				}
+			})
 		}
 	</script>
 </html>

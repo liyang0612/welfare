@@ -130,19 +130,20 @@
 				bounce: true //是否启用回弹 
 			});
 			$(".wf_tab_txt").on('tap', function(i){
-			   $(this).find('span').addClass('active').parent().siblings().find('span').removeClass('active')
-			});
-			mui.plusReady(function() {
-				getGoodsList()
+			  $(this).find('span').addClass('active').parent().siblings().find('span').removeClass('active')
+              getGoodsList(i)
 			})
-			function getGoodsList() {
+			mui.plusReady(function() {
+				getGoodsList(0)
+			})
+			function getGoodsList(status) {
 				$http({
 					url: '/auth/user/v2/get/goods/list',
 					data: {
 						token: localStorage.getItem('token'),
 						"page":1,
-						"count":10,
-						"status": 0
+						"count":100,
+						"status": status
 					},
 					success: function(res) {
 						if (res.code == 10000) {

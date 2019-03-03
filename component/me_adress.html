@@ -30,6 +30,11 @@
 			.adress_detail {font-size: 13px; color: #555; padding-right: 15px;}
 			.adress_detail span { color: #f18c5f; background: #fcf0eb;font-size: 12px; padding: 2px 5px;}
 			.adress_opr {margin: auto 0;border-left: 1px solid #eee;height: 27px;line-height: 27px;width: 60px;text-align: center;font-size: 12px;color: #999}
+			.customRadio {position: absolute;z-index: 99;height: 90px;padding: 0 10px;}
+			.adress_list.radio {padding-left: 30px}
+			.customRadio span {width: 20px;position: absolute;height: 20px;top: 0;bottom: 0;margin: auto;
+			background: url(../img/radio.png) no-repeat; background-size: 100%;}
+			.customRadio.active span {background: url(../img/radio_active.png) no-repeat; background-size: 100%;}
 		</style>
 	</head>
 	<body class="wf_webview">
@@ -43,11 +48,14 @@
 			<div class="mui-scroll wf_body">
 				<ul id="OA_task_2" class="mui-table-view">
 <!-- 					<li class="mui-table-view-cell">
+						<div class="customRadio">
+							<span></span>
+						</div>
 						<div class="mui-slider-right mui-disabled">
 							<a class="mui-btn mui-btn-red">删除</a>
 						</div>
 						<div class="mui-slider-handle mui-table">
-							<div class="adress_list">
+							<div class="adress_list radio">
 								<div class="adress_pic"><img src="../img/ccb.png"></div>
 								<div class="adress_info">
 									<div class="user_info">
@@ -66,6 +74,9 @@
 						</div>
 					</li> -->
 				</ul>
+				<div class="wl_input_row" style="padding: 0 15px;margin-top: 50px">
+					<button id="sureSelect" class="wl_btn" type="button" style="display: none;">确定选择</button>
+				</div>
 				<div class="wl_input_row" style="padding: 0 15px;">
 					<button id="add_btn" class="wl_btn">添加收货地址</button>
 				</div>
@@ -83,20 +94,23 @@
 			bounce: true //是否启用回弹
 		});
 		var adressList = [];
-// 		mui('#OA_task_2').on('slideleft', '', function(event) {
-// 			
-// 		});
+		var selectedAddress = {}
+		
 		mui.plusReady(function() {
 			//初始化页面
 			initAdressList();
 			window.addEventListener('myevent', function(event) {
 				initAdressList()
 			})
-			$('#add_btn').on('tap', function() {
+			$('#add_btn').on('tap', function() { 
 				mui.openWindow({
 					url: './me_adress_add.html',
 					id: 'me_adress_add'
 				})
+			})
+			//确定选择
+			$('#sureSelect').on('tap', function() {
+				console.log(JSON.stringify(selectedAddress))
 			})
 		});
 
@@ -107,25 +121,29 @@
 					token: localStorage.getItem('token')
 				},
 				success: function(res) {
-					console.log(JSON.stringify(res));
+					// console.log(JSON.stringify(res));
 					var listDom = [];
 					if (res.code == 10000) {
 						res.msg.forEach(function (res) {
 							adressList.unshift(res)
 						})
+						selectedAddress = adressList[0]
 						if (!res.msg.length) {
 							var nullList = '<div class="no_data">暂无数据</div>';
 							$('#OA_task_2').html(nullList);
 							return false;
 						}
-						// <span>默认</span>
+						$('#sureSelect').show()
 						res.msg.forEach(function(item, index) {
 							listDom.unshift('<li class="mui-table-view-cell">\n' +
+							  '<div class="customRadio '+ (index === (res.msg.length - 1) ? "active" : "") +'">\n' +
+                              '\t\t\t\t\t\t\t<span></span>\n' +
+                              '\t\t\t\t\t\t</div>' +
                               '\t\t\t\t\t\t<div class="mui-slider-right mui-disabled">\n' +
                               '\t\t\t\t\t\t\t<a class="mui-btn mui-btn-red">删除</a>\n' +
                               '\t\t\t\t\t\t</div>\n' +
                               '\t\t\t\t\t\t<div class="mui-slider-handle mui-table">\n' +
-                              '\t\t\t\t\t\t\t<div class="adress_list">\n' +
+                              '\t\t\t\t\t\t\t<div class="adress_list radio">\n' +
                               '\t\t\t\t\t\t\t\t<div class="adress_pic"><img src="../img/ccb.png"></div>\n' +
                               '\t\t\t\t\t\t\t\t<div class="adress_info">\n' +
                               '\t\t\t\t\t\t\t\t\t<div class="user_info">\n' +
@@ -146,6 +164,7 @@
 						});
 						$('#OA_task_2').html(listDom.join(''))
 						
+						//删除
 						var btnArray = ['确认', '取消'];
 						$('#OA_task_2 .mui-table-view-cell').each(function(index) {
 							$(this).on('slideleft', function(event) {
@@ -163,7 +182,7 @@
 								});
 							})
 						});
-						
+						//编辑
 						$('#OA_task_2 .mui-table-view-cell .adress_opr').each(function(index) {
 							$(this).on('tap', function() {
 								console.log(JSON.stringify(adressList[index]))
@@ -172,6 +191,14 @@
 									id: 'me_adress_add_edit',
 									extras: adressList[index]
 								})
+							})
+						})
+						//选择地址
+						$('.mui-table-view-cell').each(function(index) {
+							$(this).on('tap', function() {
+								// console.log($(this).find('.customRadio').className)
+								$(this).find('.customRadio').addClass('active').parent().siblings().find('.customRadio').removeClass('active')
+								selectedAddress = adressList[index]
 							})
 						})
 					}

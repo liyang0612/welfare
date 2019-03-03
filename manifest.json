@@ -35,11 +35,10 @@
         "Maps" : {
             "description" : "管理地图插件"
         },
-        "Speech" : {
-            "description" : "管理语音识别插件"
-        },
         "Payment" : {},
-        "OAuth" : {},"VideoPlayer":{}
+        "OAuth" : {},
+        "VideoPlayer" : {},
+        "Share" : {}
     },
     "plus" : {
         // 		"launchwebview": {
@@ -126,14 +125,15 @@
                         "settings-normal" : "", /*iPad设置页面程序图标，分辨率：29x29*/
                         "settings-retina" : ""
                     },
-                    "appstore" : ""
+                    "appstore" : "img/logo.png"
                 },
                 "android" : {
-                    "mdpi" : "img/boc_icon.png", /*普通屏程序图标，分辨率：48x48*/
-                    "ldpi" : "", /*大屏程序图标，分辨率：48x48*/
-                    "hdpi" : "", /*高分屏程序图标，分辨率：72x72*/
-                    "xhdpi" : "", /*720P高分屏程序图标，分辨率：96x96*/
-                    "xxhdpi" : ""
+                    "mdpi" : "img/logo.png", /*普通屏程序图标，分辨率：48x48*/
+                    "ldpi" : "img/logo.png", /*大屏程序图标，分辨率：48x48*/
+                    "hdpi" : "img/logo.png", /*高分屏程序图标，分辨率：72x72*/
+                    "xhdpi" : "img/logo.png", /*720P高分屏程序图标，分辨率：96x96*/
+                    "xxhdpi" : "img/logo.png",
+                    "xxxhdpi" : "img/logo.png"
                 }
             },
             "splashscreen" : {
@@ -163,9 +163,7 @@
                 }
             },
             "plugins" : {
-                "speech" : {
-                    "ifly" : {}
-                },
+                "speech" : {},
                 "payment" : {
                     "weixin" : {
                         "appid" : "wx40a99bf64cf20513"
@@ -176,79 +174,62 @@
                         "appid" : "wx40a99bf64cf20513",
                         "appsecret" : "6fad7f62cb2daafca74d3f7d8a30a96f"
                     }
+                },
+                "share" : {
+                    "weixin" : {
+                        "appid" : "wx40a99bf64cf20513",
+                        "appsecret" : "6fad7f62cb2daafca74d3f7d8a30a96f"
+                    }
                 }
             }
         }
     },
     "dependencies" : {
-		"pages": {
-			"guide.html": {
-				"resources": [],
-				"refer": [
-					"main.html"
-				],
-				"priority": 0
-			},
-			"index.html": {
-				"resources": [],
-				"refer": [
-					"guide.html",
-					"main.html",
-					"login.html",
-					"component/home.html"
-				],
-				"priority": 0
-			},
-			"main.html": {
-				"resources": [
-					"component/home.html"
-				],
-				"refer": [
-					"component/me.html",
-					"guide.html"
-				],
-				"priority": 0
-			},
-			"component/home.html": {
-				"resources": [
-					"component/barrage.html"
-				],
-				"refer": [
-					"component/me.html",
-					"component/studio_page.html"
-				],
-				"priority": 0
-			},
-			"login.html": {
-				"resources": [],
-				"refer": [
-					"component/home.html"
-				],
-				"priority": 0
-			},
-			"component/studio_page.html": {
-				"resources": [
-					"component/studio.html"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"component/me.html": {
-				"resources": [],
-				"refer": [
-					"component/open_studio.html"
-				],
-				"priority": 0
-			}
-		},
-		"idle": {
-			"resources": [
-				"js/mui.min.js",
-				"fonts/mui.ttf",
-				"css/mui.min.css",
-				"js/mui.js",
-				"css/mui.css"
-			]
-		}
-	}
+        "pages" : {
+            "guide.html" : {
+                "resources" : [],
+                "refer" : [ "main.html" ],
+                "priority" : 0
+            },
+            "index.html" : {
+                "resources" : [],
+                "refer" : [ "guide.html", "main.html", "login.html", "component/home.html" ],
+                "priority" : 0
+            },
+            "main.html" : {
+                "resources" : [ "component/home.html" ],
+                "refer" : [ "component/me.html", "guide.html" ],
+                "priority" : 0
+            },
+            "component/home.html" : {
+                "resources" : [ "component/barrage.html" ],
+                "refer" : [ "component/me.html", "component/studio_page.html" ],
+                "priority" : 0
+            },
+            "login.html" : {
+                "resources" : [],
+                "refer" : [ "component/home.html" ],
+                "priority" : 0
+            },
+            "component/studio_page.html" : {
+                "resources" : [ "component/studio.html" ],
+                "refer" : [],
+                "priority" : 0
+            },
+            "component/me.html" : {
+                "resources" : [],
+                "refer" : [ "component/open_studio.html" ],
+                "priority" : 0
+            }
+        },
+        "idle" : {
+            "resources" : [
+                "js/mui.min.js",
+                "fonts/mui.ttf",
+                "css/mui.min.css",
+                "js/mui.js",
+                "css/mui.css"
+            ]
+        }
+    }
 }

@@ -141,10 +141,15 @@
 			<div class="mui-page-content">
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
-						<ul class="mui-table-view mui-table-view-chevron">
+						<ul class="mui-table-view mui-table-view-chevron" id="bind" style="display: none;">
 							<li class="mui-table-view-cell">
 								<span class="right-text">已绑定</span>
 								<a class="mui-navigate-right">绑定微信</a>
+							</li>
+						</ul>
+						<ul class="mui-table-view mui-table-view-chevron" id="noBind" style="display: none;">
+							<li class="mui-table-view-cell">
+								<a class="mui-navigate-right">立即绑定</a>
 							</li>
 						</ul>
 					</div>
@@ -156,9 +161,12 @@
 	</body>
 	<script src="../js/mui.min.js "></script>
 	<script src="../js/mui.view.js "></script>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/config.js"></script>
 	<script src='../js/feedback.js'></script>
 	<script>
 		mui.init();
+		var isBind = false;
 		//初始化单页view
 		var viewApi = mui('#app').view({
 			defaultPage: '#setting'
@@ -166,16 +174,85 @@
 		//初始化单页的区域滚动
 		mui('.mui-scroll-wrapper').scroll();
 		var view = viewApi.view;
-		(function($) {
+		
+		//初始化
+		function init() {
+			$http({
+				url: "/auth/user/v2/judge/bind/wechat",
+				data: {
+					token: localStorage.getItem('token')
+				},
+				success: function(res) {
+					console.log(JSON.stringify(res))
+					if(res.code == 10000) {
+						if(res.msg) {
+							$('#bind').show()
+							isBind = true;
+						}else {
+							$('#noBind').show()
+							isBind = false;
+							authBind()
+						}
+					}
+				}
+			})
+		}
+		//授权
+		function authBind() {
+			$('#noBind').on('tap', function() {
+				plus.oauth.getServices( function(services){
+					var auths = services;
+					var auth = services[0]
+					var waiting = plus.nativeUI.showWaiting();
+					auth.login(function() {
+						waiting.close()
+						auth.getUserInfo(function() {
+							$http({
+								url: "/auth/user/v2/bind/wechat",
+								data: {
+									nickname: auth.userInfo.nickname,
+									openid: auth.userInfo.openid,
+									refresh_token: auth.authResult.refresh_token,
+									unionid: auth.userInfo.unionid,
+									token: localStorage.getItem('token')
+								},
+								success: function(res) {
+									if(res.code == 10000) {
+										plus.nativeUI.toast('微信绑定成功')
+										$('#bind').show()
+										$('#noBind').hide()
+										window.localStorage.setItem('openid', auth.userInfo.openid)
+									}else {
+										plus.nativeUI.toast('绑定失败，请重试')
+									}
+								}
+							})
+						}, function(e) {
+							plus.nativeUI.toast("获取用户信息失败：" + e.message);
+						});
+					}, function(e) {
+						waiting.close();
+						console.log(JSON.stringify(e.message))
+						plus.nativeUI.toast("认证失败：" + e.message);
+					})
+				}, function(e){
+					alert( "获取分享服务列表失败："+e.message+" - "+e.code );
+				} );
+			})
+		}
+		(function(m) {
 			//处理view的后退与webview后退
-			var oldBack = $.back;
-			$.back = function() {
+			var oldBack = m.back;
+			m.back = function() {
 				if (viewApi.canBack()) { //如果view可以后退，则执行view的后退
 					viewApi.back();
 				} else { //执行webview后退
 					oldBack();
 				}
 			};
+			m.plusReady(function() {
+				init()
+			})
 			//监听页面切换事件方案1,通过view元素监听所有页面切换事件，目前提供pageBeforeShow|pageShow|pageBeforeBack|pageBack四种事件(before事件为动画开始前触发)
 			//第一个参数为事件名称，第二个参数为事件回调，其中e.detail.page为当前页面的html对象
 			view.addEventListener('pageBeforeShow', function(e) {

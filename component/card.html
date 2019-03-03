@@ -235,6 +235,9 @@
 				margin-bottom: 15px;
 				padding: 0;
 			}
+			.mui-table-view:before {
+				height: 0 !important
+			}
 
 			/*问题反馈在setting页面单独的css==end*/
 		</style>
@@ -275,165 +278,15 @@
 						<div class="card_content">
 							<div class="card_list">
 								<ul id="OA_task_2" class="mui-table-view">
-									<li class="mui-table-view-cell">
+<!-- 									<li class="mui-table-view-cell">
 										<div class="mui-slider-right mui-disabled">
 											<a class="mui-btn mui-btn-red">删除</a>
 										</div>
 										<div class="mui-slider-handle mui-table">
-											<div class="card_list_item boc_bg">
-												<p class="card_name">
-													<span class="cn">中国银行</span>
-													<span class="en">BOC</span>
-												</p>
-												<p class="card_type">储存卡</p>
-												<p class="card_number">123412312312</p>
-											</div>
-										</div>
-									</li>
-									<li class="mui-table-view-cell">
-										<div class="mui-slider-right mui-disabled">
-											<a class="mui-btn mui-btn-red">删除</a>
-										</div>
-										<div class="mui-slider-handle mui-table">
-											<div class="card_list_item boc_bg">
-												<p class="card_name">
-													<span class="cn">中国银行</span>
-													<span class="en">BOC</span>
-												</p>
-												<p class="card_type">储存卡</p>
-												<p class="card_number">123412312312</p>
-											</div>
-										</div>
-									</li>
-									<li class="mui-table-view-cell">
-										<div class="mui-slider-right mui-disabled">
-											<a class="mui-btn mui-btn-red">删除</a>
-										</div>
-										<div class="mui-slider-handle mui-table">
-											<div class="card_list_item bocom_bg">
-												<p class="card_name">
-													<span class="cn">交通银行</span>
-													<span class="en">BOCOM</span>
-												</p>
-												<p class="card_type">信用卡</p>
-												<p class="card_number">3453247896734</p>
-											</div>
-										</div>
-									</li>
-									<li class="mui-table-view-cell">
-										<div class="mui-slider-right mui-disabled">
-											<a class="mui-btn mui-btn-red">删除</a>
-										</div>
-										<div class="mui-slider-handle mui-table">
-											<div class="card_list_item bocd_bg">
-												<p class="card_name">
-													<span class="cn">成都银行</span>
-													<span class="en">BOC</span>
-												</p>
-												<p class="card_type">储存卡</p>
-												<p class="card_number">3453247896734</p>
-											</div>
-										</div>
-									</li>
-									<li class="mui-table-view-cell">
-										<div class="mui-slider-right mui-disabled">
-											<a class="mui-btn mui-btn-red">删除</a>
-										</div>
-										<div class="mui-slider-handle mui-table">
-											<div class="card_list_item ccb_bg">
-												<p class="card_name">
-													<span class="cn">中国建设银行</span>
-													<span class="en">CCB</span>
-												</p>
-												<p class="card_type">储存卡</p>
-												<p class="card_number">3453247896734</p>
-											</div>
-										</div>
-									</li>
-									<li class="mui-table-view-cell">
-										<div class="mui-slider-right mui-disabled">
-											<a class="mui-btn mui-btn-red">删除</a>
-										</div>
-										<div class="mui-slider-handle mui-table">
-											<div class="card_list_item unionpay_bg">
-												<p class="card_name">
-													<span class="cn">中国银联</span>
-													<span class="en">UP</span>
-												</p>
-												<p class="card_type">储存卡</p>
-												<p class="card_number">3453247896734</p>
-											</div>
-										</div>
-									</li>
-									<li class="mui-table-view-cell">
-										<div class="mui-slider-right mui-disabled">
-											<a class="mui-btn mui-btn-red">删除</a>
-										</div>
-										<div class="mui-slider-handle mui-table">
-											<div class="card_list_item spdb_bg">
-												<p class="card_name">
-													<span class="cn">浦发银行</span>
-													<span class="en">SPDB</span>
-												</p>
-												<p class="card_type">储存卡</p>
-												<p class="card_number">3453247896734</p>
-											</div>
-										</div>
-									</li>
-									<li class="mui-table-view-cell">
-										<div class="mui-slider-right mui-disabled">
-											<a class="mui-btn mui-btn-red">删除</a>
-										</div>
-										<div class="mui-slider-handle mui-table">
-											<div class="card_list_item cib_bg">
-												<p class="card_name">
-													<span class="cn">兴业银行</span>
-													<span class="en">CIB</span>
-												</p>
-												<p class="card_type">储存卡</p>
-												<p class="card_number">3453247896734</p>
-											</div>
-										</div>
-									</li>
-									<li class="mui-table-view-cell">
-										<div class="mui-slider-right mui-disabled">
-											<a class="mui-btn mui-btn-red">删除</a>
-										</div>
-										<div class="mui-slider-handle mui-table">
-											<div class="card_list_item cmb_bg">
-												<p class="card_name">
-													<span class="cn">招商银行</span>
-													<span class="en">CMB</span>
-												</p>
-												<p class="card_type">储存卡</p>
-												<p class="card_number">3453247896734</p>
-											</div>
-										</div>
-									</li>
-									<li class="mui-table-view-cell">
-										<div class="mui-slider-right mui-disabled">
-											<a class="mui-btn mui-btn-red">删除</a>
-										</div>
-										<div class="mui-slider-handle mui-table">
-											<div class="card_list_item abc_bg">
+											<div class="card_list_item psbc_bg">
 												<p class="card_name">
 													<span class="cn">中国邮政银行</span>
-													<span class="en">CMB</span>
-												</p>
-												<p class="card_type">储存卡</p>
-												<p class="card_number">3453247896734</p>
-											</div>
-										</div>
-									</li>
-									<li class="mui-table-view-cell">
-										<div class="mui-slider-right mui-disabled">
-											<a class="mui-btn mui-btn-red">删除</a>
-										</div>
-										<div class="mui-slider-handle mui-table">
-											<div class="card_list_item citic_bg">
-												<p class="card_name">
-													<span class="cn">中信银行</span>
-													<span class="en">CCB</span>
+													<span class="en">PSBC</span>
 												</p>
 												<p class="card_type">储存卡</p>
 												<p class="card_number">3453247896734</p>
@@ -455,7 +308,7 @@
 											</div>
 										</div>
 									</li>
-								</ul>
+								 --></ul>
 							</div>
 							<div class="wl_input_row" style="margin-top: 30px">
 								<button id="add_btn" class="wl_btn">添加</button>
@@ -571,7 +424,13 @@
                                   '\t\t\t\t\t\t\t\t\t\t</div>\n' +
                                   '\t\t\t\t\t\t\t\t\t</li>')
 							})
-							$('#OA_task_2').html(listDom.join(''));
+							
+							if(listDom.length) {
+								$('#OA_task_2').html(listDom.join(''));
+							}else {
+								$('#OA_task_2').html('<div style="text-align: center; font-size: 14px; color: #999">暂无数据</div>');
+							}
+							
 							addDeleteEvent();
 						}
 					}
