@@ -56,6 +56,7 @@
     line-height: 48px;
     font-size: 14px;
     padding: 0 10px;}
+	.wraningInfo {background: #fff; height: 44px; line-height: 44px; padding: 0 20px; font-size: 14px; border: solid 1px #eee}
 		</style>
 	</head>
 	<body class="wf_webview">
@@ -113,6 +114,7 @@
 					<div class="wl_input_row wl_auth_code">
 						<input name="authCode" id="authCode" type="text" placeholder="验证码">
 						<span id="getSmscode">获取验证码</span>
+						<button id="timeBtn" style="display: none;" disabled></button>
 					</div>
 					<div class="wl_input_row" style="padding-top: 7rem">
 						<button type="button" class="wl_btn" id="deposit">确定</button>
@@ -133,6 +135,24 @@
 		mui('.mui-scroll-wrapper').scroll({
 			bounce: true //是否启用回弹
 		});
+		var timeNum = 60
+		function countDown(sendBtnDom, txtBtn) {
+			sendBtnDom.hide()
+			txtBtn.show()
+			let timer = setTimeout(function() {
+				timeNum -= 1
+				txtBtn.text(timeNum + 's后重发')
+				clearTimeout(timer)
+				
+				if(timeNum >= 0) {
+					countDown(sendBtnDom, txtBtn)
+				}else {
+					timeNum = 60
+					sendBtnDom.show()
+					txtBtn.hide()
+				}
+			}, 1000)
+		}
 		mui.plusReady(function() {
 			getCardList()
 			var me_cash = plus.webview.getWebviewById('me_cash')
@@ -143,6 +163,10 @@
 			})
 
 			$('#showDialog').on('tap', function(e) {
+				if(!selectedCard.Id) {
+					mui.toast('请先去个人中心绑定银行卡')
+					return false
+				}
 				$('.dialog').show()
 			})
 
@@ -161,6 +185,7 @@
 						if (res.code == 10000) {
 							plus.nativeUI.toast('已成功发送验证码')
 							code_key = res.msg;
+							countDown($('#getSmscode'), $('#timeBtn'))
 						} else if (res.code == 10001) {
 							plus.nativeUI.toast(res.msg)
 						} else {
@@ -171,12 +196,6 @@
 			})
 			//提现接口
 			$('#deposit').on('tap', function() {
-				console.log(JSON.stringify({
-						cardId: selectedCard.Id,
-						code: $('#authCode').val(),
-						money: $('#money').val(),
-						phone: $('#telNumber').val()
-					}))
 				$http({
 					url: '/auth/user/v2/apply/bank/deposit',
 					data: {
@@ -214,8 +233,10 @@
 				},
 				success: function(res) {
 					console.log(JSON.stringify(res))
-					selectedCard = res.msg[0]
 					if (res.code == 10000) {
+						if(res.msg.length) {
+							selectedCard = res.msg[0]
+						}
 						initSelectedCard(selectedCard)
 						$('.adress_list').on('tap', function() {
 							mui.openWindow({
@@ -233,6 +254,10 @@
 		}
 
 		function initSelectedCard(selectedCard) {
+			if(!selectedCard.BankName) {
+				$('#selectedCard').html('<div class="wraningInfo">暂无银行卡，请前往个人中心添加</div>')
+				return
+			}
 			$('#selectedCard').html("<div class=\"adress_list\" style=\"margin-top: 10px;\">\n" +
 				"\t\t\t\t\t\t<div class=\"adress_pic " + cardConfig(selectedCard.BankName) + "_icon\"></div>\n" +
 				"\t\t\t\t\t\t<div class=\"adress_info\">\n" +

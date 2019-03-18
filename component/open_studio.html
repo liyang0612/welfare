@@ -404,31 +404,31 @@
 		var w=null;
 		// 支付
 		function pay(id){
-			console.log(JSON.stringify({
-					token: localStorage.getItem('token'),
-					money: 200,
-					openid: localStorage.getItem('openid')
-				}))
 			if(w){return;}//检查是否请求订单中
 			w=plus.nativeUI.showWaiting();
 			$http({
 				url: '/auth/user/v2/open/live',
 				data: {
 					token: localStorage.getItem('token'),
-					money: 1,
+					money: 29900,
 					openid: localStorage.getItem('openid')
 				},
 				success: function(res) {
 					console.log(JSON.stringify(res))
-					plus.nativeUI.toast(JSON.stringify(res))
 					w.close();w=null;
 					if(res.code === 10000) {
 						plus.payment.request(pays[id],res.msg,function(result){
-							plus.nativeUI.alert('支付成功',function(){
-								back();
-							},'购买');
+							mui.openWindow({
+								url: './open_studio_result.html',
+								id: 'open_studio_result',
+								extras: { result: true }
+							})
 						},function(e){
-							plus.nativeUI.alert('支付失败，请稍后重试', null, '支付失败：'+e.code+"e_____"+e+"pays[id]:"+pays[id]);
+							mui.openWindow({
+								url: './open_studio_result.html',
+								id: 'open_studio_result',
+								extras: { result: null }
+							})
 						});
 					}else {
 						plus.nativeUI.toast(res.msg || '支付失败，请重试')

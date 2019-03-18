@@ -348,6 +348,9 @@
 					id: 'me_adress'
 				})
 			})
+			$('#get_goods #okBtn').on('tap', function() {
+				shareWeb('address')
+			})
 		})
 		//获取金币
 		function getGoldcoin() {
@@ -369,7 +372,7 @@
 		}
 		//充值
 		function recharge(num) {
-      pay('wxpay')
+			pay('wxpay', num)
 		}
 		function startGame(id, way) {
 			$('#select_goods').hide();
@@ -386,7 +389,8 @@
 						console.log(JSON.stringify(res))
 						$('#loading_wrap').hide();
 					}else {
-						
+						mui.toast(res.msg)
+						$('#loading_wrap').hide();
 					}
 				},
 			})
@@ -404,7 +408,7 @@
 			})
 			//分享
 			$('#shareBtn').on('tap', function() {
-				shareWeb()
+				shareWeb('studio')
 			})
 			$('#meHref').on('tap', function() {
 				mui.openWindow({
@@ -436,7 +440,7 @@
 				srv.authorize(function(){
 					doShare(srv, msg);
 				}, function(e){
-					plus.nativeUI.toast('认证授权失败：'+JSON.stringify(e));
+					plus.nativeUI.toast('认证授权失败：');
 				});
 			}  
 		}
@@ -461,8 +465,21 @@
 			});
 		}
 		// 分享网页
-		function shareWeb(){
-		    var msg={type:'web',thumbs:['_www/logo.png'], href: 'https://www.baidu.com', title: '测试数据', content: "百度 测试地址"};
+		function shareWeb(page){
+			var studioInfo = window.localStorage.getItem('currentStudioInfo')
+			var studiosInfoMap = studioInfo && JSON.parse(studioInfo)
+			var title = '游戏间'
+			var content = '进入直接开始玩游戏'
+			if(page == 'address') {
+				title = '领取商品'
+				content = '来自好友分享的商品，填写地址立即领取'
+			}
+		    var msg={
+				type:'web',
+				thumbs:['_www/logo.png'], 
+				href: 'http://h5game.jktwo.com/login.html?page='+ page +'&ID='+studiosInfoMap.Id,
+				title: title, 
+				content: content};
 		    sweixin?plus.nativeUI.actionSheet({title:'分享到微信',cancel:'取消',buttons:buttons}, function(e){
 		  	  (e.index>0)&&share(sweixin, msg, buttons[e.index-1]);
 		    }):plus.nativeUI.alert('当前环境不支持微信分享操作!'); 
@@ -473,7 +490,7 @@
 			srv.send(msg, function(){
 				plus.nativeUI.toast('分享到"'+srv.description+'"成功！');
 			}, function(e){
-				plus.nativeUI.toast('分享到"'+srv.description+'"失败: '+JSON.stringify(e));
+				plus.nativeUI.toast('分享到"'+srv.description+'"失败: ');
 			});
 		}
 
@@ -520,6 +537,7 @@
 			}
 			//注册回调函数
 			RegisterCallBackFunc(Addpeople,GameEnd,Kickout,Serverclose);
+			console.log(studiosInfoMap.RoomId, userInfoMap.uid)
 			WebSocketStart("ws://211.149.179.254:5250?room="+ studiosInfoMap.RoomId +"&uid="+userInfoMap.uid)
 		}
 		var pays = {}
@@ -527,7 +545,7 @@
 			// 获取支付通道
 			plus.payment.getChannels(function(channels){
 				var content=document.getElementById('dcontent');
-				var info=document.getElementById('info');
+				// var info=document.getElementById('info');
 				var txt='支付通道信息：';
 				for(var i in channels){
 					console.log(JSON.stringify(channels))
@@ -538,7 +556,7 @@
 					pays[channel.id]=channel;
 					checkServices(channel);
 				}
-				info.innerText=txt;
+				// info.innerText=txt;
 			},function(e){
 				console.log('获取支付通道失败：'+e.message);
 			});
@@ -563,24 +581,17 @@
 		}
 		var w=null;
 		// 支付
-		function pay(id){
-			console.log(JSON.stringify({
-					token: localStorage.getItem('token'),
-					money: 200,
-					openid: localStorage.getItem('openid')
-				}))
+		function pay(id, money){
 			if(w){return;}//检查是否请求订单中
 			w=plus.nativeUI.showWaiting();
 			$http({
 				url: '/auth/user/v2/user/wechat/recharge',
 				data: {
 					token: localStorage.getItem('token'),
-					money: 1,
+					money: noney * 100,
 					openid: localStorage.getItem('openid')
 				},
 				success: function(res) {
-					console.log(JSON.stringify(res))
-					plus.nativeUI.toast(JSON.stringify(res))
 					w.close();w=null;
 					if(res.code === 10000) {
 						plus.payment.request(pays[id],res.msg,function(result){
@@ -588,7 +599,7 @@
 								back();
 							},'购买');
 						},function(e){
-							plus.nativeUI.alert('支付失败，请稍后重试', null, '支付失败：'+e.code+"e_____"+e+"pays[id]:"+pays[id]);
+							plus.nativeUI.alert('支付失败，请稍后重试', null, '支付失败：'+e.code);
 						});
 					}else {
 						plus.nativeUI.toast(res.msg || '支付失败，请重试')

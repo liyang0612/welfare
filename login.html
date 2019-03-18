@@ -108,7 +108,7 @@
 			#login {background: #4FB4F8; color: #fff;height: 42px;border: 1px solid #4FB4F8;
 			line-height: 42px;padding: 0}
 			.smscode {position: relative;}
-			#getCode {display: inline-block;position: absolute;right: 0px;top: 5px; background: #ed4d5b; color: #fff;
+			.smscodeClass {display: inline-block;position: absolute;right: 0px;top: 5px; background: #ed4d5b; color: #fff;
 			 border-radius: 20px;padding: 3px 20px; font-size: 12px;z-index: 9999;}
 		</style>
 
@@ -125,7 +125,8 @@
 				</div>
 				<div class="mui-input-row smscode">
 					<input id='password' class="mui-input-clear mui-input" placeholder="请输入验证码">
-					<span id="getCode">发送验证码</span>
+					<span id="getCode" class="smscodeClass">发送验证码</span>
+					<span id="timeBtn" class="smscodeClass" style="display: none;">60s后重发</span>
 				</div>
 			</form>
 			<div class="mui-content-padded">
@@ -151,6 +152,24 @@
 				$('.oauth-wrap').css("margin-top", document.documentElement.clientHeight - 550 + 'px');
 			});
 			(function(m, doc) {
+				let timeNum = 60
+				function countDown(sendBtnDom, txtBtn) {
+					sendBtnDom.hide()
+					txtBtn.show()
+					let timer = setTimeout(function() {
+						timeNum -= 1
+						txtBtn.text(timeNum + 's后重发')
+						clearTimeout(timer)
+						
+						if(timeNum >= 0) {
+							countDown(sendBtnDom, txtBtn)
+						}else {
+							timeNum = 60
+							sendBtnDom.show()
+							txtBtn.hide()
+						}
+					}, 1000)
+				}
 				m.init({
 					statusBarBackground: '#f7f7f7'
 				});
@@ -310,6 +329,7 @@
 								console.log(JSON.stringify(res))
 								if(res.code == 10000) {
 									plus.nativeUI.toast('已成功发送验证码')
+									countDown($('#getCode'), $('#timeBtn'))
 									code_key = res.msg;
 								}else {
 									plus.nativeUI.toast('发送验证码失败，请稍后重试')

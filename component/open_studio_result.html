@@ -311,9 +311,10 @@
 					var res = currentPage.result
 					if(res) {
 						// window.localStorage.setItem('currentStudioInfo', JSON.stringify(res.msg.data[index]))
+						mui.fire(plus.webview.getWebviewById('me'), 'getLiveList')
 						mui.openWindow({
-							url: './studio_page.html',
-							id: 'studio_page'
+							url: './me.html',
+							id: 'me'
 						})
 					}else {
 						oldBack();

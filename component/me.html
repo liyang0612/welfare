@@ -52,7 +52,7 @@
 			clear: both;
 			display: block;
 		}
-		
+
 		.live_content .add-room-list {
 			font-size: 48px;
 			color: #ccc;
@@ -60,7 +60,7 @@
 			text-align: center;
 			background: #f0f0f0;
 		}
-		
+
 		.live_content .room-list-item {
 			margin: 15px 3%;
 			width: 44%;
@@ -133,8 +133,15 @@
 		.gaming {
 			background: #fb6362 !important;
 		}
-		
-		.level_icon {width: 20px; height: 20px; display: inline-block;margin-right: 5px; background: url(../img/level.png) no-repeat; background-size: 100%;}
+
+		.level_icon {
+			width: 20px;
+			height: 20px;
+			display: inline-block;
+			margin-right: 5px;
+			background: url(../img/level.png) no-repeat;
+			background-size: 100%;
+		}
 	</style>
 	<body class="wf_webview">
 		<header class="mui-bar mui-bar-nav">
@@ -230,24 +237,8 @@
 		mui('.mui-scroll-wrapper').scroll({
 			bounce: true //是否启用回弹
 		});
-		$(function() {
-			//获取个人信息
-			$http({
-				url: '/auth/user/v2/get/user/info',
-				data: {
-					token: localStorage.getItem('token')
-				},
-				success: function(res) {
-					console.log(JSON.stringify(res))
-					if (res.code == 10000) {
-						$('.me_username').text(res.msg.NickName);
-						$('#gold_coin_num').text(res.msg.Balance + '金币')
-					} else {
 
-					}
-				}
-			})
-			//获取直播间列表
+		function getLives() {
 			$http({
 				url: '/auth/user/v2/get/my/live/list',
 				data: {
@@ -278,7 +269,7 @@
 						res.msg.data && res.msg.data.forEach(function(item) {
 							roomListHtml.push('<div class="room-list-item">\n' +
 								'\t\t\t\t\t\t<div class="room-list-item-img">\n' +
-								'\t\t\t\t\t\t\t<img src="http://211.149.179.254:7002'+ item.Photo +'"/>\n' +
+								'\t\t\t\t\t\t\t<img src="http://211.149.179.254:7002' + item.Photo + '"/>\n' +
 								'\t\t\t\t\t\t</div>\n' +
 								'\t\t\t\t\t\t<div class="room-list-name">' + item.Name + '</div>\n' +
 								'\t\t\t\t\t\t<div class="room-list-flex">\n' +
@@ -286,7 +277,8 @@
 								'\t\t\t\t\t\t\t\t<span class="room-sysmol-icon"></span> ' + item.Coins + '/次\n' +
 								'\t\t\t\t\t\t\t</div>\n' +
 								'\t\t\t\t\t\t\t<div class="room-list-btn">\n' +
-								'\t\t\t\t\t\t\t\t<span class="btn " + ' + getStatus(item.Status) + '>' + statusObj[getStatus(item.Status)] +
+								'\t\t\t\t\t\t\t\t<span class="btn " + ' + getStatus(item.Status) + '>' + (statusObj[getStatus(item.Status)] ||
+									'维 护 中') +
 								'</span>\n' +
 								'\t\t\t\t\t\t\t</div>\n' +
 								'\t\t\t\t\t\t</div>\n' +
@@ -297,13 +289,13 @@
 
 						$('.room-list-item').each(function(index, e) {
 							$(this).on('tap', function() {
-								if(index == res.msg.data.length) {
+								if (index == res.msg.data.length) {
 									mui.openWindow({
 										url: './open_studio.html',
 										id: 'open_studio'
 									})
 									return false
-								}else {
+								} else {
 									window.localStorage.setItem('currentStudioInfo', JSON.stringify(res.msg.data[index]))
 									mui.openWindow({
 										url: './studio_page.html',
@@ -317,6 +309,27 @@
 					}
 				}
 			})
+		}
+		$(function() {
+			//获取个人信息
+			$http({
+				url: '/auth/user/v2/get/user/info',
+				data: {
+					token: localStorage.getItem('token')
+				},
+				success: function(res) {
+					console.log(JSON.stringify(res))
+					if (res.code == 10000) {
+						$('.me_username').text(res.msg.NickName);
+						$('#gold_coin_num').text(res.msg.Balance + '金币')
+					} else {
+
+					}
+				}
+			})
+			//获取直播间列表
+			getLives()
+
 		})
 
 		function createDialogview() {
@@ -335,22 +348,25 @@
 			plus.webview.currentWebview().append(wsub);
 		}
 		mui.plusReady(function() {
+			window.addEventListener('getLiveList', function(event) {
+				getLives()
+			})
 			//进入直播间
-// 			$('.room-list-item').each(function(e, index) {
-// 				$(this).on('tap', function() {
-// 					mui.openWindow({
-// 						url: './studio_page.html',
-// 						id: 'studio_page'
-// 					})
-// 				})
-// 			})
+			// 			$('.room-list-item').each(function(e, index) {
+			// 				$(this).on('tap', function() {
+			// 					mui.openWindow({
+			// 						url: './studio_page.html',
+			// 						id: 'studio_page'
+			// 					})
+			// 				})
+			// 			})
 			//添加直播间
-//			$('.add_btn').on('tap', function() {
-//				mui.openWindow({
-//					url: './open_studio.html',
-//					id: 'open_studio'
-//				})
-//			})
+			//			$('.add_btn').on('tap', function() {
+			//				mui.openWindow({
+			//					url: './open_studio.html',
+			//					id: 'open_studio'
+			//				})
+			//			})
 			$('.me_info_picture').on('tap', function() {
 				createDialogview()
 			})
