@@ -385,6 +385,7 @@
 					token: localStorage.getItem('token')
 				},
 				success: function(res) {
+					console.log(JSON.stringify(res))
 					if(res.code == 10000) {
 						console.log(JSON.stringify(res))
 						$('#loading_wrap').hide();
@@ -470,14 +471,17 @@
 			var studiosInfoMap = studioInfo && JSON.parse(studioInfo)
 			var title = '游戏间'
 			var content = '进入直接开始玩游戏'
+			var redirectUrl = encodeURIComponent('http://h5game.jktwo.com/studio.html?ID=' + studiosInfoMap.Id)
 			if(page == 'address') {
 				title = '领取商品'
 				content = '来自好友分享的商品，填写地址立即领取'
+				redirectUrl = encodeURIComponent('http://h5game.jktwo.com/me_adress_add.html')
 			}
+			var href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd253c0abbe9a10cf&redirect_uri='+ redirectUrl +'&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect'
 		    var msg={
 				type:'web',
 				thumbs:['_www/logo.png'], 
-				href: 'http://h5game.jktwo.com/login.html?page='+ page +'&ID='+studiosInfoMap.Id,
+				href: href,
 				title: title, 
 				content: content};
 		    sweixin?plus.nativeUI.actionSheet({title:'分享到微信',cancel:'取消',buttons:buttons}, function(e){
@@ -588,10 +592,11 @@
 				url: '/auth/user/v2/user/wechat/recharge',
 				data: {
 					token: localStorage.getItem('token'),
-					money: noney * 100,
+					money: money * 100,
 					openid: localStorage.getItem('openid')
 				},
 				success: function(res) {
+					console.log(JSON.stringify(res))
 					w.close();w=null;
 					if(res.code === 10000) {
 						plus.payment.request(pays[id],res.msg,function(result){
@@ -602,7 +607,7 @@
 							plus.nativeUI.alert('支付失败，请稍后重试', null, '支付失败：'+e.code);
 						});
 					}else {
-						plus.nativeUI.toast(res.msg || '支付失败，请重试')
+						plus.nativeUI.toast(('service err :' + res.msg) || '支付失败，请重试')
 					}
 				}
 			})
