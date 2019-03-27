@@ -174,6 +174,9 @@
 					statusBarBackground: '#f7f7f7'
 				});
 				m.plusReady(function() {					
+					window.addEventListener('loginReload', function() {
+						window.location.reload()
+					})
 					plus.screen.lockOrientation("portrait-primary");
 					var settings = app.getSettings();
 					var state = app.getState();
@@ -273,13 +276,13 @@
 														extras: {
 															mark: "index" //额外的参数，仅仅是个标识，实际开发中不用；
 														},
-														show: {
-															aniShow: 'none',
-															//				            duration: 5
-														},
-														waiting: {
-															autoShow: false, //自动显示等待框，默认为true
-														}
+//														show: {
+//															aniShow: 'none',
+//															//				            duration: 5
+//														},
+//														waiting: {
+//															autoShow: false, //自动显示等待框，默认为true
+//														}
 													});
 													localStorage.setItem('token', res.msg.token);
 													localStorage.setItem('userInfo', JSON.stringify(res.msg));
@@ -339,6 +342,7 @@
 					})
 					//登录
 					loginButton.addEventListener('tap', function() {
+						var waiting = plus.nativeUI.showWaiting();
 						$http({
 							url: "/auth/user/v2/login/phone",
 							data: {
@@ -347,6 +351,7 @@
 								code_key: code_key
 							},
 							success: function(res) {
+								waiting.close()
 								console.log(JSON.stringify(res))
 								if(res.code == 10000) {
                                     window.localStorage.setItem('bindPhone', accountBox.value)
@@ -357,12 +362,12 @@
 										extras: {
 											mark: "index" //额外的参数，仅仅是个标识，实际开发中不用；
 										},
-										show: {
-											aniShow: 'none',
-										},
-										waiting: {
-											autoShow: false, //自动显示等待框，默认为true
-										}
+//										show: {
+//											aniShow: 'none',
+//										},
+//										waiting: {
+//											autoShow: true, //自动显示等待框，默认为true
+//										}
 									});
 									localStorage.setItem('token', res.msg.token);
 									localStorage.setItem('userInfo', JSON.stringify(res.msg));

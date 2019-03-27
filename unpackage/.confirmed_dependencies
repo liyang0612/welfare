@@ -37,7 +37,8 @@
   "login.html": {
     "refer": [
       "component/home.html"
-    ]
+    ],
+    "resources": []
   },
   "component/studio_page.html": {
     "resources": [
@@ -49,7 +50,14 @@
   },
   "component/me.html": {
     "refer": [
-      "component/open_studio.html"
+      "component/open_studio.html",
+      "component/setting.html"
+    ],
+    "resources": []
+  },
+  "component/setting.html": {
+    "refer": [
+      "login.html"
     ]
   }
 }
