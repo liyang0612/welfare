@@ -238,10 +238,13 @@
 				"priority": 0
 			},
 			"component/me.html": {
-				"resources": [],
+				"resources": [
+					"component/bindingDialog.html"
+				],
 				"refer": [
 					"component/open_studio.html",
-					"component/setting.html"
+					"component/setting.html",
+					"component/me_adress.html"
 				],
 				"priority": 0
 			},

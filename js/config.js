@@ -10,10 +10,18 @@ function $http(params) {
 		success: function(resStr) {
 			try {
 				var res = JSON.parse(resStr);
+				if(res.code === 10002) {
+					plus.nativeUI.toast('登录过期， 请重新登录')
+					localStorage.clear()
+					mui.fire(plus.webview.getWebviewById('login'), 'loginReload')
+					mui.openWindow({
+						url: '../login.html',
+						id: 'login'
+					})
+					return false
+				}
 				params.success(res)
-				
-			}
-			catch(err) {
+			} catch(err) {
 				throw new Error(err);
 				plus.nativeUI.toast('500 error 数据返回异常');
 			}

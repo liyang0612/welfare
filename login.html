@@ -12,49 +12,49 @@
 			.area {
 				margin: 20px auto 0px auto;
 			}
-			
+
 			.mui-input-group {
 				margin-top: 10px;
 			}
-			
+
 			.mui-input-group:first-child {
 				margin-top: 20px;
 			}
-			
+
 			.mui-input-group label {
 				width: 22%;
 			}
-			
+
 			.mui-input-row label~input,
 			.mui-input-row label~select,
 			.mui-input-row label~textarea {
 				width: 78%;
 			}
-			
+
 			.mui-checkbox input[type=checkbox],
 			.mui-radio input[type=radio] {
 				top: 6px;
 			}
-			
+
 			.mui-content-padded {
 				margin-top: 25px;
 			}
-			
+
 			.mui-btn {
 				padding: 10px;
 			}
-			
+
 			.link-area {
 				display: block;
 				margin-top: 25px;
 				text-align: center;
 			}
-			
+
 			.spliter {
 				color: #bbb;
 				padding: 0px 8px;
 			}
-			
+
 			.oauth-wrap {
 				position: relative;
 				width: 100%;
@@ -64,7 +64,7 @@
 				margin-top: 90px;
 				z-index: 9999;
 			}
-			
+
 			.oauth-area {
 				position: absolute;
 				bottom: 20px;
@@ -78,7 +78,7 @@
 				height: 42px;
 				padding: 0 15px;
 			}
-			
+
 			.oauth-area .oauth-btn {
 				display: inline-block;
 				width: 70px;
@@ -91,11 +91,11 @@
 				border-radius: 35px;
 				background: url(img/weixin.png);
 			}
-			
+
 			.oauth-area .oauth-btn:active {
 				border: solid 1px #aaa;
 			}
-			
+
 			.oauth-area .oauth-btn.disabled {
 				background-color: #ddd;
 			}
@@ -160,7 +160,7 @@
 						timeNum -= 1
 						txtBtn.text(timeNum + 's后重发')
 						clearTimeout(timer)
-						
+
 						if(timeNum >= 0) {
 							countDown(sendBtnDom, txtBtn)
 						}else {
@@ -173,7 +173,7 @@
 				m.init({
 					statusBarBackground: '#f7f7f7'
 				});
-				m.plusReady(function() {					
+				m.plusReady(function() {
 					window.addEventListener('loginReload', function() {
 						window.location.reload()
 					})
@@ -190,7 +190,7 @@
 // 					}else{
 // 						main_loaded_flag = true;
 // 					}
-// 					
+//
 // 					mainPage.addEventListener("loaded",function () {
 // 						main_loaded_flag = true;
 // 					});
@@ -280,18 +280,19 @@
 //															aniShow: 'none',
 //															//				            duration: 5
 //														},
-//														waiting: {
-//															autoShow: false, //自动显示等待框，默认为true
-//														}
+														waiting: {
+															autoShow: false, //自动显示等待框，默认为true
+														}
 													});
 													localStorage.setItem('token', res.msg.token);
+													localStorage.setItem('headimgurl', auth.userInfo.headimgurl)
 													localStorage.setItem('userInfo', JSON.stringify(res.msg));
 												}else {
 													waiting.close();
 													plus.nativeUI.toast('登录失败，请重试')
 													localStorage.clear()
 												}
-											}
+											} 
 										})
 									}, function(e) {
 										plus.nativeUI.toast("获取用户信息失败：" + e.message);
@@ -403,7 +404,7 @@
 					};
 				});
 			}(mui, document));
-		
+
 		</script>
 	</body>
 

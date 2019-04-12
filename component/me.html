@@ -152,7 +152,7 @@
 			<div class="mui-scroll" style="padding: 54px 0;">
 				<div class="wf_me_info wf_lay">
 					<div class="me_info_picture">
-						<img src="../img/wechart_icon.png" />
+						<img id="headimgurl" src="../img/wechart_icon.png" />
 						<span></span>
 					</div>
 					<div class="me_info_con">
@@ -311,6 +311,7 @@
 			})
 		}
 		$(function() {
+			
 			//获取个人信息
 			$http({
 				url: '/auth/user/v2/get/user/info',
@@ -319,11 +320,13 @@
 				},
 				success: function(res) {
 					console.log(JSON.stringify(res))
+					console.log(window.localStorage.getItem('headimgurl'))
 					if (res.code == 10000) {
 						$('.me_username').text(res.msg.NickName);
-						$('#gold_coin_num').text(res.msg.Balance + '金币')
+						$('#gold_coin_num').text(res.msg.Balance + '金币');
+						$('#headimgurl')[0].src = window.localStorage.getItem('headimgurl') || res.msg.HeadImg
 					} else {
-
+ 
 					}
 				}
 			})
