@@ -109,7 +109,11 @@
 			//普通示例
 			mui.plusReady(function() {
 				getBlance()
-        getBillList()
+				getBillList()
+				window.addEventListener('getCashEvent', function() {
+					getBlance()
+					getBillList()
+				})
 				$('#cash_btn').on('tap', function() {
 					mui.openWindow({
 						url: './me_cash.html',
@@ -128,6 +132,7 @@
 						token: localStorage.getItem('token'),
 					},
 					success: function(res) {
+						console.log(JSON.stringify(res))
 						if (res.code == 10000) {
 							$('#balance').text(res.msg)
 						}

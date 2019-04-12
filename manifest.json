@@ -185,51 +185,85 @@
         }
     },
     "dependencies" : {
-        "pages" : {
-            "guide.html" : {
-                "resources" : [],
-                "refer" : [ "main.html" ],
-                "priority" : 0
-            },
-            "index.html" : {
-                "resources" : [],
-                "refer" : [ "guide.html", "main.html", "login.html", "component/home.html" ],
-                "priority" : 0
-            },
-            "main.html" : {
-                "resources" : [ "component/home.html" ],
-                "refer" : [ "component/me.html", "guide.html" ],
-                "priority" : 0
-            },
-            "component/home.html" : {
-                "resources" : [ "component/barrage.html" ],
-                "refer" : [ "component/me.html", "component/studio_page.html" ],
-                "priority" : 0
-            },
-            "login.html" : {
-                "resources" : [],
-                "refer" : [ "component/home.html" ],
-                "priority" : 0
-            },
-            "component/studio_page.html" : {
-                "resources" : [ "component/studio.html" ],
-                "refer" : [],
-                "priority" : 0
-            },
-            "component/me.html" : {
-                "resources" : [],
-                "refer" : [ "component/open_studio.html" ],
-                "priority" : 0
-            }
-        },
-        "idle" : {
-            "resources" : [
-                "js/mui.min.js",
-                "fonts/mui.ttf",
-                "css/mui.min.css",
-                "js/mui.js",
-                "css/mui.css"
-            ]
-        }
-    }
+		"pages": {
+			"guide.html": {
+				"resources": [],
+				"refer": [
+					"main.html"
+				],
+				"priority": 0
+			},
+			"index.html": {
+				"resources": [],
+				"refer": [
+					"guide.html",
+					"main.html",
+					"login.html",
+					"component/home.html"
+				],
+				"priority": 0
+			},
+			"main.html": {
+				"resources": [
+					"component/home.html"
+				],
+				"refer": [
+					"component/me.html",
+					"guide.html"
+				],
+				"priority": 0
+			},
+			"component/home.html": {
+				"resources": [
+					"component/barrage.html"
+				],
+				"refer": [
+					"component/me.html",
+					"component/studio_page.html"
+				],
+				"priority": 0
+			},
+			"login.html": {
+				"resources": [],
+				"refer": [
+					"component/home.html"
+				],
+				"priority": 0
+			},
+			"component/studio_page.html": {
+				"resources": [
+					"component/studio.html"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"component/me.html": {
+				"resources": [
+					"component/bindingDialog.html"
+				],
+				"refer": [
+					"component/open_studio.html",
+					"component/setting.html",
+					"component/me_adress.html"
+				],
+				"priority": 0
+			},
+			"component/setting.html": {
+				"resources": [],
+				"refer": [
+					"login.html"
+				],
+				"priority": 0
+			}
+		},
+		"idle": {
+			"resources": [
+				"js/mui.min.js",
+				"fonts/mui.ttf",
+				"css/mui.min.css",
+				"js/mui.js",
+				"css/mui.css"
+			]
+		}
+	}
 }

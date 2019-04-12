@@ -152,7 +152,7 @@
 			<div class="mui-scroll" style="padding: 54px 0;">
 				<div class="wf_me_info wf_lay">
 					<div class="me_info_picture">
-						<img src="../img/wechart_icon.png" />
+						<img id="headimgurl" src="../img/wechart_icon.png" />
 						<span></span>
 					</div>
 					<div class="me_info_con">
@@ -237,7 +237,25 @@
 		mui('.mui-scroll-wrapper').scroll({
 			bounce: true //是否启用回弹
 		});
-
+		function getInfo() {
+			//获取个人信息
+			$http({
+				url: '/auth/user/v2/get/user/info',
+				data: {
+					token: localStorage.getItem('token')
+				},
+				success: function(res) {
+					console.log(JSON.stringify(res))
+					if (res.code == 10000) {
+						$('.me_username').text(res.msg.NickName);
+						$('#gold_coin_num').text(res.msg.Balance + '金币');
+						$('#headimgurl')[0].src = window.localStorage.getItem('headimgurl') || res.msg.HeadImg
+					} else {
+			 
+					}
+				}
+			})
+		}
 		function getLives() {
 			$http({
 				url: '/auth/user/v2/get/my/live/list',
@@ -311,22 +329,7 @@
 			})
 		}
 		$(function() {
-			//获取个人信息
-			$http({
-				url: '/auth/user/v2/get/user/info',
-				data: {
-					token: localStorage.getItem('token')
-				},
-				success: function(res) {
-					console.log(JSON.stringify(res))
-					if (res.code == 10000) {
-						$('.me_username').text(res.msg.NickName);
-						$('#gold_coin_num').text(res.msg.Balance + '金币')
-					} else {
-
-					}
-				}
-			})
+			getInfo()
 			//获取直播间列表
 			getLives()
 
@@ -349,7 +352,22 @@
 		}
 		mui.plusReady(function() {
 			window.addEventListener('getLiveList', function(event) {
+				getInfo()
 				getLives()
+			})
+			$('#homeHref').on('tap', function() {
+				mui.openWindow({
+					url: './home.html',
+					id: 'home',
+					show: {
+						aniShow: 'none',
+						//				            duration: 5
+					},
+					waiting: {
+						autoShow: false, //自动显示等待框，默认为true
+					}
+				})
+				mui.fire(plus.webview.getWebviewById('home'), 'getHomeList')
 			})
 			//进入直播间
 			// 			$('.room-list-item').each(function(e, index) {
@@ -392,19 +410,6 @@
 				})
 			})
 			// createDialogview()
-			$('#homeHref').on('tap', function() {
-				mui.openWindow({
-					url: './home.html',
-					id: 'home',
-					show: {
-						aniShow: 'none',
-						//				            duration: 5
-					},
-					waiting: {
-						autoShow: false, //自动显示等待框，默认为true
-					}
-				})
-			})
 		})
 
 		function getStatus(status) {

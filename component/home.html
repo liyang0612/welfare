@@ -129,7 +129,7 @@
 				gaming: '游 戏 中'
 			}
 			$(function() {
-				// window.localStorage.clear() 
+//				 window.localStorage.clear() 
 				var mySwiper = new Swiper('.swiper-container', {
 					autoplay: true, //可选选项，自动滑动
 					pagination: {
@@ -137,9 +137,19 @@
 						bulletActiveClass: 'my-bullet-active',
 					},
 				})
+				window.addEventListener('getHomeList', function() {
+					getList()
+				})
 				mui.plusReady(function() {
 					//获取直播间列表
 					getList()
+					$('#meHref').on('tap', function() {
+						mui.openWindow({
+							url: './me.html',
+							id: 'me'
+						})
+						mui.fire(plus.webview.getWebviewById('me'), 'getLiveList')
+					})
 				})
 			})
 
@@ -183,7 +193,7 @@
 								})
 							})
 						} else {
-
+							plus.nativeUI.toast('数据获取异常')
 						}
 					}
 				})
@@ -200,12 +210,7 @@
 						return 'gaming'
 				}
 			}
-			$('#meHref').on('tap', function() {
-				mui.openWindow({
-					url: './me.html',
-					id: 'me'
-				})
-			})
+
 			var first = null;
 			mui.back = function() {
 				if (!first) {

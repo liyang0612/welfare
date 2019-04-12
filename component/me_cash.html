@@ -211,6 +211,7 @@
 						if (res.code == 10000) {
 							plus.nativeUI.toast('提现成功')
 							mui.back()
+							mui.fire(plus.webview.getWebviewById('me_money_pack'), 'getCashEvent')
 						} else if (res.code == 10001) {
 							plus.nativeUI.toast(res.msg)
 						} else {

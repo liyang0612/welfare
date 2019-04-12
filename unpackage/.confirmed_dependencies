@@ -1,55 +1,67 @@
 {
-  "guide.html": {
-    "refer": [
-      "main.html"
-    ],
-    "resources": []
-  },
-  "index.html": {
-    "refer": [
-      "guide.html",
-      "main.html",
-      "login.html",
-      "component/home.html"
-    ],
-    "resources": []
-  },
-  "main.html": {
-    "resources": [
-      "component/home.html"
-    ],
-    "refer": [
-      "component/me.html",
-      "component/home.html",
-      "guide.html"
-    ]
-  },
-  "component/home.html": {
-    "resources": [
-      "component/barrage.html"
-    ],
-    "refer": [
-      "component/barrage.html",
-      "component/me.html",
-      "component/studio_page.html"
-    ]
-  },
-  "login.html": {
-    "refer": [
-      "component/home.html"
-    ]
-  },
-  "component/studio_page.html": {
-    "resources": [
-      "component/studio.html"
-    ],
-    "refer": [
-      "component/studio.html"
-    ]
-  },
-  "component/me.html": {
-    "refer": [
-      "component/open_studio.html"
-    ]
-  }
+	"guide.html": {
+		"refer": [
+			"main.html"
+		],
+		"resources": []
+	},
+	"index.html": {
+		"refer": [
+			"guide.html",
+			"main.html",
+			"login.html",
+			"component/home.html"
+		],
+		"resources": []
+	},
+	"main.html": {
+		"resources": [
+			"component/home.html"
+		],
+		"refer": [
+			"component/me.html",
+			"component/home.html",
+			"guide.html"
+		]
+	},
+	"component/home.html": {
+		"resources": [
+			"component/barrage.html"
+		],
+		"refer": [
+			"component/barrage.html",
+			"component/me.html",
+			"component/studio_page.html"
+		]
+	},
+	"login.html": {
+		"refer": [
+			"component/home.html"
+		],
+		"resources": []
+	},
+	"component/studio_page.html": {
+		"resources": [
+			"component/studio.html"
+		],
+		"refer": [
+			"component/studio.html"
+		]
+	},
+	"component/me.html": {
+		"refer": [
+			"component/open_studio.html",
+			"component/setting.html",
+			"component/bindingDialog.html",
+			"component/me_adress.html"
+		],
+		"resources": [
+			"component/bindingDialog.html"
+		]
+	},
+	"component/setting.html": {
+		"refer": [
+			"login.html"
+		]
+	}
 }
