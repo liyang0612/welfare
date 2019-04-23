@@ -575,7 +575,6 @@
 			}
 			//注册回调函数
 			RegisterCallBackFunc(Addpeople,GameEnd,Kickout,Serverclose);
-			console.log(studiosInfoMap.RoomId, userInfoMap.uid)
 			WebSocketStart("ws://211.149.179.254:5250?room="+ studiosInfoMap.RoomId +"&uid="+userInfoMap.uid)
 		}
 		var pays = {}
@@ -586,7 +585,6 @@
 				// var info=document.getElementById('info');
 				var txt='支付通道信息：';
 				for(var i in channels){
-					console.log(JSON.stringify(channels))
 					var channel=channels[i];
 					if(channel.id=='qhpay'||channel.id=='qihoo'){	// 过滤掉不支持的支付通道：暂不支持360相关支付
 						continue;
